@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$h: 2rem;
+
+.pagination {
+  @apply   flex border  rounded overflow-hidden;
+  & > * {
+    @apply px-2 flex justify-center items-center border-r ;
+    height: $h;
+  }
+  & > button {
+    @apply transition-colors;
+    // &:hover {
+    //   @apply ;
+    // }
+    // &:active {
+    //   @apply ;
+    // }
+  }
+  & > .active {
+    @apply bg-purple-500 text-white pointer-events-none;
+  }
+}
+
+.select-page {
+  @apply min-w-[4rem] h-12;
+  height: $h;
+}

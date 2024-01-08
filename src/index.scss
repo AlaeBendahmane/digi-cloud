@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+// @import url("leaflet/dist/leaflet.css");
+
+
+
+.active {
+  @apply bg-red-500;
+  .icon {
+    @apply stroke-white;
+  }
+  animation: active 1.5s linear;
+  @keyframes active {
+    0% {
+      stroke-dasharray: 0 100;
+    }
+    100% {
+      stroke-dasharray: 100 0;
+    }
+  }
+}
+
+.debug {
+  border: 1px solid red;
+
+  & > * {
+    border: 1px solid green;
+
+    & > * {
+      border: 1px solid blue;
+    }
+  }
+}
+
+
+
+.blur-content {
+  backdrop-filter: blur(0.5rem);
+}
+
+
+.absolute-center {
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
