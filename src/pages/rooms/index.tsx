@@ -136,7 +136,7 @@ export default function Roomespage() {
     room.Name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="flex h-full w-full flex-col ">
       <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
         Rooms
         <div className="relative flex mx-2 ml-auto">
