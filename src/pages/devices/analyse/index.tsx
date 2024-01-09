@@ -5,7 +5,7 @@ import { Card } from "@material-tailwind/react";
 
 export default function index() {
     return (
-        <Card className="min-h-[10rem] bg-white p-[1rem] md:col-span-3 2xl:col-span-4 mb-2" placeholder={undefined} style={{ fontFamily: 'Roboto' }}>
+        <Card className="min-h-[10rem] h-fit bg-white p-[1rem] md:col-span-3 2xl:col-span-4 mb-2" placeholder={undefined} style={{ fontFamily: 'Roboto' }}>
             <span style={{ fontFamily: 'Nunito !important' }} className="font-bold text-red-300">DSIT-SB-1</span>
             <div className="grid grid-cols-2 gap-2 mt-3">
                 <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center '>

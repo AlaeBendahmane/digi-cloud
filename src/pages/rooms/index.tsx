@@ -137,7 +137,7 @@ export default function Roomespage() {
   );
   return (
     <div className="flex h-full w-full flex-col">
-      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px]">
+      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
         Rooms
         <div className="relative flex mx-2 ml-auto">
           <input type="text" className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search"
@@ -145,7 +145,7 @@ export default function Roomespage() {
           <img src={Find} alt="" className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
         </div>
       </h6>
-      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 ">
+      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
         <DataTable
           columns={columns}
           data={filteredData}

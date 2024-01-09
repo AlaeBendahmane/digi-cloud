@@ -122,7 +122,7 @@ export default function Alerts() {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px]">
+      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
         Alerts
         <div className="flex ml-auto">
           <div className="relative flex mx-2">
@@ -136,7 +136,7 @@ export default function Alerts() {
           </button>
         </div>
       </h6>
-      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 ">
+      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
         <DataTable
           columns={columns}
           data={slicedData}
