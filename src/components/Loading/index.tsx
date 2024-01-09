@@ -1,7 +1,5 @@
-import React from "react";
 import animation from "./animation.json";
 import Lottie from "lottie-react";
-
 function Loading() {
   return (
     <div className=" flex h-screen flex-col items-center justify-center ">
@@ -9,5 +7,4 @@ function Loading() {
     </div>
   );
 }
-
 export default Loading;

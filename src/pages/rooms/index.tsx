@@ -1,203 +1,161 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useMemo } from "react";
-import Pagination from "../../components/pagination";
-import DataGrid, { Column } from "../../components/data-grid";
-import { Params } from "../../utils/types";
-import { useQueries } from "@tanstack/react-query";
-import { useProvider } from "../../components/provider";
-import { AppContextType } from "../../App";
-import { twMerge } from "tailwind-merge";
-// import { Button } from "@material-tailwind/react";
-// import { ReactComponent as PlusIcon } from "../../assets//icons/plus.svg";
-function RoomesPage() {
-  const { backendApi } = useProvider<AppContextType>();
-  const [params, setParams] = React.useState<Params>({
-    where: {},
-    pagination: {
-      page: 1,
-      perPage: 10,
-    },
-    include: {
-      devices: {
-        select: {
-          isOnline: true,
-          _count: true,
-        },
-      },
-    },
-    orderBy: {},
-  });
+import { SetStateAction, useState } from "react";
+import DataTable, { TableStyles } from "react-data-table-component";
+import Preroom from '../../assets/icons/preroom.svg'
+import Loanding from '../../components/Loading'
+import Nodata from '../../components/nodata'
+import Find from '../../assets/icons/find.svg'
 
-  const columns: Column[] = useMemo(
-    () =>
-      [
-        {
-          label: "name",
-          header: "name",
-          valueGetter: (row) => row.name || "N/A",
-          filter: {
-            type: "text",
-            onChange: (v) => {
-              setParams({
-                ...params,
-                where: {
-                  ...params.where,
-                  name: {
-                    contains: v,
-                    mode: "insensitive",
-                  },
-                },
-              });
-            },
-          },
-        },
-        {
-          label: "type",
-          header: "type",
-          valueGetter: (row) => row?.type || "N/A",
-          filter: {
-            type: "text",
-            onChange: (v: string) => {
-              setParams({
-                ...params,
-                where: {
-                  ...params.where,
-                  type: {
-                    contains: v,
-                    mode: "insensitive",
-                  },
-                },
-              });
-            },
-          },
-        },
-        {
-          label: "alerts",
-          header: "alerts",
-          valueGetter: (row) => {
-            let count = 0;
-            count =
-              row?.devices?.reduce(
-                (acc: number, cur: any) => acc + cur._count?.alerts || 0,
-                0,
-              ) || 0;
-            return (
-              <div className="w-[7rem] border-[2px] border-red-500  px-4 py-1 text-center text-red-500">
-                {count} alert
-              </div>
-            );
-          },
-          filter: {
-            type: "text",
-            onChange: (v: string) => {
-              console.log(v);
-            },
-          },
-        },
-        {
-          label: "devices status",
-          header: "devices status",
-          valueGetter: (row) => {
-            let count = 0;
-            count =
-              row?.devices?.reduce(
-                (acc: number, cur: any) => (!cur.isOnline && acc + 1) || 0,
-                0,
-              ) || 0;
-            return (
-              <div className="flex w-fit gap-2 overflow-hidden rounded-3xl  [&>*]:px-4 [&>*]:py-1">
-                <div className="flex  max-w-[6rem] items-center gap-2 bg-black/10  py-2 ">
-                  <span className="text-green-500">Online:</span>
-                  <span>1</span>
-                </div>
-                <div className="flex  max-w-[6rem] items-center gap-2 bg-black/10  py-2 ">
-                  <span className="text-green-500">Online:</span>
-                  <span>1</span>
-                </div>
-              </div>
-            );
-          },
-          filter: {
-            type: "text",
-            onChange: (v: string) => {
-              console.log(v);
-            },
-          },
-        },
-      ] as Column[],
-    [],
+export default function Roomespage() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleSearch = (e: { target: { value: SetStateAction<string>; }; }) => {
+    setSearchQuery(e.target.value);
+  };
+  const customCellRendererDevice = (row: { Name: string | string[] }) => (
+    < >
+      <img src={Preroom} alt="Preroom" />
+      <p style={{ marginLeft: '15px' }}>
+        {row.Name}
+      </p>
+    </>
   );
-
-  const [groups] = useQueries({
-    queries: [
-      {
-        queryKey: ["group", params],
-        queryFn: async () => {
-          return await backendApi.findMany("/group", params);
-        },
-      },
-    ],
-  });
-
-  return (
-    <div className="flex  h-full w-full flex-col gap-4 p-2 md:p-4 xl:p-6">
-      <h6 className="mx-5 flex h-[4rem] items-center border-b-[4px] font-bold">
-        Roomes
-        {/* <Button
-          className="my-1 ml-auto flex items-center gap-4 !bg-green-500 text-white"
-          variant="text"
-        >
-          Add Device <PlusIcon className="h-5 w-5" />
-        </Button> */}
-      </h6>
-      <div className="ml-auto p-1">
-        <Pagination
-          className="flex items-center justify-center gap-4 pr-2"
-          total={groups.data?.totalResult || 0}
-          value={{
-            page: params.pagination.page,
-            perPage: params.pagination.perPage,
-          }}
-          onChange={(v) => {
-            setParams({
-              ...params,
-              pagination: v,
-            });
-          }}
-        />
+  const customCellRendererAlert = (row: { Alert: number | number }) => (
+    <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+      {row.Alert} Alerts
+    </span>
+  );
+  const customCellRendererNumber = (row: { Nbofdevices: number | number }) => (
+    <span >
+      {row.Nbofdevices}  Devices
+    </span>
+  );
+  const customCellRendererStats = (row: { Devicesstats: number | number; Nbofdevices: number | number }) => (
+    <div className='grid grid-flow-row auto-rows-max gap-2 '>
+      <div className="grid grid-cols-2 gap-1" >
+        <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '10px 0px 0px 10px' }}>
+          <p style={{ color: '#3FBC58' }} className="px-1">Online : </p> {row.Devicesstats}
+        </div>
+        <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '0px 10px 10px 0px' }}>
+          <p className="px-1" style={{ color: '#999ca9' }}>Offline : </p>{row.Nbofdevices - row.Devicesstats}
+        </div>
       </div>
-      <div className=" mx-auto flex max-h-[92rem]   max-w-[calc(2000px-20rem)] ">
-        <DataGrid
-          error={groups.isError}
-          cellMinWidth={300}
-          loading={groups.isLoading}
-          className="h-full w-full  table-fixed text-left"
-          headClassName="h-[5.5rem] text-[#697681] [&>*]:px-2 bg-[#D5D7E1]/40"
-          rowClassName="h-[4rem] [&>*]:px-2 shadow shadow-[#7f7f7f]/20 hover:bg-purple/50"
+    </div >
+  );
+  const columns = [
+    {
+      name: 'Name',
+      selector: (row: { Name: string }) => row.Name,
+      sortable: true,
+      cell: customCellRendererDevice,
+
+    },
+    {
+      name: 'Nb of devices',
+      selector: (row: { Nbofdevices: number }) => row.Nbofdevices,
+      sortable: true,
+      cell: customCellRendererNumber,
+    },
+    {
+      name: 'Alert',
+      selector: (row: { Alert: number }) => row.Alert,
+      sortable: true,
+      cell: customCellRendererAlert,
+    },
+    {
+      name: 'Devices stats',
+      selector: (row: { Devicesstats: number }) => row.Devicesstats,
+      sortable: true,
+      cell: customCellRendererStats,
+    },
+    {
+      name: 'Creation date',
+      selector: (row: { Creationdate: string }) => row.Creationdate,
+      sortable: true,
+      width: '150px',
+    },
+  ];
+  const data = [
+    {
+      "Name": "Room Gamma", "Nbofdevices": 42, "Alert": 15, "Devicesstats": 8, "Creationdate": "2022-03-10"
+    },
+    {
+      "Name": "Room Delta", "Nbofdevices": 30, "Alert": 10, "Devicesstats": 6, "Creationdate": "2022-04-05"
+    },
+    {
+      "Name": "Room Epsilon", "Nbofdevices": 50, "Alert": 20, "Devicesstats": 12, "Creationdate": "2022-05-20"
+    },
+    {
+      "Name": "Room Zeta", "Nbofdevices": 25, "Alert": 5, "Devicesstats": 4, "Creationdate": "2022-06-12"
+    },
+    {
+      "Name": "Room Eta", "Nbofdevices": 38, "Alert": 18, "Devicesstats": 9, "Creationdate": "2022-07-08"
+    },
+    {
+      "Name": "Room Theta", "Nbofdevices": 31, "Alert": 11, "Devicesstats": 7, "Creationdate": "2022-08-02"
+    },
+    {
+      "Name": "Room Iota", "Nbofdevices": 1045, "Alert": 22, "Devicesstats": 10, "Creationdate": "2022-09-17"
+    },
+    {
+      "Name": "Room Kappa", "Nbofdevices": 29, "Alert": 9, "Devicesstats": 5, "Creationdate": "2022-10-05"
+    },
+    {
+      "Name": "Room Lambda", "Nbofdevices": 35, "Alert": 12, "Devicesstats": 6, "Creationdate": "2022-11-20"
+    },
+    {
+      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
+    },
+    {
+      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
+    },
+    {
+      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
+    },
+  ];
+  const customStyles: TableStyles = {
+    headRow: {
+      style: {
+        textAlign: 'center',
+        paddingLeft: '10px',
+        color: '#5D7285',
+      },
+    },
+    rows: {
+      style: {
+        margin: '3px 10px 3px 10px',
+        paddingLeft: 'auto',
+        paddingRight: 'auto',
+        color: '#030229',
+        fontSize: '17px',
+        backgroundColor: '#F7F7F8',
+        borderBottom: 'none !important',
+        width: 'auto',
+      },
+    },
+  };
+  const filteredData = data.filter((room) =>
+    room.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  return (
+    <div className="flex h-full w-full flex-col">
+      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px]">
+        Rooms
+        <div className="relative flex mx-2 ml-auto">
+          <input type="text" className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search"
+            value={searchQuery} onChange={handleSearch} />
+          <img src={Find} alt="" className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+        </div>
+      </h6>
+      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 ">
+        <DataTable
           columns={columns}
-          rows={groups.data?.results || []}
-          noData={
-            <div className="flex  h-full min-h-[40vh] flex-col items-center justify-center gap-[4rem] text-4xl">
-              <img
-                src="/not-data.svg"
-                alt=""
-                className="h-[10rem] md:h-[20rem]"
-              />
-              <span
-                className="
-            font-extrabold
-            text-purple-600
-            "
-              >
-                No Data fond
-              </span>
-            </div>
-          }
-          action={() => <div className="flex gap-2"></div>}
+          data={filteredData}
+          customStyles={customStyles}
+          progressComponent={<Loanding />}
+          noDataComponent={<Nodata />}
+          fixedHeader
+          fixedHeaderScrollHeight="calc(100vh - 160px)"
         />
       </div>
     </div>
-  );
+  )
 }
-
-export default RoomesPage;

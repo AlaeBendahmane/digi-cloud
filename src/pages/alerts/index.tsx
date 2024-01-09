@@ -1,8 +1,16 @@
 import DataTable from 'react-data-table-component';
 import { useState } from "react";
+import Find from '../../assets/icons/find.svg'
+import Add from '../../assets/icons/add.svg'
 import Prealerts from '../../assets/icons/prealerts.svg'
+import Pagination from '../../components/pagination2/index';
+import Loanding from '../../components/Loading'
+import Nodata from '../../components/nodata'
+import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
+import React from 'react';
 export default function Alerts() {
-  const [showModal, setShowModal] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen((cur) => !cur);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const handlePageChange = (page: number) => {
@@ -111,21 +119,60 @@ export default function Alerts() {
       },
     }
   };
+
   return (
     <div className="flex h-full w-full flex-col">
-      <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px]">
+      <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px]">
         Alerts
-        <input className="ml-auto mb-0.5">
-
-        </input>
+        <div className="flex ml-auto">
+          <div className="relative flex mx-2">
+            <input type="text" className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search"
+              value={searchQuery} onChange={handleSearch} />
+            <img src={Find} alt="" className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+          </div>
+          <button className="rounded bg-red-600 flex px-2.5 py-1 text-white " onClick={handleOpen} >
+            <img src={Add} alt="" className="mx-1.5 my-0.5" />
+            ADD DEVICE
+          </button>
+        </div>
       </h6>
-      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-1 ">
+      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 ">
         <DataTable
           columns={columns}
           data={slicedData}
           customStyles={customStyles}
+          progressComponent={<Loanding />}
+          noDataComponent={<Nodata />}
+        />
+        <Pagination
+          totalRows={filteredData.length}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
         />
       </div>
+      <Dialog size="sm" open={open} handler={handleOpen}
+        animate={{
+          mount: { scale: 1, y: 0 },
+          unmount: { scale: 0.9, y: -100 },
+        }}
+        className="bg-transparent shadow-none" placeholder={undefined}      >
+        <Card className="mx-auto w-full max-w-[24rem]" placeholder={undefined}>
+          <CardBody className="flex flex-col gap-4" placeholder={undefined}>
+            <Typography variant="h4" color="blue-gray" placeholder={undefined}>
+              Add device
+            </Typography>
+            <Typography className="-mb-2" variant="h6" placeholder={undefined}>
+              Serial
+            </Typography>
+            <Input label="Serial" size="lg" crossOrigin={undefined} />
+          </CardBody>
+          <CardFooter className="pt-0" placeholder={undefined}>
+            <Button variant="gradient" onClick={handleOpen} fullWidth placeholder={undefined}>
+              Add
+            </Button>
+          </CardFooter>
+        </Card>
+      </Dialog>
     </div>
   )
 }

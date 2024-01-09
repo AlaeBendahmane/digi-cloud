@@ -57,7 +57,7 @@ function SideBar(props: Props) {
         )}
       >
         <span className="mx-2 flex h-[4rem] items-center border-b-2 px-3 text-[16px] font-bold text-[#3F4570]">
-          Home
+          Menu
         </span>
 
         <div className="flex flex-col  gap-2 p-2 ">
