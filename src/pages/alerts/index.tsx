@@ -1,181 +1,131 @@
-import React, { useMemo } from "react";
-import DataGrid, { Column } from "../../components/data-grid";
-import Pagination from "../../components/pagination";
-import { useQueries } from "@tanstack/react-query";
-
-import { AppContextType } from "../../App";
-import { useProvider } from "../../components/provider";
-import { Params } from "../../utils/types";
-
-function AlertPage() {
-  const { backendApi } = useProvider<AppContextType>();
-  const [params, setParams] = React.useState<Params>({
-    where: {},
-    pagination: {
-      page: 1,
-      perPage: 10,
-    },
-    include: {},
-    orderBy: {},
-  });
-
-  const [alert] = useQueries({
-    queries: [
-      {
-        queryKey: ["alerts", params],
-        queryFn: () => backendApi.findMany("alert", params),
-      },
-    ],
-  });
-
-  const columns: Column[] = useMemo(
-    () =>
-      [
-        {
-          label: "location",
-          header: "location",
-          valueGetter: (row) => row.group?.location || "N/A",
-          filter: {
-            type: "text",
-            onChange: () => {},
-          },
-        },
-        {
-          label: "site",
-          header: "site",
-          valueGetter: (row) => row.group?.name || "N/A",
-          filter: {
-            type: "select",
-            // options: (dashboardData?.groups || []).map((g) => ({
-            //   label: g.name,
-            //   value: g.id,
-            // })),
-            onChange: () => {
-              // setParams({
-              //   ...params,
-              //   where: {
-              //     ...params.where,
-              //     groupId: v ? parseInt(v) : undefined,
-              //   },
-              // });
-            },
-          },
-        },
-        {
-          label: "system",
-          header: "system",
-          valueGetter: (row) => row.system,
-          filter: {
-            type: "select",
-            options: [],
-            // options: systems.map((s) => ({ label: s, value: s })),
-
-            onChange: () => {
-              // setParams({
-              //   ...params,
-              //   where: {
-              //     ...params.where,
-              //     system: {
-              //       contains: v,
-              //       mode: "insensitive",
-              //     },
-              //   },
-              // });
-            },
-          },
-        },
-        {
-          label: "model",
-          header: "model",
-          valueGetter: (row) => row.model || "N/A",
-          filter: {
-            type: "text",
-            onChange: () => {
-              // setParams({
-              //   ...params,
-              //   where: {
-              //     ...params.where,
-              //     model: {
-              //       contains: v,
-              //       mode: "insensitive",
-              //     },
-              //   },
-              // });
-            },
-          },
-        },
-        {
-          label: "name",
-          header: "name",
-          valueGetter: (row) => row.name,
-          filter: {
-            type: "text",
-            onChange: () => {},
-          },
-        },
-        {
-          label: "serial",
-          header: "serial",
-          field: "serial",
-          filter: {
-            type: "text",
-            onChange: () => {},
-          },
-        },
-      ] as Column[],
-    [],
+import DataTable from 'react-data-table-component';
+import { useState } from "react";
+import Prealerts from '../../assets/icons/prealerts.svg'
+export default function Alerts() {
+  const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+  const customCellRendererDate = (row: { datetime: string | string[] }) => (
+    <>
+      <img src={Prealerts} alt="Preroom" />
+      <p style={{ marginLeft: '12px' }}>
+        {row.datetime}
+      </p>
+    </>
   );
-
+  const customCellRendererStats = (row: { Devicestats: String | String[] }) => (
+    <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+      {row.Devicestats}
+    </span>
+  );
+  const columns = [
+    {
+      name: 'Date/Time',
+      selector: (row: { datetime: string }) => row.datetime,
+      sortable: true,
+      cell: customCellRendererDate
+    },
+    {
+      name: 'Device stats',
+      selector: (row: { Devicestats: string }) => row.Devicestats,
+      sortable: true,
+      cell: customCellRendererStats
+    },
+    {
+      name: 'Cause',
+      selector: (row: { Cause: string }) => row.Cause,
+      sortable: true,
+    },
+    {
+      name: 'Room',
+      selector: (row: { Room: string }) => row.Room,
+      sortable: true,
+    },
+    {
+      name: 'Serial',
+      selector: (row: { Serial: string }) => row.Serial,
+      sortable: true,
+    },
+  ];
+  const data = [
+    {
+      datetime: '2024-01-01 12:00 PM', Devicestats: 'Online', Cause: 'Power outage', Room: 'Living Room', Serial: 'ABC123',
+    },
+    {
+      datetime: '2024-01-02 03:30 PM', Devicestats: 'Offline', Cause: 'Network issue', Room: 'Bedroom', Serial: 'XYZ789',
+    },
+    {
+      datetime: '2024-01-03 08:45 AM', Devicestats: 'Online', Cause: 'Software update', Room: 'Kitchen', Serial: 'DEF456',
+    },
+    {
+      datetime: '2024-01-04 02:15 PM', Devicestats: 'Offline', Cause: 'Hardware failure', Room: 'Home Office', Serial: 'GHI789',
+    },
+    {
+      datetime: '2024-01-05 10:30 AM', Devicestats: 'Online', Cause: 'Security breach', Room: 'Bathroom', Serial: 'JKL012',
+    },
+    {
+      datetime: '2024-01-06 04:20 PM', Devicestats: 'Offline', Cause: 'Connection timeout', Room: 'Dining Room', Serial: 'MNO345',
+    },
+    {
+      datetime: '2024-01-07 01:00 PM', Devicestats: 'Online', Cause: 'Temperature alert', Room: 'Guest Room', Serial: 'PQR678',
+    },
+    {
+      datetime: '2024-01-08 09:10 AM', Devicestats: 'Offline', Cause: 'Firmware bug', Room: 'Playroom', Serial: 'STU901',
+    },
+    {
+      datetime: '2024-01-09 05:45 PM', Devicestats: 'Online', Cause: 'User error', Room: 'Library', Serial: 'VWX234',
+    },
+    {
+      datetime: '2024-01-10 11:30 AM', Devicestats: 'Offline', Cause: 'System overload', Room: 'Basement', Serial: 'YZA567',
+    }
+  ];
+  const filteredData = data.filter((room) =>
+    room.Serial.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const rowsPerPage = 9;
+  const startIndex = currentPage * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const slicedData = filteredData.slice(startIndex, endIndex);
+  const customStyles = {
+    headRow: {
+      style: {
+        paddingLeft: '65px',
+        color: '#5D7285',
+      },
+    },
+    rows: {
+      style: {
+        margin: '3px 10px 3px 10px',
+        paddingLeft: '50px',
+        color: '#030229',
+        fontSize: '17px',
+        backgroundColor: '#F7F7F8',
+        borderBottom: 'none !important',
+        width: 'auto',
+      },
+    }
+  };
   return (
-    <div className="flex  h-full w-full flex-col gap-4 p-2 md:p-4 xl:p-6">
-      <h6 className=" mx-5 flex h-[4rem] items-center border-b-[4px] font-bold">
+    <div className="flex h-full w-full flex-col">
+      <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px]">
         Alerts
+        <input className="ml-auto mb-0.5">
+
+        </input>
       </h6>
-      <div className="ml-auto p-1">
-        <Pagination
-          className="flex items-center justify-center gap-4 pr-2"
-          total={alert?.data?.totalResult || 0}
-          value={{
-            page: params.pagination?.page || 1,
-            perPage: params.pagination?.perPage || 10,
-          }}
-          onChange={(v) => {
-            console.log(v);
-            setParams({
-              ...params,
-              pagination: v,
-            });
-          }}
-        />
-      </div>
-      <div className=" mx-auto flex h-full  max-h-[92rem] max-w-[calc(2000px-20rem)] flex-1">
-        <DataGrid
-          error={false}
-          cellMinWidth={300}
-          loading={alert.isLoading}
-          className="h-full w-full table-fixed text-left"
-          headClassName="h-[5.5rem] text-[#697681] [&>*]:px-2"
-          rowClassName="h-[4rem] [&>*]:px-2 even:bg-dark/5 dark:even:bg-light/5 hover:bg-dark/10 dark:hover:bg-light/10 shadow shadow-[#7f7f7f]/20"
+      <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-1 ">
+        <DataTable
           columns={columns}
-          rows={[]}
-          noData={
-            <div className="flex  h-full  min-h-[50vh] flex-col items-center justify-center gap-[4rem] text-4xl">
-              <img src="/not-data.svg" alt="" className="h-[20rem]" />
-              <span
-                className="
-            font-extrabold
-            text-purple-600
-            "
-              >
-                No Data fond
-              </span>
-            </div>
-          }
-          action={() => <div className="flex gap-2"></div>}
+          data={slicedData}
+          customStyles={customStyles}
         />
       </div>
     </div>
-  );
+  )
 }
-
-export default AlertPage;

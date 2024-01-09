@@ -21,8 +21,13 @@ const Routes: {
       icon: <DashBoardIcon />,
     },
     {
-      name: "Realtime events",
+      name: "realtime events",
       path: "/realtime",
+      icon: <ListIcon />,
+    },
+    {
+      name: "alerts",
+      path: "/alerts",
       icon: <ListIcon />,
     },
     /* {
@@ -31,11 +36,7 @@ const Routes: {
        icon: <ListIcon />,
      },
      
-     {
-       name: "alerts",
-       path: "/alerts",
-       icon: <ListIcon />,
-     },
+     
      {
        name: "users",
        path: "/users",

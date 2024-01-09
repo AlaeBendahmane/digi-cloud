@@ -12,7 +12,7 @@ function HomePage() {
         Dashboard
       </h6>
       <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col ">
-        <div className="grid w-full gap-3 px-2 pt-4 md:grid-cols-6 2xl:grid-cols-12 ">
+        <div className="grid w-full gap-3 px-4 pt-4 md:grid-cols-6 2xl:grid-cols-12 ">
           <CardsDetail />
           <AnalyseTemp />
           <Avrg />
