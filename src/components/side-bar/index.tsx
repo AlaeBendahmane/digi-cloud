@@ -29,12 +29,11 @@ function SideBar(props: Props) {
               color="yellow"
               variant="text"
               className={`mb-auto flex 
-               aspect-square w-10  items-center justify-center  !p-0 ${""}`}
-            >
+               aspect-square w-10  items-center justify-center  !p-0 ${""}`} placeholder={undefined}            >
               <img src="/more-aps.svg" className="h-6 w-6 stroke-white" />
             </Button>
           </PopoverHandler>
-          <PopoverContent className="z-[500]">
+          <PopoverContent className="z-[500]" placeholder={undefined}>
             <div className="grid grid-cols-3 gap-2 [&>*]:aspect-square [&>*]:h-16  "></div>
           </PopoverContent>
         </Popover>
@@ -45,8 +44,7 @@ function SideBar(props: Props) {
           }}
           color="yellow"
           variant="filled"
-          className={`flex aspect-square w-10 items-center justify-center  !p-0 ${""}`}
-        >
+          className={`flex aspect-square w-10 items-center justify-center  !p-0 ${""}`} placeholder={undefined}        >
           <HomeIcon className="w-6" />
         </Button>
       </div>
@@ -72,9 +70,8 @@ function SideBar(props: Props) {
                 className={twMerge(
                   "flex min-w-[15rem] items-center gap-4 text-black [&>svg]:stroke-black",
                   location.pathname === link.path &&
-                    "pointer-events-none text-white [&>svg]:stroke-white",
-                )}
-              >
+                  "pointer-events-none text-white [&>svg]:stroke-white"
+                )} placeholder={undefined}              >
                 {link.icon}
 
                 <div className="name">{link.name}</div>
