@@ -1,4 +1,4 @@
-import { ReactComponent as HomeIcon } from "../../assets/home.svg";
+import { ReactComponent as HomeIcon } from "../../assets/icons/home.svg";
 import { useNavigate } from "react-router-dom";
 import {
   Popover,

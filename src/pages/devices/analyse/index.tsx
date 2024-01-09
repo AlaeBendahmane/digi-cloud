@@ -16,10 +16,10 @@ export default function index() {
                         <img src={Tempearature} alt="TempearatureIcon" />
                         <p className='m-1 font-extrabold text-3xl'>22C </p>
                     </div>
-                    <div className="flex">
-                        <p className='m-1 font-light'>Min:21.6C</p>
-                        <img src={Circle} alt="" className='my-1' />
-                        <p className='m-1 font-light'>Max:22.5C</p>
+                    <div className="flex flex-wrap sm:justify-center">
+                        <p className='my-1 font-light'>Min:21.6C</p>
+                        <img src={Circle} alt="" className='m-1' />
+                        <p className='my-1 font-light'>Max:22.5C</p>
                     </div>
                 </div>
                 <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center '>
@@ -30,10 +30,10 @@ export default function index() {
                         <img src={Humidity} alt="TempearatureIcon" />
                         <p className='m-1 font-extrabold text-3xl'>27.5% </p>
                     </div>
-                    <div className="flex">
-                        <p className='m-1 font-light'>Min:25.8%</p>
-                        <img src={Circle} alt="" className='my-1' />
-                        <p className='m-1 font-light'>Max:25.8%</p>
+                    <div className="flex flex-wrap sm:justify-center">
+                        <p className='my-1 font-light'>Min:25.8%</p>
+                        <img src={Circle} alt="" className='m-1' />
+                        <p className='my-1 font-light'>Max:25.8%</p>
                     </div>
                 </div>
             </div>

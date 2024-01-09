@@ -2,7 +2,7 @@ import { Card } from "@material-tailwind/react";
 import React from "react";
 import { ReactComponent as NbrDevice } from "../../../assets/icons/nbr-device.svg";
 import { ReactComponent as HomeDashboard } from "../../../assets/icons/home-dashbord.svg";
-import { ReactComponent as AlertComponent } from "../../../assets/icons/alert-dashbord.svg";
+import { ReactComponent as AlertComponent } from "../../../assets/icons/alerts.svg";
 function CardsDetail() {
   return (
     <React.Fragment>

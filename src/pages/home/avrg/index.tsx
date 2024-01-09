@@ -16,7 +16,7 @@ function Avrg() {
           <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center '>
             <p className='m-1 font-light'> Thershold... </p>
             <p className='m-1 font-medium'> &gt;40.00%R </p>
-            <p className='m-1 font-light'>Clear on  &lt; 39.00%RH</p>
+            <p className='m-1 font-light text-nowrap'>Clear on&lt;39.00%RH</p>
           </div>
           <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center '>
             <p className='m-1 font-light'> Last Reading... </p>
@@ -40,7 +40,7 @@ function Avrg() {
           <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center '>
             <p className='m-1 font-light'> Thershold... </p>
             <p className='m-1 font-medium'> &gt;200.00A </p>
-            <p className='m-1 font-light'>Clear on &lt; 199.00A</p>
+            <p className='m-1 font-light text-nowrap'>Clear on&lt;199.00A</p>
           </div>
           <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center '>
             <p className='m-1 font-light'> Last Reading... </p>
