@@ -110,7 +110,7 @@ export default function Alerts() {
     rows: {
       style: {
         margin: '3px 10px 3px 10px',
-        paddingLeft: '50px',
+        paddingLeft: 'auto',
         color: '#030229',
         fontSize: '17px',
         backgroundColor: '#F7F7F8',

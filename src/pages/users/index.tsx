@@ -144,7 +144,7 @@ function UserPage() {
     rows: {
       style: {
         margin: '3px 10px 3px 10px',
-        paddingLeft: '40px',
+        paddingLeft: 'auto',
         color: '#030229',
         fontSize: '17px',
         backgroundColor: '#F7F7F8',
