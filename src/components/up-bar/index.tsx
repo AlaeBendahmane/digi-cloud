@@ -4,7 +4,6 @@ import ProfileMenu from "./profile-menu";
 import ToggleFullScreen from "./toggle-full-screen";
 import Logo from '../../assets/unused/dup/logo.svg'
 import Lang from "./lang";
-
 function Upbar() {
   return (
     <div className="fixed z-[500] top-0 left-0 right-0 ">

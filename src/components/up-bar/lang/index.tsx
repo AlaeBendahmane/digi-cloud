@@ -2,35 +2,30 @@ import { Menu, MenuHandler, MenuList, MenuItem, IconButton, } from "@material-ta
 import Usa from "../../../assets/icons/usa.svg";
 import Fr from "../../../assets/icons/fr.svg";
 import Ar from "../../../assets/icons/sa.svg";
-import { useState } from "react";
+import { useProvider } from "../../provider";
+import { AppContextType } from "../../../App";
+const langMap = {
+  en: Usa,
+  fr: Fr,
+  ar: Ar
+} as const;
 function Notifications() {
-  const [selectedItem, setSelectedItem] = useState<string>(Usa);
-  const handleMenuItemClick = (item: string) => {
-    setSelectedItem((prevItem: string) => (prevItem === item ? Usa : item));
-  };
+  const { lang, setLang } = useProvider<AppContextType>()
   return (
     <Menu>
       <MenuHandler>
         <IconButton variant="text" className="min-w-[50px]" placeholder={undefined}>
-          {selectedItem ? <img src={selectedItem} /> : <span>Select an item</span>}
+          <img src={langMap[lang]} />
         </IconButton>
       </MenuHandler>
       <MenuList className="flex flex-col gap-1 min-w-[20px]" placeholder={undefined}>
-        <MenuItem
-          className={`flex items-center ${selectedItem === Usa ? 'hidden' : ''}`}
-          onClick={() => handleMenuItemClick(Usa)} placeholder={undefined} >
-          <img src={Usa} />
-        </MenuItem>
-        <MenuItem
-          className={`flex items-center ${selectedItem === Fr ? 'hidden' : ''}`}
-          onClick={() => handleMenuItemClick(Fr)} placeholder={undefined} >
-          <img src={Fr} />
-        </MenuItem>
-        <MenuItem
-          className={`flex items-center ${selectedItem === Ar ? 'hidden' : ''}`}
-          onClick={() => handleMenuItemClick(Ar)} placeholder={undefined} >
-          <img src={Ar} />
-        </MenuItem>
+        {
+          Object.entries(langMap).map(([ln, src]) => (<MenuItem key={ln}
+            className={`flex items-center ${lang === ln ? 'hidden' : ''}`}
+            onClick={() => setLang(ln as "ar" | "fr" | "en")} placeholder={undefined} >
+            <img src={src} />
+          </MenuItem>))
+        }
       </MenuList>
     </Menu>
   );

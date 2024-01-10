@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import AuthApi from "./api/auth";
 import BackendApi from "./api/backend";
@@ -29,10 +29,14 @@ export type AppContextType = {
   backendApi: BackendApi;
   user: UserType | null | undefined;
   setUser: React.Dispatch<React.SetStateAction<UserType | null | undefined>>;
+  lang : "ar" | "en" | "fr",
+  setLang: React.Dispatch< "ar" | "en" | "fr">
 };
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
+  const [lang, setLang] = useLocalStorage<"en"| "ar" | "fr">("lang", "en");
+
   const [refreshToken, setRefreshToken] = useLocalStorage("refreshToken", "");
   const [user, setUser] = useState<UserType | null | undefined>(undefined);
   const [openSideBar, setOpenSideBar] = useState(false);
@@ -63,6 +67,8 @@ function App() {
     backendApi,
     user,
     setUser,
+    lang,
+    setLang
   };
 
   /*useEffect(() => {
