@@ -1,9 +1,5 @@
 import { Card } from "@material-tailwind/react";
-import React, { useMemo } from "react";
-import { AxisOptions, Chart } from "react-charts";
 import ReactApexChart from 'react-apexcharts';
-
-
 function AnalyseTemp() {
   const alldata =
   {
@@ -18,20 +14,9 @@ function AnalyseTemp() {
       toolbar: {
         show: false
       },
-      //offsetY: -20,
-    },
-    /*subtitle: {
-        text: 'Overview',
-        offsetX: 10,
-        style: {
-            fontSize: '20px',
-            fontWeight: 'bold',
-            color: '#030229',
-            fontFamily: 'Nunito'
-        }
-    },*/
-    dataLabels: {
-      enabled: false
+      zoom: {
+        enabled: false,
+      }
     },
     colors: ["#0D0887", "#9C179E", "#ED7953"],
     series: [
@@ -75,13 +60,20 @@ function AnalyseTemp() {
         }
       },
     },
-    tooltip: {
+   /* tooltip: {
+      enabled:true,
       shared: false,
       intersect: true,
       x: {
         show: false
       },
-    },
+      followCursor: true,
+      custom: function({series, seriesIndex, dataPointIndex, w}) {
+        return '<div class="arrow_box">' +
+          '<span>' + series[seriesIndex][dataPointIndex] + '</span>' +
+          '</div>'
+      }
+    },*/
     legend: {
       position: "top",
       horizontalAlign: "right",
@@ -94,34 +86,14 @@ function AnalyseTemp() {
     },
   };
   return (
-    <Card className="bg-white p-2 md:col-span-full"  placeholder={undefined}>
-      {/* <h3 className="font-semibold ">patients statistics</h3>
-      <div className="flex-1"> */}
+    <Card className="bg-white p-2 md:col-span-full" placeholder={undefined}>
       <div className="flex h-[2rem] gap-2 p-1 px-3 absolute">
         <span className="font-Nunito font-bold text-xl">Overview</span>
-        {/* <div className=" ml-auto flex gap-2">
-          <div className="flex items-center gap-2">
-            <div className="h-[1.2rem] w-[1.2rem] rounded-[100%] bg-red-500"></div>
-            <span>Electricity</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-[1.2rem] w-[1.2rem] rounded-[100%] bg-red-500"></div>
-            <span>Humidity</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-[1.2rem] w-[1.2rem] rounded-[100%] bg-red-500"></div>
-            <span>Temperature</span>
-          </div>
-        </div> */}
       </div>
-      <div className="h-[22rem] ">
+      <div className="h-[18rem]">
         <ReactApexChart options={options} series={options.series} type="line" height={'100%'} />
-
       </div>
-
-      {/* </div> */}
     </Card>
   );
 }
-
 export default AnalyseTemp;
