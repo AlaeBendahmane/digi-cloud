@@ -93,7 +93,7 @@ export default function Roomespage() {
       "Name": "Room Theta", "Nbofdevices": 31, "Alert": 11, "Devicesstats": 7, "Creationdate": "2022-08-02"
     },
     {
-      "Name": "Room Iota", "Nbofdevices": 1045, "Alert": 22, "Devicesstats": 10, "Creationdate": "2022-09-17"
+      "Name": "Room Iota", "Nbofdevices": 30, "Alert": 22, "Devicesstats": 10, "Creationdate": "2022-09-17"
     },
     {
       "Name": "Room Kappa", "Nbofdevices": 29, "Alert": 9, "Devicesstats": 5, "Creationdate": "2022-10-05"
