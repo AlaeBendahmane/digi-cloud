@@ -1,7 +1,6 @@
 import AnalyseTemp from "./analyse-temp";
 import Avrg from "./avrg";
 import CardsDetail from "./cards-detail";
-
 function HomePage() {
   return (
     <div className="flex h-full w-full flex-col">

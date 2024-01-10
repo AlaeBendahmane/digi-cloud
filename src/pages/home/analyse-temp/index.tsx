@@ -60,20 +60,6 @@ function AnalyseTemp() {
         }
       },
     },
-   /* tooltip: {
-      enabled:true,
-      shared: false,
-      intersect: true,
-      x: {
-        show: false
-      },
-      followCursor: true,
-      custom: function({series, seriesIndex, dataPointIndex, w}) {
-        return '<div class="arrow_box">' +
-          '<span>' + series[seriesIndex][dataPointIndex] + '</span>' +
-          '</div>'
-      }
-    },*/
     legend: {
       position: "top",
       horizontalAlign: "right",

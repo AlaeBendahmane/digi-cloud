@@ -6,7 +6,8 @@ import Prealerts from '../../assets/icons/prealerts.svg'
 import Pagination from '../../components/pagination2/index';
 import Loanding from '../../components/Loading'
 import Nodata from '../../components/nodata'
-import { Button, Dialog, Card, CardHeader, CardBody, CardFooter, Typography, Input, Checkbox, } from "@material-tailwind/react";
+import Annuler from '../../assets/icons/x.svg'
+import { Button, Dialog, Card, CardFooter, Typography, Input, CardBody } from "@material-tailwind/react";
 import React from 'react';
 export default function Alerts() {
   const [open, setOpen] = React.useState(false);
@@ -122,7 +123,10 @@ export default function Alerts() {
       },
     }
   };
-
+  const dismissType = {
+    outsidePress: false,
+    escapeKey: false
+  };
   return (
     <div className="flex h-full w-full flex-col">
       <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
@@ -155,16 +159,19 @@ export default function Alerts() {
           onPageChange={handlePageChange}
         />
       </div>
-      <Dialog size="sm" open={open} handler={handleOpen}
+      <Dialog size="sm" open={open} handler={handleOpen} dismiss={dismissType}
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
-        className="bg-transparent shadow-none" placeholder={undefined}      >
+        className="bg-transparent shadow-none" placeholder={undefined}>
         <Card className="mx-auto w-full max-w-[24rem]" placeholder={undefined}>
           <CardBody className="flex flex-col gap-4" placeholder={undefined}>
-            <Typography variant="h4" color="blue-gray" placeholder={undefined}>
+            <Typography variant="h4" color="blue-gray" className='flex' placeholder={undefined}>
               Add device
+              <button className='ml-auto'>
+                <img src={Annuler} alt="" onClick={handleOpen} />
+              </button>
             </Typography>
             <Typography className="-mb-2" variant="h6" placeholder={undefined}>
               Serial
