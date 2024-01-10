@@ -94,11 +94,11 @@ function AnalyseTemp() {
     },
   };
   return (
-    <Card className="bg-white p-2 md:col-span-full">
+    <Card className="bg-white p-2 md:col-span-full"  placeholder={undefined}>
       {/* <h3 className="font-semibold ">patients statistics</h3>
       <div className="flex-1"> */}
       <div className="flex h-[2rem] gap-2 p-1 px-3 absolute">
-        <span>Overview</span>
+        <span className="font-Nunito font-bold text-xl">Overview</span>
         {/* <div className=" ml-auto flex gap-2">
           <div className="flex items-center gap-2">
             <div className="h-[1.2rem] w-[1.2rem] rounded-[100%] bg-red-500"></div>
