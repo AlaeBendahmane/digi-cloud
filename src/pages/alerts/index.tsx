@@ -103,7 +103,7 @@ export default function Alerts() {
   const customStyles = {
     headRow: {
       style: {
-        paddingLeft: '65px',
+        paddingLeft: '10px',
         color: '#5D7285',
       },
     },

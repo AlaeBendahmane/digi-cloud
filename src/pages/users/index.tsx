@@ -137,7 +137,7 @@ function UserPage() {
   const customStyles = {
     headRow: {
       style: {
-        paddingLeft: '45px',
+        paddingLeft: '15px',
         color: '#5D7285',
       },
     },
