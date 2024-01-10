@@ -147,6 +147,9 @@ function UserPage() {
         paddingLeft: 'auto',
         color: '#030229',
         fontSize: '17px',
+        fontFamily:'Nunito',
+        fontWeight: 600,
+        
         backgroundColor: '#F7F7F8',
         borderBottom: 'none !important',
         width: 'auto',
@@ -170,6 +173,8 @@ function UserPage() {
           customStyles={customStyles}
           progressComponent={<Loanding />}
           noDataComponent={<Nodata />}
+          fixedHeader
+          fixedHeaderScrollHeight="calc(100vh - 175px)"
         />
         <Pagination
           totalRows={filteredData.length}

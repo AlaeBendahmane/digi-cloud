@@ -13,18 +13,18 @@ export default function Roomespage() {
   const customCellRendererDevice = (row: { Name: string | string[] }) => (
     < >
       <img src={Preroom} alt="Preroom" />
-      <p style={{ marginLeft: '15px' }}>
+      <p className=" font-semibold text-lg ml-3">
         {row.Name}
       </p>
     </>
   );
   const customCellRendererAlert = (row: { Alert: number | number }) => (
-    <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+    <span className="bg-red-100 text-red-800  text-sm font-semibold me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
       {row.Alert} Alerts
     </span>
   );
   const customCellRendererNumber = (row: { Nbofdevices: number | number }) => (
-    <span >
+    <span className=" font-semibold text-lg">
       {row.Nbofdevices}  Devices
     </span>
   );
@@ -32,10 +32,14 @@ export default function Roomespage() {
     <div className='grid grid-flow-row auto-rows-max gap-2 '>
       <div className="grid grid-cols-2 gap-1" >
         <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '10px 0px 0px 10px' }}>
-          <p style={{ color: '#3FBC58' }} className="px-1">Online : </p> {row.Devicesstats}
+          <p style={{ color: '#3FBC58' }} className="px-1  font-semibold text-sm text-nowrap">Online :
+            <span className="text-black	"> {row.Devicesstats}</span>
+          </p>
         </div>
         <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '0px 10px 10px 0px' }}>
-          <p className="px-1" style={{ color: '#999ca9' }}>Offline : </p>{row.Nbofdevices - row.Devicesstats}
+          <p className="px-1  font-semibold text-sm text-nowrap" style={{ color: '#999ca9' }}>Offline :
+            <span className="text-black	"> {row.Nbofdevices - row.Devicesstats}</span>
+          </p>
         </div>
       </div>
     </div >
@@ -124,8 +128,8 @@ export default function Roomespage() {
         margin: '3px 10px 3px 10px',
         paddingLeft: 'auto',
         paddingRight: 'auto',
-        color: '#030229',
-        fontSize: '17px',
+        fontFamily: 'Nunito',
+        //textWrap: 'nowrap',
         backgroundColor: '#F7F7F8',
         borderBottom: 'none !important',
         width: 'auto',

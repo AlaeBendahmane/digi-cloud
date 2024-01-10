@@ -22,14 +22,14 @@ export default function Alerts() {
   const customCellRendererDate = (row: { datetime: string | string[] }) => (
     <>
       <img src={Prealerts} alt="Preroom" />
-      <p style={{ marginLeft: '12px' }}>
+      <p className='ml-3 text-nowrap font-semibold text-lg'>
         {row.datetime}
       </p>
     </>
   );
   const customCellRendererStats = (row: { Devicestats: String | String[] }) => (
-    <span className="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-      {row.Devicestats}
+    <span className="uppercase bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
+      DEVICE {row.Devicestats}
     </span>
   );
   const columns = [
@@ -37,7 +37,8 @@ export default function Alerts() {
       name: 'Date/Time',
       selector: (row: { datetime: string }) => row.datetime,
       sortable: true,
-      cell: customCellRendererDate
+      cell: customCellRendererDate,
+      width: '250px'
     },
     {
       name: 'Device stats',
@@ -111,8 +112,10 @@ export default function Alerts() {
       style: {
         margin: '3px 10px 3px 10px',
         paddingLeft: 'auto',
-        color: '#030229',
+        fontFamily: 'Nunito',
         fontSize: '17px',
+        fontWeight: 600,
+        textWrap: 'nowrap',
         backgroundColor: '#F7F7F8',
         borderBottom: 'none !important',
         width: 'auto',
@@ -143,6 +146,8 @@ export default function Alerts() {
           customStyles={customStyles}
           progressComponent={<Loanding />}
           noDataComponent={<Nodata />}
+          fixedHeader
+          fixedHeaderScrollHeight="calc(100vh - 175px)"
         />
         <Pagination
           totalRows={filteredData.length}
