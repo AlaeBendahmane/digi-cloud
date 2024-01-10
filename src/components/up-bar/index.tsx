@@ -3,6 +3,7 @@ import Notifications from "./notifications";
 import ProfileMenu from "./profile-menu";
 import ToggleFullScreen from "./toggle-full-screen";
 import Logo from '../../assets/unused/dup/logo.svg'
+import Lang from "./lang";
 
 function Upbar() {
   return (
@@ -11,6 +12,7 @@ function Upbar() {
         <div className="relative mx-auto flex items-center text-blue-gray-900">
           <img src={Logo} alt="" className="h-10" />{/*"/logo.svg" */}
           <div className=" mx-auto "></div>
+          <Lang />
           <Notifications />
           <ToggleFullScreen />
           {/*<ProfileMenu />*/}
