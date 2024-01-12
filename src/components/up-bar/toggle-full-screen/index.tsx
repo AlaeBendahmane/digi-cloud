@@ -1,5 +1,4 @@
 import { IconButton } from "@material-tailwind/react";
-
 import {
   ArrowsPointingInIcon,
   ArrowsPointingOutIcon,
@@ -13,12 +12,11 @@ function ToggleFullScreen() {
   return (
     <IconButton
       variant="text"
-      className="mx-1 text-blue-900"
+      className="text-blue-900"
       onClick={() => {
         setIsFullScreen(!isFullScreen);
         toggleFullScreen();
-      }}
-    >
+      }} placeholder={undefined}    >
       {isFullScreen ? (
         <ArrowsPointingInIcon className="h-5 w-5" />
       ) : (

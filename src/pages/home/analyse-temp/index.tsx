@@ -60,6 +60,18 @@ function AnalyseTemp() {
         }
       },
     },
+    noData: {
+      text: 'No Data found',
+      align: 'center',
+      verticalAlign: 'middle',
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+        color: 'black',
+        fontSize: '14px',
+        fontFamily: 'Nunito'
+      }
+    },
     legend: {
       position: "top",
       horizontalAlign: "right",
