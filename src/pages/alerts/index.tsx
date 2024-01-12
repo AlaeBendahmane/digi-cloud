@@ -9,7 +9,9 @@ import Nodata from '../../components/nodata'
 import Annuler from '../../assets/icons/x.svg'
 import { Button, Dialog, Card, CardFooter, Typography, Input, CardBody } from "@material-tailwind/react";
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 export default function Alerts() {
+  const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen((cur) => !cur);
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,35 +32,35 @@ export default function Alerts() {
   );
   const customCellRendererStats = (row: { Devicestats: String | String[] }) => (
     <span className="uppercase bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-      DEVICE {row.Devicestats}
+      {t(`DEVICE_${row.Devicestats}`)}
     </span>
   );
   const columns = [
     {
-      name: 'Date/Time',
+      name: t('Date/Time'),
       selector: (row: { datetime: string }) => row.datetime,
       sortable: true,
       cell: customCellRendererDate,
       width: '250px'
     },
     {
-      name: 'Device stats',
+      name: t('Device stats'),
       selector: (row: { Devicestats: string }) => row.Devicestats,
       sortable: true,
       cell: customCellRendererStats
     },
     {
-      name: 'Cause',
+      name: t('Cause'),
       selector: (row: { Cause: string }) => row.Cause,
       sortable: true,
     },
     {
-      name: 'Room',
+      name: t('Room'),
       selector: (row: { Room: string }) => row.Room,
       sortable: true,
     },
     {
-      name: 'Serial',
+      name: t('Serial'),
       selector: (row: { Serial: string }) => row.Serial,
       sortable: true,
     },
@@ -130,16 +132,16 @@ export default function Alerts() {
   return (
     <div className="flex h-full w-full flex-col">
       <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
-        Alerts
+        {t('Alerts')}
         <div className="flex ml-auto">
           <div className="relative flex mx-2">
-            <input type="text" className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder="Search"
+            <input type="text" className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary" placeholder={t('Search')}
               value={searchQuery} onChange={handleSearch} />
             <img src={Find} alt="" className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer" />
           </div>
           <button className="rounded bg-red-600 flex px-2.5 py-1 text-white " onClick={handleOpen} >
             <img src={Add} alt="" className="mx-1.5 my-0.5" />
-            ADD DEVICE
+            {t('ADD DEVICE')}
           </button>
         </div>
       </h6>
@@ -168,19 +170,19 @@ export default function Alerts() {
         <Card className="mx-auto w-full max-w-[24rem]" placeholder={undefined}>
           <CardBody className="flex flex-col gap-4" placeholder={undefined}>
             <Typography variant="h4" color="blue-gray" className='flex' placeholder={undefined}>
-              Add device
+              {t('Add device')}
               <button className='ml-auto'>
                 <img src={Annuler} alt="" onClick={handleOpen} />
               </button>
             </Typography>
             <Typography className="-mb-2" variant="h6" placeholder={undefined}>
-              Serial
+              {t('Serial')}
             </Typography>
-            <Input label="Serial" size="lg" crossOrigin={undefined} />
+            <Input label={t('Serial')} size="lg" crossOrigin={undefined} />
           </CardBody>
           <CardFooter className="pt-0" placeholder={undefined}>
             <Button variant="gradient" onClick={handleOpen} fullWidth placeholder={undefined}>
-              Add
+              {t('Add')}
             </Button>
           </CardFooter>
         </Card>

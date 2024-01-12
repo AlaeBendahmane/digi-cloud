@@ -11,6 +11,9 @@ const langMap = {
 } as const;
 function Notifications() {
   const { lang, setLang } = useProvider<AppContextType>()
+  const langHandler = (): void => {
+    window.location.reload();
+  };
   return (
     <Menu>
       <MenuHandler>
@@ -18,11 +21,14 @@ function Notifications() {
           <img src={langMap[lang]} />
         </IconButton>
       </MenuHandler>
-      <MenuList className="flex flex-col gap-1 min-w-[20px]" placeholder={undefined}>
+      <MenuList className="flex flex-col gap-1 min-w-[20px]" placeholder={undefined} >
         {
           Object.entries(langMap).map(([ln, src]) => (<MenuItem key={ln}
             className={`flex items-center ${lang === ln ? 'hidden' : ''}`}
-            onClick={() => setLang(ln as "ar" | "fr" | "en")} placeholder={undefined} >
+            onClick={() => {
+              setLang(ln as "ar" | "fr" | "en");
+              langHandler();
+            }} placeholder={undefined} >
             <img src={src} />
           </MenuItem>))
         }

@@ -9,6 +9,7 @@ import {
 import React from "react";
 import { twMerge } from "tailwind-merge";
 import Routes from "../../routes";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   openSideBar: boolean;
@@ -16,6 +17,8 @@ interface Props {
 }
 function SideBar(props: Props) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const { openSideBar, setOpenSideBar } = props;
   return (
     <div className="fixed bottom-2 left-2 top-[4rem]  z-[500] flex  ">
@@ -55,7 +58,7 @@ function SideBar(props: Props) {
         )}
       >
         <span className="mx-2 flex h-[4rem] items-center border-b-2 px-3 text-[16px] font-bold text-[#3F4570]">
-          Menu
+          {t('menu')}
         </span>
 
         <div className="flex flex-col  gap-2 p-2 ">
@@ -74,7 +77,7 @@ function SideBar(props: Props) {
                 )} placeholder={undefined}              >
                 {link.icon}
 
-                <div className="name">{link.name}</div>
+                <div className="name">{t(link.name)}</div>
               </Button>
             );
           })}

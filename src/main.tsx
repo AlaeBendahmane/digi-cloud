@@ -11,6 +11,8 @@ import AlertPage from "./pages/alerts/index.tsx";
 import UserPage from "./pages/users/index.tsx";
 //import LogsPage from "./pages/logs/index.tsx";
 import RoomesPage from "./pages/rooms/index.tsx";
+import i18n from './hook/i18n.tsx';
+import { I18nextProvider } from 'react-i18next';
 
 const router = createBrowserRouter([
   {
@@ -47,32 +49,34 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider
-      value={{
-        button: {
-          defaultProps: {
-            variant: "gradient",
-            color: "purple",
+    <I18nextProvider i18n={i18n}>
+      <ThemeProvider
+        value={{
+          button: {
+            defaultProps: {
+              variant: "gradient",
+              color: "purple",
+            },
           },
-        },
-        input: {
-          defaultProps: {
-            color: "purple",
+          input: {
+            defaultProps: {
+              color: "purple",
+            },
           },
-        },
-        select: {
-          defaultProps: {
-            color: "purple",
+          select: {
+            defaultProps: {
+              color: "purple",
+            },
           },
-        },
-        checkbox: {
-          defaultProps: {
-            color: "purple",
+          checkbox: {
+            defaultProps: {
+              color: "purple",
+            },
           },
-        },
-      }}
-    >
-      <RouterProvider router={router} />
-    </ThemeProvider>
+        }}
+      >
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </I18nextProvider>
   </React.StrictMode>,
 );

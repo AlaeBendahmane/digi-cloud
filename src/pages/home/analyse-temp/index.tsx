@@ -1,6 +1,9 @@
 import { Card } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts';
+import { useTranslation } from "react-i18next";
 function AnalyseTemp() {
+  const { t } = useTranslation();
+
   const alldata =
   {
     Electricity: [10, 20, 30, 40, 50, 60, 60, 50, 40, 30, 20, 10],
@@ -21,15 +24,15 @@ function AnalyseTemp() {
     colors: ["#0D0887", "#9C179E", "#ED7953"],
     series: [
       {
-        name: "Electricity",
+        name: t('electricity'),
         data: alldata.Electricity
       },
       {
-        name: "Humidity",
+        name: t('humidity'),
         data: alldata.Humidity
       },
       {
-        name: "Temperature",
+        name: t('temperature'),
         data: alldata.Temperature
       }
     ],
@@ -42,7 +45,7 @@ function AnalyseTemp() {
       }
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      categories: [t('jan'), t('feb'), t('mar'), t('apr'), t('may'), t('jun'), t('jul'), t('aug'), t('sep'), t('oct'), t('nov'), t('dec')]
     },
     yaxis: {
       axisTicks: {
@@ -61,7 +64,7 @@ function AnalyseTemp() {
       },
     },
     noData: {
-      text: 'No Data found',
+      text: t('No Data found'),
       align: 'center',
       verticalAlign: 'middle',
       offsetX: 0,
@@ -86,7 +89,7 @@ function AnalyseTemp() {
   return (
     <Card className="bg-white p-2 md:col-span-full" placeholder={undefined}>
       <div className="flex h-[2rem] gap-2 p-1 px-3 absolute">
-        <span className="font-Nunito font-bold text-xl">Overview</span>
+        <span className="font-Nunito font-bold text-xl">{t('overview')}</span>
       </div>
       <div className="h-[18rem]">
         <ReactApexChart options={options} series={options.series} type="line" height={'100%'} />
