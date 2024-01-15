@@ -152,8 +152,10 @@ export default function Alerts() {
           customStyles={customStyles}
           progressComponent={<Loanding />}
           noDataComponent={<Nodata />}
-          fixedHeader
-          fixedHeaderScrollHeight="calc(100vh - 175px)"
+          {...(filteredData.length === 0 ? {} : {
+            fixedHeader: true,
+            fixedHeaderScrollHeight: "calc(100vh - 175px)"
+          })}
         />
         <Pagination
           totalRows={filteredData.length}

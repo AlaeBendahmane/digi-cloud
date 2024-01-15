@@ -9,22 +9,8 @@ function DevicesPage() {
       </h6>
       <div className="mx-auto  flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 overflow-auto" id="Content"  >
         <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2"  >
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
-          <Analyse />
+          <Analyse nom="aaa" temperature={0} minT={0} maxT={0} humidity={0} minH={0} maxH={0} />
+          <Analyse nom="bbb" temperature={0} minT={0} maxT={0} humidity={0} minH={0} maxH={0} />
         </div>
       </div>
     </div>

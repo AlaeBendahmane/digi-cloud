@@ -1,0 +1,78 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("BACKEND_DATABASE_URL")
+}
+
+// generator erd {
+//     provider = "prisma-erd-generator"
+//     output   = "./ERD.pdf"
+// }
+
+model Sensors {
+    id          Int       @id @default(autoincrement())
+    name        String
+    temperature Float
+    t_min       Float
+    t_max       Float
+    humidity    Float
+    h_min       Float
+    h_max       Float
+    created_at  DateTime  @default(now()) @map("created_at")
+    updated_at  DateTime  @updatedAt @map("updated_at")
+    @@unique([id, name])
+    @@map("sensors")
+}
+
+model Rooms {
+    id              Int      @id @default(autoincrement())
+    name            String
+    //nb_of_devices   Int
+    alert           Int
+    //devices_stats   Int
+    created_at      DateTime  @default(now()) @map("created_at")
+    updated_at      DateTime  @updatedAt @map("updated_at")
+    @@unique([id, name])
+    @@map("rooms")
+}
+
+model Alerts {
+    id             Int      @id @default(autoincrement())
+    datetime       DateTime
+    device_stats   String
+    cause          String
+    room           Rooms     @relation(fields: [roomName], references: [name], onDelete: Cascade)
+    roomName       String
+    serial         String
+    created_at     DateTime  @default(now()) @map("created_at")
+    updated_at     DateTime  @updatedAt @map("updated_at")
+    @@unique([id])
+    @@map("alerts")
+}
+
+model Contacts {
+    id              Int      @id @default(autoincrement())
+    name            String
+    phone_number    String
+    whatsapp_number String
+    email_address   String
+    telegram_id     String
+    created_at      DateTime  @default(now()) @map("created_at")
+    updated_at      DateTime  @updatedAt @map("updated_at")
+    @@unique([id, phone_number,email_address,telegram_id])
+    @@map("contacts")
+}
+
+model Users {
+    id              Int      @id @default(autoincrement())
+    email           String   @unique
+    password        String
+    full_name       String
+    avatar_url      String?
+    created_at      DateTime @default(now()) @map("created_at")
+    updated_at      DateTime @updatedAt @map("updated_at")
+    @@map("users")
+}

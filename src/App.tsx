@@ -29,13 +29,13 @@ export type AppContextType = {
   backendApi: BackendApi;
   user: UserType | null | undefined;
   setUser: React.Dispatch<React.SetStateAction<UserType | null | undefined>>;
-  lang : "ar" | "en" | "fr",
-  setLang: React.Dispatch< "ar" | "en" | "fr">
+  lang: "ar" | "en" | "fr",
+  setLang: React.Dispatch<"ar" | "en" | "fr">
 };
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
-  const [lang, setLang] = useLocalStorage<"en"| "ar" | "fr">("lang", "en");
+  const [lang, setLang] = useLocalStorage<"en" | "ar" | "fr">("lang", "en");
 
   const [refreshToken, setRefreshToken] = useLocalStorage("refreshToken", "");
   const [user, setUser] = useState<UserType | null | undefined>(undefined);
