@@ -1,5 +1,6 @@
 import Analyse from "./analyse";
 import { useTranslation } from "react-i18next";
+import Nodata from '../../components/nodata'
 function DevicesPage() {
   const data = [
     { "nom": "aaa", "temperature": 10, "minT": 0, "maxT": 0, "humidity": 0, "minH": 0, "maxH": 0 },
@@ -23,19 +24,17 @@ function DevicesPage() {
       <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px] min-h-14">
         {t('realtime event')}
       </h6>
-      <div className="mx-auto  flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 overflow-auto" id="Content"  >
-        <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2"  >
-          {data.length > 0 ? (
-            <>
-              {data.map(element => (
-                <Analyse key={5} nom={element.nom} temperature={element.temperature} minT={element.minT} maxT={element.maxT} humidity={element.humidity} minH={element.minH} maxH={element.maxH} />
-              ))}
-            </>
-          ) : (
-            <span>no data</span>
-          )}
+      {data.length === 0 ? (
+        <Nodata />
+      ) : (
+        <div className="mx-auto  flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 overflow-auto" id="Content">
+          <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2"  >
+            {data.map(element => (
+              <Analyse key={element.nom} nom={element.nom} temperature={element.temperature} minT={element.minT} maxT={element.maxT} humidity={element.humidity} minH={element.minH} maxH={element.maxH} />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
