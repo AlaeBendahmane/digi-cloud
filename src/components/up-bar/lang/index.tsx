@@ -4,6 +4,7 @@ import Fr from "../../../assets/icons/fr.svg";
 import Ar from "../../../assets/icons/sa.svg";
 import { useProvider } from "../../provider";
 import { AppContextType } from "../../../App";
+import { useTranslation } from "react-i18next";
 const langMap = {
   en: Usa,
   fr: Fr,
@@ -11,9 +12,7 @@ const langMap = {
 } as const;
 function Notifications() {
   const { lang, setLang } = useProvider<AppContextType>()
-  const langHandler = (): void => {
-    window.location.reload();
-  };
+  const [t, i18n] = useTranslation('lang')
   return (
     <Menu>
       <MenuHandler>
@@ -27,7 +26,7 @@ function Notifications() {
             className={`flex items-center ${lang === ln ? 'hidden' : ''}`}
             onClick={() => {
               setLang(ln as "ar" | "fr" | "en");
-              langHandler();
+              i18n.changeLanguage(ln)
             }} placeholder={undefined} >
             <img src={src} />
           </MenuItem>))
