@@ -6,8 +6,8 @@ import Prealerts from '../../assets/icons/prealerts.svg'
 import Pagination from '../../components/pagination2/index';
 import Loanding from '../../components/Loading'
 import Nodata from '../../components/nodata'
-import Annuler from '../../assets/icons/x.svg'
-import { Button, Dialog, Card, CardFooter, Typography, Input, CardBody } from "@material-tailwind/react";
+import Device from '../../assets/icons/device.svg'
+import { Button, Dialog, Card, CardFooter, Typography, Input, CardBody, CardHeader, DialogHeader, DialogBody } from "@material-tailwind/react";
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 export default function Alerts() {
@@ -163,24 +163,31 @@ export default function Alerts() {
           onPageChange={handlePageChange}
         />
       </div>
-      <Dialog size="sm" open={open} handler={handleOpen} dismiss={dismissType}
+      {/*<Dialog size='lg' open={open} handler={handleOpen} dismiss={dismissType}
         animate={{
           mount: { scale: 1, y: 0 },
           unmount: { scale: 0.9, y: -100 },
         }}
         className="bg-transparent shadow-none" placeholder={undefined}>
-        <Card className="mx-auto w-full max-w-[24rem]" placeholder={undefined}>
+        <Card className="mx-auto w-full max-w-[24rem]"  placeholder={undefined}>
+          <DialogHeader placeholder={undefined}>Its a simple dialog.</DialogHeader>
+          <DialogBody placeholder={undefined} >
+          The key to more success is to have a lot of pillows. Put it this way,
+          it took me twenty five years to get these plants, twenty five years of
+          blood sweat and tears, and I&apos;m never giving up, I&apos;m just
+          getting started. I&apos;m up to something. Fan luv.
+        </DialogBody>
+        <Typography variant="h4" color="blue-gray" className='flex bg-red-50 h-16 p-3 font-medium ' placeholder={undefined}>
+            <img src={Device} alt="" className='mr-1.5' />
+            {t('Add device')}
+          </Typography>
           <CardBody className="flex flex-col gap-4" placeholder={undefined}>
-            <Typography variant="h4" color="blue-gray" className='flex' placeholder={undefined}>
-              {t('Add device')}
-              <button className='ml-auto'>
-                <img src={Annuler} alt="" onClick={handleOpen} />
-              </button>
-            </Typography>
             <Typography className="-mb-2" variant="h6" placeholder={undefined}>
-              {t('Serial')}
+              {t('Name')}
             </Typography>
-            <Input label={t('Serial')} size="lg" crossOrigin={undefined} />
+            <input type="email" placeholder='NXT-3' className="peer h-full w-full rounded-[7px]  !border  !border-gray-300 border-t-transparent bg-transparent bg-white px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700  shadow-lg shadow-gray-900/5 outline outline-0 ring-4 ring-transparent transition-all placeholder:text-gray-500 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2  focus:!border-gray-900 focus:border-t-transparent focus:!border-t-gray-900 focus:outline-0 focus:ring-gray-900/10 disabled:border-0 disabled:bg-blue-gray-50" />
+            <input type="email" placeholder='NXT-3' className="peer h-full w-full rounded-[7px]  !border  !border-gray-300 border-t-transparent bg-transparent bg-white px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700  shadow-lg shadow-gray-900/5 outline outline-0 ring-4 ring-transparent transition-all placeholder:text-gray-500 placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2  focus:!border-gray-900 focus:border-t-transparent focus:!border-t-gray-900 focus:outline-0 focus:ring-gray-900/10 disabled:border-0 disabled:bg-blue-gray-50" />
+
           </CardBody>
           <CardFooter className="pt-0" placeholder={undefined}>
             <Button variant="gradient" onClick={handleOpen} fullWidth placeholder={undefined}>
@@ -188,7 +195,7 @@ export default function Alerts() {
             </Button>
           </CardFooter>
         </Card>
-      </Dialog>
+      </Dialog>*/}
     </div>
   )
 }

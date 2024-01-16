@@ -3,15 +3,16 @@ import { Button, Input } from "@material-tailwind/react";
 // import Lottie from "lottie-react";
 import { useState } from "react";
 // import { Alert } from "@material-tailwind/react";
-import { ZodError, z } from "zod";
+import { ZodError, object, z } from "zod";
 import { useProvider } from "../../components/provider";
 import { AppContextType } from "../../App";
 // import Loader from "../../components/loader";
 import { AxiosError } from "axios";
-import LogoImage from "../../assets/loginImage.png";
-import { ReactComponent as Logo } from "../../assets/logo.svg";
+import LogoImage from "../../assets/icons/loginImage.png"
+import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { toast } from "react-toastify";
 import { Spinner } from "@material-tailwind/react";
+import { User } from "../../utils/types";
 
 const loginDataSchema = z.object({
   email: z.string().email({
@@ -32,7 +33,7 @@ function LoginPage() {
 
   const [loading, setLoading] = useState(false);
 
-  const { authApi, setAccessToken, setRefreshToken } =
+  const { backendApi, setAccessToken, setRefreshToken, setUser } =
     useProvider<AppContextType>();
 
   async function handleLogin() {
@@ -41,7 +42,8 @@ function LoginPage() {
     await new Promise((resolve) => setTimeout(resolve, 500));
     try {
       const data = loginDataSchema.parse(loginData);
-      const { accessToken, refreshToken } = await authApi.login(data);
+      const { accessToken, refreshToken, user } = await backendApi.login(data);
+      setUser(user as User)
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
     } catch (error) {
@@ -71,38 +73,27 @@ function LoginPage() {
               type="text"
               label="Username"
               value={loginData.email}
-              onChange={(e) =>
-                setLoginData((prev) => ({ ...prev, email: e.target.value }))
-              }
+              onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleLogin();
                 }
-              }}
-            />
+              }} crossOrigin={undefined} />
           </div>
           <div>
             <Input
               type="password"
               label="Password"
               value={loginData.password}
-              onChange={(e) =>
-                setLoginData((prev) => ({ ...prev, password: e.target.value }))
-              }
+              onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleLogin();
                 }
-              }}
-            />
+              }} crossOrigin={undefined} />
           </div>
         </div>
-        <Button
-          color="purple"
-          className=" relative h-11"
-          onClick={handleLogin}
-          disabled={loading}
-        >
+        <Button color="purple" className=" relative h-11" onClick={handleLogin} disabled={loading} placeholder={undefined}>
           {loading ? (
             <div className="absolute-center">
               <Spinner />
@@ -118,5 +109,4 @@ function LoginPage() {
     </div>
   );
 }
-
 export default LoginPage;

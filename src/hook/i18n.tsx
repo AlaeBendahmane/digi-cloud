@@ -1,7 +1,6 @@
 // i18n.js
 import en from '../assets/lang/en.json';
 import fr from '../assets/lang/fr.json';
-import ar from '../assets/lang/ar.json';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 const savedLanguage = localStorage.getItem('lang')?.replace(/"/g, '');
@@ -15,9 +14,6 @@ i18n
             fr: {
                 translation: fr,
             },
-            ar: {
-                translation: ar,
-            }
         },
         lng: savedLanguage || 'en',
         fallbackLng: 'en',

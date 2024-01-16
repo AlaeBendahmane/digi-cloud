@@ -11,12 +11,12 @@ function Upbar() {
         <div className="relative mx-auto flex items-center text-blue-gray-900">
           <img src={Logo} alt="" className="h-10" />{/*"/logo.svg" */}
           <div className="mx-auto"></div>
-          <div className="space-x-1 ">
+          <div className="space-x-1 mr-1">
             <Lang />
             <Notifications />
             <ToggleFullScreen />
           </div>
-          {/*<ProfileMenu />*/}
+          <ProfileMenu />
         </div>
       </Navbar>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import AuthApi from "./api/auth";
 import BackendApi from "./api/backend";
@@ -29,13 +29,13 @@ export type AppContextType = {
   backendApi: BackendApi;
   user: UserType | null | undefined;
   setUser: React.Dispatch<React.SetStateAction<UserType | null | undefined>>;
-  lang: "ar" | "en" | "fr",
-  setLang: React.Dispatch<"ar" | "en" | "fr">
+  lang: "en" | "fr",
+  setLang: React.Dispatch<"en" | "fr">
 };
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
-  const [lang, setLang] = useLocalStorage<"en" | "ar" | "fr">("lang", "en");
+  const [lang, setLang] = useLocalStorage<"en" | "fr">("lang", "en");
 
   const [refreshToken, setRefreshToken] = useLocalStorage("refreshToken", "");
   const [user, setUser] = useState<UserType | null | undefined>(undefined);
@@ -48,12 +48,13 @@ function App() {
   const backendApi = useMemo(
     () =>
       new BackendApi({
-        accessToken: refreshToken,
-        logout: () => {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        logoutCallback: () => {
           setUser(null);
           setAccessToken("");
-          setRefreshToken("");
-        },
+          setRefreshToken("")
+        }
       }),
     [refreshToken],
   );
@@ -71,28 +72,28 @@ function App() {
     setLang
   };
 
-  /*useEffect(() => {
+ useEffect(() => {
     setUser(undefined);
-    authApi
-      .verify()
+    backendApi
+      .getCurrentUser()
       .then((u) => {
         setUser(u);
       })
       .catch(() => {
         setUser(null);
       });
-  }, [accessToken, refreshToken]);*/
+  }, [accessToken, refreshToken]);
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <Provider value={value}>
-        {/*user === undefined && (
+        {user === undefined && (
           <div className="flex-center h-screen w-screen ">
             <Loading />
           </div>
         )}
-        {user === null && <LoginPage />*/}
-        {/*user &&*/ (
+        {user === null && <LoginPage />}
+        {user && (
           <div className="text-dark flex h-screen  text-xs sm:text-sm md:text-base">
             <SideBar
               openSideBar={openSideBar}

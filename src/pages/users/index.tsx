@@ -1,13 +1,23 @@
 import Pagination from "../../components/pagination2";
 import DataTable from "react-data-table-component";
 import Find from '../../assets/icons/find.svg'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import user from '../../assets/icons/user.svg'
 import Loanding from '../../components/Loading'
 import Nodata from '../../components/nodata'
 import { useTranslation } from "react-i18next";
+import { makeReq } from "../../api/backend";
+import { env } from "../../utils/env";
+import { User } from "../../utils/types";
 function UserPage() {
   const { t } = useTranslation();
+  const [ContactsArray, setContactsArray] = useState<User[]>([]);
+  async function fetchData() {
+    setContactsArray(await makeReq(env.VITE_BACKEND_API + 'user').then(rep => rep.results));
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +42,8 @@ function UserPage() {
       cell: customCellRendererName
     },
     {
-      name: t('Phone number'),
-      selector: (row: { Phonenumber: string }) => row.Phonenumber,
-      sortable: true,
-    },
-    {
-      name: t('Whatsapp number'),
-      selector: (row: { Whatsappnumber: string }) => row.Whatsappnumber,
+      name: t('Role'),
+      selector: (row: { Role: string }) => row.Role,
       sortable: true,
     },
     {
@@ -47,88 +52,20 @@ function UserPage() {
       sortable: true,
     },
     {
-      name: t('Telegram ID'),
-      selector: (row: { TelegramID: string }) => row.TelegramID,
-      sortable: true,
-    },
-    {
       name: t('Creation date'),
       selector: (row: { Creationdate: string }) => row.Creationdate,
       sortable: true,
     },
   ];
-  const data = [
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    }, {
-      Name: 'Jone Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    },
-    {
-      Name: 'John Doe', Phonenumber: '123-456-7890', Whatsappnumber: '+1234567890', EmailAdrdress: 'john.doe@example.com', TelegramID: 'DH3820101', Creationdate: '2022-01-01'
-    },
-    {
-      Name: 'Jane Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    }, {
-      Name: 'Jone Smith', Phonenumber: '987-654-3210', Whatsappnumber: '+9876543210', EmailAdrdress: 'jane.smith@example.com', TelegramID: 'DH3820101', Creationdate: '2022-02-15'
-    }
-  ];
+  const data: { Name: string; Role: string; EmailAdrdress: string; Creationdate: string; }[] = [];
+  ContactsArray.forEach(element => {
+    data.push({
+      Name: element.firstName + " " + element.lastName,
+      Role: element.role,
+      EmailAdrdress: element.email,
+      Creationdate: new Date(element.createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")
+    });
+  });
   const filteredData = data.filter((contact) =>
     contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -151,7 +88,6 @@ function UserPage() {
         fontSize: '17px',
         fontFamily: 'Nunito',
         fontWeight: 600,
-
         backgroundColor: '#F7F7F8',
         borderBottom: 'none !important',
         width: 'auto',
@@ -189,5 +125,4 @@ function UserPage() {
     </div>
   );
 }
-
 export default UserPage;

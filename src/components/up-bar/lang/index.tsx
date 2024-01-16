@@ -1,14 +1,12 @@
 import { Menu, MenuHandler, MenuList, MenuItem, IconButton, } from "@material-tailwind/react";
 import Usa from "../../../assets/icons/usa.svg";
 import Fr from "../../../assets/icons/fr.svg";
-import Ar from "../../../assets/icons/sa.svg";
 import { useProvider } from "../../provider";
 import { AppContextType } from "../../../App";
 import { useTranslation } from "react-i18next";
 const langMap = {
   en: Usa,
   fr: Fr,
-  ar: Ar
 } as const;
 function Notifications() {
   const { lang, setLang } = useProvider<AppContextType>()
@@ -25,7 +23,7 @@ function Notifications() {
           Object.entries(langMap).map(([ln, src]) => (<MenuItem key={ln}
             className={`flex items-center ${lang === ln ? 'hidden' : ''}`}
             onClick={() => {
-              setLang(ln as "ar" | "fr" | "en");
+              setLang(ln as "fr" | "en");
               i18n.changeLanguage(ln)
             }} placeholder={undefined} >
             <img src={src} />

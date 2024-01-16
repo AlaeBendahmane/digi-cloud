@@ -27,6 +27,11 @@ const Routes: {
       icon: <ListIcon />,
     },
     {
+      name: "maps",
+      path: "/maps",
+      icon: <ListIcon />,
+    },
+    {
       name: "contacts",
       path: "/contacts",
       icon: <ListIcon />,

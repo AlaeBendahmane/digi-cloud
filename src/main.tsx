@@ -11,6 +11,7 @@ import AlertPage from "./pages/alerts/index.tsx";
 import UserPage from "./pages/users/index.tsx";
 //import LogsPage from "./pages/logs/index.tsx";
 import RoomesPage from "./pages/rooms/index.tsx";
+import MapsPage from "./pages/map/index.tsx";
 import i18n from './hook/i18n.tsx';
 import { I18nextProvider } from 'react-i18next';
 
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/rooms",
         element: <RoomesPage />,
+      },
+      {
+        path: "/maps",
+        element: <MapsPage />,
       },
     ],
   },

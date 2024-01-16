@@ -8,7 +8,7 @@ export default class AuthApi {
   private retryCounter:number = 0;
   private maxRetry:number = 3;
   private api = axios.create({
-    baseURL: env.VITE_AUTH_API,
+    baseURL: env.VITE_BACKEND_API,
     timeout: 8000,
   });
 
