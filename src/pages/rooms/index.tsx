@@ -5,11 +5,16 @@ import Loanding from '../../components/Loading'
 import Nodata from '../../components/nodata'
 import Find from '../../assets/icons/find.svg'
 import { useTranslation } from "react-i18next";
-
+import { useQuery } from "@tanstack/react-query";
+import { useProvider } from "../../components/provider";
+import { AppContextType } from "../../App";
+import { Group } from "../../utils/types";
 export default function Roomespage() {
+  const [RoomsArray, setRoomsArray] = useState<Group[]>([]);
+  const { backendApi } = useProvider<AppContextType>();
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
-  const handleSearch = (e: { target: { value: SetStateAction<string>; }; }) => {
+  const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
     setSearchQuery(e.target.value);
   };
   const customCellRendererDevice = (row: { Name: string | string[] }) => (
@@ -30,17 +35,17 @@ export default function Roomespage() {
       {row.Nbofdevices}  {t('Devices')}
     </span>
   );
-  const customCellRendererStats = (row: { Devicesstats: number | number; Nbofdevices: number | number }) => (
+  const customCellRendererStats = (row: { OnlineDevices: number | number; OfflineDevices: number | number }) => (
     <div className='grid grid-flow-row auto-rows-max gap-2 '>
       <div className="grid grid-cols-2 gap-1" >
         <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '10px 0px 0px 10px' }}>
           <p style={{ color: '#3FBC58' }} className="px-1  font-semibold text-sm text-nowrap">{t('Online :')}
-            <span className="text-black	"> {row.Devicesstats}</span>
+            <span className="text-black	"> {row.OnlineDevices}</span>
           </p>
         </div>
         <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '0px 10px 10px 0px' }}>
           <p className="px-1  font-semibold text-sm text-nowrap" style={{ color: '#999ca9' }}>{t('Offline :')}
-            <span className="text-black	"> {row.Nbofdevices - row.Devicesstats}</span>
+            <span className="text-black	"> {row.OfflineDevices}</span>
           </p>
         </div>
       </div>
@@ -52,7 +57,6 @@ export default function Roomespage() {
       selector: (row: { Name: string }) => row.Name,
       sortable: true,
       cell: customCellRendererDevice,
-
     },
     {
       name: t('Nb of devices'),
@@ -68,7 +72,7 @@ export default function Roomespage() {
     },
     {
       name: t('Devices stats'),
-      selector: (row: { Devicesstats: number }) => row.Devicesstats,
+      selector: (row: { OnlineDevices: number; OfflineDevices: number }) => row.OnlineDevices + row.OfflineDevices,
       sortable: true,
       cell: customCellRendererStats,
     },
@@ -79,44 +83,35 @@ export default function Roomespage() {
       width: '150px',
     },
   ];
-  const data = [
-    {
-      "Name": "Room Gamma", "Nbofdevices": 42, "Alert": 15, "Devicesstats": 8, "Creationdate": "2022-03-10"
-    },
-    {
-      "Name": "Room Delta", "Nbofdevices": 30, "Alert": 10, "Devicesstats": 6, "Creationdate": "2022-04-05"
-    },
-    {
-      "Name": "Room Epsilon", "Nbofdevices": 50, "Alert": 20, "Devicesstats": 12, "Creationdate": "2022-05-20"
-    },
-    {
-      "Name": "Room Zeta", "Nbofdevices": 25, "Alert": 5, "Devicesstats": 4, "Creationdate": "2022-06-12"
-    },
-    {
-      "Name": "Room Eta", "Nbofdevices": 38, "Alert": 18, "Devicesstats": 9, "Creationdate": "2022-07-08"
-    },
-    {
-      "Name": "Room Theta", "Nbofdevices": 31, "Alert": 11, "Devicesstats": 7, "Creationdate": "2022-08-02"
-    },
-    {
-      "Name": "Room Iota", "Nbofdevices": 30, "Alert": 22, "Devicesstats": 10, "Creationdate": "2022-09-17"
-    },
-    {
-      "Name": "Room Kappa", "Nbofdevices": 29, "Alert": 9, "Devicesstats": 5, "Creationdate": "2022-10-05"
-    },
-    {
-      "Name": "Room Lambda", "Nbofdevices": 35, "Alert": 12, "Devicesstats": 6, "Creationdate": "2022-11-20"
-    },
-    {
-      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
-    },
-    {
-      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
-    },
-    {
-      "Name": "Room Mu", "Nbofdevices": 48, "Alert": 16, "Devicesstats": 9, "Creationdate": "2022-12-15"
-    },
-  ];
+  const data: { Name: string; Nbofdevices: number; Alert: number; OnlineDevices: number; OfflineDevices: number; Creationdate: string }[] = [];
+  useQuery(['getRoomsDevices', searchQuery], async () => {
+    const result = await backendApi.findMany<any>("group", {
+      where: {
+        name: {
+          contains: searchQuery
+        }
+      },
+      include: {
+        _count: true,
+        devices: true,
+      },
+    });
+    console.log(result.results)
+    setRoomsArray(result.results);
+    return result.totalResult
+  });
+  RoomsArray.forEach(element => {
+    const onlineDevices = element.devices.filter(device => device.status === "ONLINE").length;
+    const offlineDevices = element.devices.filter(device => device.status === "OFFLINE").length;
+    data.push({
+      Name: element.name,
+      Nbofdevices: element._count.devices,
+      Alert: 0,
+      OnlineDevices: onlineDevices,
+      OfflineDevices: offlineDevices,
+      Creationdate: new Date(element.createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")
+    });
+  });
   const customStyles: TableStyles = {
     headRow: {
       style: {
@@ -138,9 +133,6 @@ export default function Roomespage() {
       },
     },
   };
-  const filteredData = data.filter((room) =>
-    room.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   return (
     <div className="flex h-full w-full flex-col ">
       <h6 className="mx-5 flex h-[4rem] items-center font-bold border-b-[4px] min-h-14">
@@ -154,11 +146,11 @@ export default function Roomespage() {
       <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
         <DataTable
           columns={columns}
-          data={filteredData}
+          data={data}
           customStyles={customStyles}
           progressComponent={<Loanding />}
           noDataComponent={<Nodata />}
-          {...(filteredData.length === 0 ? {} : {
+          {...(data.length === 0 ? {} : {
             fixedHeader: true,
             fixedHeaderScrollHeight: "calc(100vh - 160px)"
           })}

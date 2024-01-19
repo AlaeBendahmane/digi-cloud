@@ -62,5 +62,20 @@
   "Email Adrdress": "Email Adrdress",
   "Whatsapp number": "Whatsapp number",
   "Phone number": "Phone number",
-  "Role": "Role"
+  "Role": "Role",
+  "Sign Out": "Sign Out",
+  "maps": "Maps",
+  "Type": "Type",
+  "Map": "Map",
+  "Firmware versions": "Firmware Versions",
+  "Device Status": "Device Status",
+  "Cancel": "Cancel",
+  "Save": "Save",
+  "Upload": "Upload",
+  "Drag & drop files or Browse": "Drag & drop files or Browse",
+  "Supported formats": "Supported Formats",
+  "Plan": "Plan",
+  "SAVE ROOM": "SAVE ROOM",
+  "Draw a room": "Draw a Room",
+  "Add devices": "Add Devices"
 }

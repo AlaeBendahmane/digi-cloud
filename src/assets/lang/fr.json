@@ -62,5 +62,21 @@
     "Email Adrdress": "Adresse e-mail",
     "Whatsapp number": "Numéro Whatsapp",
     "Phone number": "Numéro de téléphone",
-    "Role": "Rôle"
+    "Role": "Rôle",
+    "Email Address": "Adresse e-mail",
+    "Sign Out": "Déconnexion",
+    "maps": "Cartes",
+    "Map": "Carte",
+    "Type": "Type",
+    "Firmware versions": "Versions du firmware",
+    "Device Status": "État de l'appareil",
+    "Cancel": "Annuler",
+    "Save": "Enregistrer",
+    "Upload": "Télécharger",
+    "Drag & drop files or Browse": "Glissez-déposez des fichiers ou Parcourir",
+    "Supported formats": "Formats pris en charge",
+    "Plan": "Plan",
+    "SAVE ROOM": "ENREGISTRER LA PIÈCE",
+    "Draw a room": "Dessiner une pièce",
+    "Add devices": "Ajouter des appareils"
 }

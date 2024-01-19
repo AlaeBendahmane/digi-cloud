@@ -272,8 +272,10 @@ export type DeviceProfile = {
 };
 
 export type Group = {
+  devices: Device[];
   id: number;
   name: string;
+  _count: any;
   type: string;
   attributes: any;
   tenantId?: number;

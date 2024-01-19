@@ -1,30 +1,51 @@
 import Pagination from "../../components/pagination2";
 import DataTable from "react-data-table-component";
 import Find from '../../assets/icons/find.svg'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import user from '../../assets/icons/user.svg'
 import Loanding from '../../components/Loading'
 import Nodata from '../../components/nodata'
 import { useTranslation } from "react-i18next";
-import { makeReq } from "../../api/backend";
-import { env } from "../../utils/env";
 import { User } from "../../utils/types";
+import { useQuery } from "@tanstack/react-query";
+import { useProvider } from "../../components/provider";
+import { AppContextType } from "../../App";
 function UserPage() {
   const { t } = useTranslation();
   const [ContactsArray, setContactsArray] = useState<User[]>([]);
-  async function fetchData() {
-    setContactsArray(await makeReq(env.VITE_BACKEND_API + 'user').then(rep => rep.results));
-  }
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { backendApi } = useProvider<AppContextType>();
+  const rowsPerPage = 9;
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [progressPending, setprogressPending] = useState(true);
+  const data: { Name: string; Role: string; EmailAdrdress: string; Creationdate: string; }[] = [];
+  useQuery(['getRoomsDevices', searchQuery, currentPage], async () => {
+    const result = await backendApi.findMany<any>("user", {
+      where: {
+        "email": {
+          contains: searchQuery
+        }
+      },
+      orderBy: {
+        "email": "asc"
+      },
+      /*pagination: {
+        perPage: rowsPerPage,
+        page: currentPage
+      }*/
+    });
+    console.log("ha" + currentPage)
+    setContactsArray(result.results);
+    console.log(result.results)
+    setprogressPending(false)
+    return result.results;
+  });
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    console.log(page)
   };
   const customCellRendererName = (row: { Name: string | string[] }) => (
     <>
@@ -57,7 +78,6 @@ function UserPage() {
       sortable: true,
     },
   ];
-  const data: { Name: string; Role: string; EmailAdrdress: string; Creationdate: string; }[] = [];
   ContactsArray.forEach(element => {
     data.push({
       Name: element.firstName + " " + element.lastName,
@@ -66,13 +86,12 @@ function UserPage() {
       Creationdate: new Date(element.createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")
     });
   });
-  const filteredData = data.filter((contact) =>
+  /*const filteredData = data.filter((contact) =>
     contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const rowsPerPage = 9;
+  );*/
   const startIndex = currentPage * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const slicedData = filteredData.slice(startIndex, endIndex);
+  const slicedData = data.slice(startIndex, endIndex);
   const customStyles = {
     headRow: {
       style: {
@@ -110,14 +129,15 @@ function UserPage() {
           data={slicedData}
           customStyles={customStyles}
           progressComponent={<Loanding />}
+          progressPending={progressPending}
           noDataComponent={<Nodata />}
-          {...(filteredData.length === 0 ? {} : {
+          {...(data.length === 0 ? {} : {
             fixedHeader: true,
             fixedHeaderScrollHeight: "calc(100vh - 175px)"
           })}
         />
         <Pagination
-          totalRows={filteredData.length}
+          totalRows={data.length}
           currentPage={currentPage}
           onPageChange={handlePageChange}
         />

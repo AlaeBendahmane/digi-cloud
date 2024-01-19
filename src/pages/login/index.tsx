@@ -1,19 +1,15 @@
-import { Button, Input } from "@material-tailwind/react";
-// import animations from "./animation.json";
-// import Lottie from "lottie-react";
+import { Button, Input, Switch } from "@material-tailwind/react";
 import { useState } from "react";
-// import { Alert } from "@material-tailwind/react";
-import { ZodError, object, z } from "zod";
+import { ZodError, z } from "zod";
 import { useProvider } from "../../components/provider";
 import { AppContextType } from "../../App";
-// import Loader from "../../components/loader";
 import { AxiosError } from "axios";
+import Aba from "../../assets/icons/aba-logo.svg";
 import LogoImage from "../../assets/icons/loginImage.png"
 import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 import { toast } from "react-toastify";
 import { Spinner } from "@material-tailwind/react";
 import { User } from "../../utils/types";
-
 const loginDataSchema = z.object({
   email: z.string().email({
     message: "Please enter a valid email",
@@ -22,7 +18,6 @@ const loginDataSchema = z.object({
     message: "Password must be at least 8 characters long",
   }),
 });
-
 type LoginDataType = z.infer<typeof loginDataSchema>;
 function LoginPage() {
   const [errors, setErrors] = useState<string[]>([]);
@@ -30,15 +25,15 @@ function LoginPage() {
     email: "",
     password: "",
   });
-
   const [loading, setLoading] = useState(false);
-
+  // const [rememberMe, setRememberMe] = useState(false);
+  /* const handleRememberMeChange = () => {
+     setRememberMe(!rememberMe);
+   };*/
   const { backendApi, setAccessToken, setRefreshToken, setUser } =
     useProvider<AppContextType>();
-
   async function handleLogin() {
     setLoading(true);
-    // trottle the login button
     await new Promise((resolve) => setTimeout(resolve, 500));
     try {
       const data = loginDataSchema.parse(loginData);
@@ -46,9 +41,12 @@ function LoginPage() {
       setUser(user as User)
       setAccessToken(accessToken);
       setRefreshToken(refreshToken);
+      /* if (rememberMe === true) {
+         localStorage.setItem("username", loginData.email)
+         localStorage.setItem("password", loginData.password)
+       }*/
     } catch (error) {
       console.log(error);
-
       if (error instanceof ZodError) {
         setErrors(error.issues.map((issue) => issue.message));
       } else if (
@@ -64,49 +62,62 @@ function LoginPage() {
     setLoading(false);
   }
   return (
-    <div className="flex h-screen  min-h-[40rem] overflow-x-hidden">
-      <div className="flex-center flex-1  flex-col gap-[2rem] px-[4rem] py-12 [&>*]:w-80">
-        <Logo className="w-52" />
-        <div className="flex  flex-col gap-6">
+    <div className="flex h-screen min-h-[40rem] overflow-x-hidden">
+      <div className="flex-center flex-1 flex-col gap-[2rem] px-[4rem] pt-24 [&>*]:w-96">
+        <div className="flex-center flex-col gap-[2rem]  [&>*]:w-96">
           <div>
-            <Input
-              type="text"
-              label="Username"
-              value={loginData.email}
-              onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleLogin();
-                }
-              }} crossOrigin={undefined} />
+            <Logo className="w-52" />
           </div>
-          <div>
-            <Input
-              type="password"
-              label="Password"
-              value={loginData.password}
-              onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleLogin();
-                }
-              }} crossOrigin={undefined} />
-          </div>
-        </div>
-        <Button color="purple" className=" relative h-11" onClick={handleLogin} disabled={loading} placeholder={undefined}>
-          {loading ? (
-            <div className="absolute-center">
-              <Spinner />
+          <p className="text-[#595959] font-semibold text-xl">Nice to see you again</p>
+          <div className="flex flex-col gap-6">
+            <div>
+              <Input
+                type="text"
+                label="Email or phone number"
+                value={loginData.email}
+                onChange={(e) => setLoginData((prev) => ({ ...prev, email: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }} crossOrigin={undefined} />
             </div>
-          ) : (
-            "Login"
-          )}
-        </Button>
+            <div>
+              <Input
+                type="password"
+                label="Password"
+                value={loginData.password}
+                onChange={(e) => setLoginData((prev) => ({ ...prev, password: e.target.value }))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleLogin();
+                  }
+                }} crossOrigin={undefined} />
+            </div>
+            {/*<div className="flex">
+              <Switch label="Remember me" crossOrigin={undefined} color="purple" onChange={handleRememberMeChange} checked={rememberMe} />
+              <a href="" className="ml-auto text-gray-600 underline underline-offset-4">Forgot password?</a>
+            </div>*/}
+          </div>
+          <Button className=" relative h-11" onClick={handleLogin} disabled={loading} placeholder={undefined}>
+            {loading ? (
+              <div className="absolute-center">
+                <Spinner />
+              </div>
+            ) : (
+              "Sign in"
+            )}
+          </Button>
+        </div>
+        <div className="flex mt-auto mb-10">
+          <img src={Aba} alt="" />
+          <p className="ml-auto text-[#091E42] font-normal text-sm my-auto">Version 1.1.1</p>
+        </div>
       </div>
       <div className="flex-2 relative hidden flex-col items-center justify-center gap-6  bg-[#3C56A0]/5 lg:flex">
         <img src={LogoImage} className="h-full w-full" />
       </div>
-    </div>
+    </div >
   );
 }
 export default LoginPage;

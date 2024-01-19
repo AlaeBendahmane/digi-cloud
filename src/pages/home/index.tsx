@@ -2,7 +2,6 @@ import AnalyseTemp from "./analyse-temp";
 import Avrg from "./avrg";
 import CardsDetail from "./cards-detail";
 import { useTranslation } from 'react-i18next';
-
 function HomePage() {
   const { t } = useTranslation();
   return (

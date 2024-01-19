@@ -1,9 +1,18 @@
 import { Card } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts';
 import { useTranslation } from "react-i18next";
+import { useProvider } from "../../../components/provider";
+import { AppContextType } from "../../../App";
+import { useQuery } from "@tanstack/react-query";
 function AnalyseTemp() {
   const { t } = useTranslation();
-
+  /*const { backendApi } = useProvider<AppContextType>();
+  useQuery(['getHistory'], async () => {
+    const result = await backendApi.findMany<any>("dpc-history/api/history",{
+    });
+    console.log(result)
+    return result
+  });*/
   const alldata =
   {
     Electricity: [10, 20, 30, 40, 50, 60, 60, 50, 40, 30, 20, 10],
