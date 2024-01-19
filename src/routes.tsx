@@ -1,5 +1,6 @@
 import { ReactComponent as DashBoardIcon } from "./assets/icons/dashboard.svg";
 import { ReactComponent as ListIcon } from "./assets/icons/list.svg";
+import { ReactComponent as Contacts } from "./assets/icons/contacts.svg";
 
 const Routes: {
   name: string;
@@ -34,7 +35,7 @@ const Routes: {
     {
       name: "contacts",
       path: "/contacts",
-      icon: <ListIcon />,
+      icon: <Contacts />,
     },
   ];
 
