@@ -12,6 +12,9 @@ import UserPage from "./pages/users/index.tsx";
 //import LogsPage from "./pages/logs/index.tsx";
 import RoomesPage from "./pages/rooms/index.tsx";
 import MapsPage from "./pages/map/index.tsx";
+import MoreInfo from "./pages/moreinfo/moreinfo.tsx";
+import Detail from "./pages/detail/index.tsx";
+
 import i18n from './hook/i18n.tsx';
 import { I18nextProvider } from 'react-i18next';
 
@@ -43,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "/maps",
         element: <MapsPage />,
+      },
+      {
+        path: "/stats/:id",
+        element: <MoreInfo />,
+      },
+      {
+        path: "/rooms/:id",
+        element: <Detail />,
       },
     ],
   },

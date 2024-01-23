@@ -22,21 +22,17 @@ function UserPage() {
   useQuery(['getRoomsDevices', searchQuery, currentPage], async () => {
     const result = await backendApi.findMany<any>("user", {
       where: {
-        "email": {
-          contains: searchQuery
-        }
+        OR: [
+          { "email": { contains: searchQuery } },
+          { "lastName": { contains: searchQuery } },
+          { "firstName": { contains: searchQuery } },
+        ],
       },
       orderBy: {
-        "email": "asc"
+        "firstName": "asc"
       },
-      /*pagination: {
-        perPage: rowsPerPage,
-        page: currentPage
-      }*/
     });
-    console.log("ha" + currentPage)
     setContactsArray(result.results);
-    console.log(result.results)
     setprogressPending(false)
     return result.results;
   });
@@ -45,7 +41,6 @@ function UserPage() {
   };
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    console.log(page)
   };
   const customCellRendererName = (row: { Name: string | string[] }) => (
     <>
@@ -86,9 +81,6 @@ function UserPage() {
       Creationdate: new Date(element.createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")
     });
   });
-  /*const filteredData = data.filter((contact) =>
-    contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );*/
   const startIndex = currentPage * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
   const slicedData = data.slice(startIndex, endIndex);

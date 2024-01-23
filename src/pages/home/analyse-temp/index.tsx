@@ -4,15 +4,64 @@ import { useTranslation } from "react-i18next";
 import { useProvider } from "../../../components/provider";
 import { AppContextType } from "../../../App";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 function AnalyseTemp() {
   const { t } = useTranslation();
-  /*const { backendApi } = useProvider<AppContextType>();
+  const [Temperature, setTemperature] = useState<number[]>([]);
+  const [Humidity, setHumidity] = useState<number[]>([]);
+  const [Power, setPower] = useState<number[]>([]);
+  const { backendApi } = useProvider<AppContextType>();
   useQuery(['getHistory'], async () => {
-    const result = await backendApi.findMany<any>("dpc-history/api/history",{
+    const result = await backendApi.findMany<any>("dpc-history/api/history", {
+      where: {
+        temperature: {
+          $exists: true
+        },
+        humidity: {
+          $exists: true
+        },
+        createdAt: {
+          $gte: new Date().toISOString().slice(0, 4),
+        }
+      },
+      pagination: {
+        perPage: 5,
+        page: 1
+      }
     });
-    console.log(result)
+    ////////////////////////
+    const temperatures: number[] = result.results.map(obj => obj.temperature);
+    // Calculate the average temperature
+    const averageTemperature = temperatures.reduce((sum, temp) => sum + temp, 0) / temperatures.length;
+    console.log("Average Temperature:", averageTemperature);
+    ///////////////////
+
+
+    /*const monthlyAverages = {
+      Humidity: Array(12).fill(0),
+      Temperature: Array(12).fill(0)
+    };
+    result.results.forEach(result => {
+      const date = new Date(result.date);
+      const month = date.getMonth();
+
+      monthlyAverages.Humidity[month] += result.humidity;
+      monthlyAverages.Temperature[month] += result.temperature;
+    });
+    for (let i = 0; i < 12; i++) {
+      monthlyAverages.Humidity[i] /= 12;
+      monthlyAverages.Temperature[i] /= 12;
+    }
+    monthlyAverages.Humidity = monthlyAverages.Humidity.map(avg => parseFloat(avg.toFixed(2)));
+    monthlyAverages.Temperature = monthlyAverages.Temperature.map(avg => parseFloat(avg.toFixed(2)));
+    setHumidity(monthlyAverages.Humidity);
+    setTemperature(monthlyAverages.Temperature);
+    console.log(monthlyAverages.Humidity)
+    console.log(monthlyAverages.Temperature)
+    console.log(Power)
+    console.log(parseInt(new Date().toISOString().slice(0, 4), 10) - 1);*/
     return result
-  });*/
+  });
   const alldata =
   {
     Electricity: [10, 20, 30, 40, 50, 60, 60, 50, 40, 30, 20, 10],
@@ -34,7 +83,7 @@ function AnalyseTemp() {
     series: [
       {
         name: t('electricity'),
-        data: alldata.Electricity
+        data: alldata.Electricity,
       },
       {
         name: t('humidity'),

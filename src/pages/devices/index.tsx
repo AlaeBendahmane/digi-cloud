@@ -6,37 +6,42 @@ import { useQuery } from "@tanstack/react-query";
 import { AppContextType } from "../../App";
 import { useState } from "react";
 import Loading from "../../components/Loading";
+interface ResultObject {
+  deviceId: number;
+  humidity?: number;
+  temperature?: number;
+}
 function DevicesPage() {
   const { t } = useTranslation();
   const { backendApi } = useProvider<AppContextType>();
   const [historyArray, setHistoryArray] = useState<any[]>([]);
   const { isLoading } = useQuery(['getHistory'], async () => {
-    const result = await backendApi.findMany<any>("dpc-history/api/history", {
-      /* where: {
-         createdAt: {
-           $gte: new Date().toISOString().slice(0, 16),
-           // $sort: { createdAt: -1 }
-         },
-       },*/
-      /*include: {
-        temperature: true
-      },*/
+    const result = await backendApi.findMany<any>("lastTelemetry", {
+      where: {
+        "OR": [{ "name": "temperature" }, { "name": "humidity" }]
+      }
     });
-    setHistoryArray(result.results);
-    console.log(result.results)
-    console.log("date:" + new Date().toISOString())
+    const resultArray: ResultObject[] = [];
+    result.results.forEach(obj => {
+      const existingDevice = resultArray.find(item => item.deviceId === obj.deviceId);
+      if (existingDevice) {
+        if (obj.name === "humidity") {
+          existingDevice.humidity = obj.value;
+        } else if (obj.name === "temperature") {
+          existingDevice.temperature = obj.value;
+        }
+      } else {
+        const newObj: ResultObject = {
+          deviceId: obj.deviceId,
+          humidity: obj.name === "humidity" ? obj.value : undefined,
+          temperature: obj.name === "temperature" ? obj.value : undefined
+        };
+        resultArray.push(newObj);
+      }
+    });
+    setHistoryArray(resultArray)
     return result;
   });
-  const data = historyArray.map(element => ({
-    _id: element._id,
-    nom: element.deviceId + " " + element.date,
-    temperature: element.temperature || 'NaN ',
-    minT: 0 || 'NaN ',
-    maxT: 0 || 'NaN ',
-    humidity: element.humidity || 'NaN ',
-    minH: 0 || 'NaN ',
-    maxH: 0 || 'NaN '
-  }));
   return (
     <div className="flex h-full w-full flex-col">
       <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px] min-h-14">
@@ -44,13 +49,13 @@ function DevicesPage() {
       </h6>
       {isLoading ? (
         <Loading />
-      ) : data.length === 0 ? (
+      ) : historyArray.length === 0 ? (
         <Nodata />
       ) : (
         <div className="mx-auto  flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 overflow-auto" id="Content">
           <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2">
-            {data.map(element => (
-              <Analyse key={element._id} nom={element.nom} temperature={element.temperature} minT={element.minT} maxT={element.maxT} humidity={element.humidity} minH={element.minH} maxH={element.maxH} />
+            {historyArray.map(element => (
+              <Analyse key={element.deviceId} id={element.deviceId} nom={element.deviceId} temperature={element.temperature} humidity={element.humidity} calledfrom={"RealTime"} />
             ))}
           </div>
         </div>

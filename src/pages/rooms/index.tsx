@@ -9,21 +9,25 @@ import { useQuery } from "@tanstack/react-query";
 import { useProvider } from "../../components/provider";
 import { AppContextType } from "../../App";
 import { Group } from "../../utils/types";
+import { Link } from "react-router-dom";
 export default function Roomespage() {
   const [RoomsArray, setRoomsArray] = useState<Group[]>([]);
   const { backendApi } = useProvider<AppContextType>();
+  const [progressPending, setprogressPending] = useState(true);
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const handleSearch = (e: { target: { value: SetStateAction<string> } }) => {
     setSearchQuery(e.target.value);
   };
   const customCellRendererDevice = (row: { Name: string | string[] }) => (
-    < >
-      <img src={Preroom} alt="Preroom" />
-      <p className=" font-semibold text-lg ml-3">
-        {row.Name}
-      </p>
-    </>
+    <Link to={row.Name.toString()}>
+      <div className="flex" >
+        <img src={Preroom} alt="Preroom" />
+        <p className=" font-semibold text-lg ml-3">
+          {row.Name}
+        </p>
+      </div>
+    </Link>
   );
   const customCellRendererAlert = (row: { Alert: number | number }) => (
     <span className="bg-red-100 text-red-800  text-sm font-semibold me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
@@ -98,6 +102,7 @@ export default function Roomespage() {
     });
     console.log(result.results)
     setRoomsArray(result.results);
+    setprogressPending(false)
     return result.totalResult
   });
   RoomsArray.forEach(element => {
@@ -149,6 +154,7 @@ export default function Roomespage() {
           data={data}
           customStyles={customStyles}
           progressComponent={<Loanding />}
+          progressPending={progressPending}
           noDataComponent={<Nodata />}
           {...(data.length === 0 ? {} : {
             fixedHeader: true,

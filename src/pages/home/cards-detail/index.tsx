@@ -13,6 +13,7 @@ function CardsDetail() {
   const [Active, setCountActive] = useState(0);
   const [Inactive, setCountInaactive] = useState(0);
   const [Rooms, setCountRooms] = useState(0);
+  const [Alerts, setCountAlerts] = useState(0);
   const { backendApi } = useProvider<AppContextType>();
   useQuery(['getGroup'], async () => {
     const result = await backendApi.findMany<any>("group");
@@ -58,7 +59,7 @@ function CardsDetail() {
         <div className="flex h-full  w-full ">
           <img src={AlertComponent} />
           <div className="flex flex-col items-stretch gap-0 my-1 ml-3">
-            <span className="text-2xl font-extrabold">0</span>
+            <span className="text-2xl font-extrabold">{Alerts}</span>
             <span className="text-sm font-normal">{t('alerts')}</span>
           </div>
         </div>
