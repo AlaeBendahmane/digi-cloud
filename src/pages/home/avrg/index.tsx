@@ -45,10 +45,10 @@ function Avrg() {
       <Card className="min-h-[10rem] bg-white p-[1rem] md:col-span-3 2xl:col-span-4 mb-2" placeholder={undefined}>
         <div className="flex justify-between items-center">
           <span className="font-bold font-Nunito text-xl"> {t('average temperature')}</span>
-          <Link to={'#'} className="flex" >
+          {/*<Link to={'#'} className="flex" >
             <span className="font-light font-Roboto text-sm"> {t('more data')}</span>
             <img src={More} className="ml-1" />
-          </Link>
+  </Link>*/}
         </div>
         <div className="grid grid-cols-2 gap-5 mt-3">
           <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center h-[100px]'>
@@ -69,10 +69,10 @@ function Avrg() {
       <Card className="min-h-[10rem] bg-white p-[1rem] md:col-span-3 2xl:col-span-4 mb-2" placeholder={undefined} >
         <div className="flex justify-between items-center">
           <span className="font-bold font-Nunito text-xl"> {t('average humidity')}</span>
-          <Link to={'#'} className="flex" >
+          {/*<Link to={'#'} className="flex" >
             <span className="font-light font-Roboto text-sm"> {t('more data')}</span>
             <img src={More} className="ml-1" />
-          </Link>
+          </Link>*/}
         </div>
         <div className="grid grid-cols-2 gap-5 mt-3">
           <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center  h-[100px]'>
@@ -93,10 +93,10 @@ function Avrg() {
       <Card className="min-h-[10rem] bg-white p-[1rem] md:col-span-3 2xl:col-span-4 mb-2" placeholder={undefined}>
         <div className="flex justify-between items-center">
           <span className="font-bold font-Nunito text-xl"> {t('average power')}</span>
-          <Link to={'#'} className="flex" >
+          {/*<Link to={'#'} className="flex" >
             <span className="font-light font-Roboto text-sm"> {t('more data')}</span>
             <img src={More} className="ml-1" />
-          </Link>
+          </Link>*/}
         </div>
         <div className="grid grid-cols-2 gap-5 mt-3">
           <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center  h-[100px]'>

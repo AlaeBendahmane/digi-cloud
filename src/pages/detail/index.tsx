@@ -25,7 +25,6 @@ export default function index() {
                 devices: true,
             },
         });
-        console.log(result.results)
         result.results.map((e) => setDevicesArray(e.devices))
         return result.totalResult
     });

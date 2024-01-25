@@ -1,17 +1,21 @@
 import { Card } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts';
+import Resetzoom from '../../../assets/icons/resetzoom.svg'
 import { useTranslation } from "react-i18next";
 import { useProvider } from "../../../components/provider";
 import { AppContextType } from "../../../App";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { Spinner } from "@material-tailwind/react";
 function AnalyseTemp() {
   const { t } = useTranslation();
-  const [Temperature, setTemperature] = useState<number[]>([]);
-  const [Humidity, setHumidity] = useState<number[]>([]);
-  const [Power, setPower] = useState<number[]>([]);
   const { backendApi } = useProvider<AppContextType>();
-  useQuery(['getHistory'], async () => {
+  const [alldata, setAllData] = useState({
+    Humidity: [],
+    Temperature: [],
+    Time: []
+  });
+  const { data, isLoading, error } = useQuery(['getHistory'], async () => {
     const result = await backendApi.findMany<any>("dpc-history/api/history", {
       where: {
         temperature: {
@@ -21,138 +25,94 @@ function AnalyseTemp() {
           $exists: true
         },
         createdAt: {
-          $gte: new Date().toISOString().slice(0, 4),
+          $gte: new Date().toISOString().slice(0, 10),
         }
       },
       pagination: {
-        perPage: 5,
+        perPage: 1000,
         page: 1
       }
     });
-    ////////////////////////
-    const temperatures: number[] = result.results.map(obj => obj.temperature);
-    // Calculate the average temperature
-    const averageTemperature = temperatures.reduce((sum, temp) => sum + temp, 0) / temperatures.length;
-    console.log("Average Temperature:", averageTemperature);
-    ///////////////////
-
-
-    /*const monthlyAverages = {
-      Humidity: Array(12).fill(0),
-      Temperature: Array(12).fill(0)
-    };
-    result.results.forEach(result => {
-      const date = new Date(result.date);
-      const month = date.getMonth();
-
-      monthlyAverages.Humidity[month] += result.humidity;
-      monthlyAverages.Temperature[month] += result.temperature;
-    });
-    for (let i = 0; i < 12; i++) {
-      monthlyAverages.Humidity[i] /= 12;
-      monthlyAverages.Temperature[i] /= 12;
-    }
-    monthlyAverages.Humidity = monthlyAverages.Humidity.map(avg => parseFloat(avg.toFixed(2)));
-    monthlyAverages.Temperature = monthlyAverages.Temperature.map(avg => parseFloat(avg.toFixed(2)));
-    setHumidity(monthlyAverages.Humidity);
-    setTemperature(monthlyAverages.Temperature);
-    console.log(monthlyAverages.Humidity)
-    console.log(monthlyAverages.Temperature)
-    console.log(Power)
-    console.log(parseInt(new Date().toISOString().slice(0, 4), 10) - 1);*/
+    setAllData((prevData: any) => ({
+      ...prevData,
+      Temperature: result.results.map((e) => parseFloat(parseFloat(e.temperature).toFixed(2))),
+      Humidity: result.results.map((e) => parseFloat(parseFloat(e.humidity).toFixed(2))),
+      Time: result.results.map((e) => e.date)
+    }));
     return result
   });
-  const alldata =
-  {
-    Electricity: [10, 20, 30, 40, 50, 60, 60, 50, 40, 30, 20, 10],
-    Humidity: [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
-    Temperature: [60, 50, 40, 30, 20, 10, 10, 20, 30, 40, 50, 60]
-  }
   const options: ApexCharts.ApexOptions = {
     chart: {
-      type: "line",
-      stacked: false,
+      height: 350,
+      type: 'area',
       toolbar: {
-        show: false
-      },
-      zoom: {
-        enabled: false,
+        show: true,
+        tools: {
+          download: false,
+          selection: true,
+          reset: true,
+          zoom: '<img>',
+          zoomin: false,
+          zoomout: false,
+          pan: true,
+        },
       }
     },
-    colors: ["#0D0887", "#9C179E", "#ED7953"],
-    series: [
-      {
-        name: t('electricity'),
-        data: alldata.Electricity,
-      },
-      {
-        name: t('humidity'),
-        data: alldata.Humidity
-      },
-      {
-        name: t('temperature'),
-        data: alldata.Temperature
-      }
-    ],
+    series: [{
+      name: t('humidity'),
+      data: alldata.Humidity,
+    }, {
+      name: t('temperature'),
+      data: alldata.Temperature,
+      color: '#FF5722'
+    }],
+    dataLabels: {
+      enabled: false
+    },
     stroke: {
-      width: [2, 2, 2]
-    },
-    plotOptions: {
-      bar: {
-        columnWidth: "20%"
-      }
+      curve: 'smooth'
     },
     xaxis: {
-      categories: [t('jan'), t('feb'), t('mar'), t('apr'), t('may'), t('jun'), t('jul'), t('aug'), t('sep'), t('oct'), t('nov'), t('dec')]
-    },
-    yaxis: {
-      axisTicks: {
-        show: true
-      },
-      axisBorder: {
-        show: false,
-      },
+      type: 'datetime',
+      categories: alldata.Time,
+      tickAmount: 12,
       labels: {
-        style: {
-          colors: "#000000",
-          fontSize: '14px',
-          fontWeight: 'normal',
-          fontFamily: 'Assistant'
-        }
-      },
-    },
-    noData: {
-      text: t('No Data found'),
-      align: 'center',
-      verticalAlign: 'middle',
-      offsetX: 0,
-      offsetY: 0,
-      style: {
-        color: 'black',
-        fontSize: '14px',
-        fontFamily: 'Nunito'
+        format: 'HH:mm'
       }
     },
+    tooltip: {
+      x: {
+        format: 'HH:mm:ss',
+      },
+    },
     legend: {
-      position: "top",
-      horizontalAlign: "right",
-      fontFamily: 'Assistant',
-      fontSize: '14px',
-      fontWeight: 'normal',
+      position: 'top',
       markers: {
         radius: 0
       },
     },
   };
   return (
-    <Card className="bg-white p-2 md:col-span-full" placeholder={undefined}>
-      <div className="flex h-[2rem] gap-2 p-1 px-3 absolute">
+    <Card className="bg-white p-2 md:col-span-full" placeholder={undefined} >
+      <div className="flex h-[2rem] gap-2 p-0 px-3 absolute">
         <span className="font-Nunito font-bold text-xl">{t('overview')}</span>
       </div>
       <div className="h-[18rem]">
-        <ReactApexChart options={options} series={options.series} type="line" height={'100%'} />
+        {isLoading ?
+          <div className="flex justify-center items-center h-full">
+            <Spinner color="purple" />
+          </div>
+          : data?.results.length === 0 || error ? (
+            <div className="flex justify-center items-center h-full">
+              <span className=" font-extrabold text-purple-600 " >
+                {t('No Data found')}
+              </span>
+            </div>
+          ) :
+            <ReactApexChart options={options} series={options.series} type="area" height={'100%'} />
+        }
       </div>
-    </Card>
+    </Card >
   );
 }
 export default AnalyseTemp;

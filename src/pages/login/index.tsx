@@ -63,7 +63,7 @@ function LoginPage() {
   }
   return (
     <div className="flex h-screen min-h-[40rem] overflow-x-hidden">
-      <div className="flex-center flex-1 flex-col gap-[2rem] px-[4rem] pt-24 [&>*]:w-96">
+      <div className="flex-center flex-1 flex-col gap-[2rem] px-[4rem] py-12 [&>*]:w-96">{/*pt-24 [&>*]:w-80*/}
         <div className="flex-center flex-col gap-[2rem]  [&>*]:w-96">
           <div>
             <Logo className="w-52" />
@@ -109,10 +109,10 @@ function LoginPage() {
             )}
           </Button>
         </div>
-        <div className="flex mt-auto mb-10">
+        {/*<div className="flex mt-auto mb-10">
           <img src={Aba} alt="" />
           <p className="ml-auto text-[#091E42] font-normal text-sm my-auto">Version 1.1.1</p>
-        </div>
+            </div>*/}
       </div>
       <div className="flex-2 relative hidden flex-col items-center justify-center gap-6  bg-[#3C56A0]/5 lg:flex">
         <img src={LogoImage} className="h-full w-full" />

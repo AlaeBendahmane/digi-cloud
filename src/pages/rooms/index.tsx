@@ -100,7 +100,6 @@ export default function Roomespage() {
         devices: true,
       },
     });
-    console.log(result.results)
     setRoomsArray(result.results);
     setprogressPending(false)
     return result.totalResult

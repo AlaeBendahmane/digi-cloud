@@ -31,12 +31,14 @@ export type AppContextType = {
   setUser: React.Dispatch<React.SetStateAction<UserType | null | undefined>>;
   lang: "en" | "fr",
   setLang: React.Dispatch<"en" | "fr">
+  setIdSelected: React.Dispatch<React.SetStateAction<number | undefined>>;
+  idSelected: number | undefined;
 };
 
 function App() {
   const [accessToken, setAccessToken] = useLocalStorage("accessToken", "");
   const [lang, setLang] = useLocalStorage<"en" | "fr">("lang", "en");
-
+  const [idSelected, setIdSelected] = useState<number | undefined>(undefined);
   const [refreshToken, setRefreshToken] = useLocalStorage("refreshToken", "");
   const [user, setUser] = useState<UserType | null | undefined>(undefined);
   const [openSideBar, setOpenSideBar] = useState(false);
@@ -69,10 +71,12 @@ function App() {
     user,
     setUser,
     lang,
-    setLang
+    setLang,
+    setIdSelected,
+    idSelected
   };
 
- useEffect(() => {
+  useEffect(() => {
     setUser(undefined);
     backendApi
       .getCurrentUser()

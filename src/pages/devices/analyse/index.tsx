@@ -3,18 +3,21 @@ import Humidity from "../../../assets/icons/humidity.svg";
 import { Card } from "@material-tailwind/react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useProvider } from "../../../components/provider";
+import { AppContextType } from "../../../App";
 interface AnalyseProps {
     id: number;
     nom: string;
     temperature?: number;
     humidity?: number;
     calledfrom: string;
-    status?: string
+    status?: string;
 }
 function index({ id, nom, temperature, humidity, calledfrom, status }: AnalyseProps) {
+    const { setIdSelected } = useProvider<AppContextType>();
     const { t } = useTranslation();
     return (
-        <Link to={'/stats/' + id.toString()} className="md:col-span-3 2xl:col-span-4 mb-2">
+        <Link to={'/stats/' + id.toString()} className="md:col-span-3 2xl:col-span-4 mb-2" onClick={() => { setIdSalected(id) }}>
             <Card className={calledfrom === 'RealTime' ? "min-h-[10rem] h-fit bg-white p-[1rem]" : "h-fit bg-white p-[1rem]"} placeholder={undefined} style={{ fontFamily: 'Roboto' }} >
                 <div className="flex">
                     <span style={{ fontFamily: 'Nunito !important' }} className={calledfrom === "RealTime" ? "font-medium text-2xl text-red-300" : "font-medium text-2xl text-gray-800"}>{nom}</span>
