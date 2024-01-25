@@ -11,20 +11,20 @@ interface AnalyseProps {
     temperature?: number;
     humidity?: number;
     calledfrom: string;
-    status?: string;
+    status?: 'OFFLINE' | 'ONLINE' | 'INACTIVE' | undefined | any;
 }
 function index({ id, nom, temperature, humidity, calledfrom, status }: AnalyseProps) {
     const { setIdSelected } = useProvider<AppContextType>();
     const { t } = useTranslation();
     return (
-        <Link to={'/stats/' + id.toString()} className="md:col-span-3 2xl:col-span-4 mb-2" onClick={() => { setIdSalected(id) }}>
+        <Link to={'/stats/' + id.toString()} className="md:col-span-3 2xl:col-span-4 mb-2" onClick={() => { setIdSelected(id) }}>
             <Card className={calledfrom === 'RealTime' ? "min-h-[10rem] h-fit bg-white p-[1rem]" : "h-fit bg-white p-[1rem]"} placeholder={undefined} style={{ fontFamily: 'Roboto' }} >
                 <div className="flex">
                     <span style={{ fontFamily: 'Nunito !important' }} className={calledfrom === "RealTime" ? "font-medium text-2xl text-red-300" : "font-medium text-2xl text-gray-800"}>{nom}</span>
                     {calledfrom == 'Rooms' ?
                         <span className={status === "OFFLINE" ? "ml-auto font-medium text-2xl text-red-600 font-Nunito" :
                             status === "ONLINE" ? "ml-auto font-medium text-2xl text-green-600 font-Nunito" :
-                                status === "INACTIVE" ? "ml-auto font-medium text-2xl text-orange-600 font-Nunito" : ""}>{status}</span> : ''}</div>
+                                status === "INACTIVE" ? "ml-auto font-medium text-2xl text-orange-600 font-Nunito" : ""}>{t(status)}</span> : ''}</div>
                 {calledfrom == 'RealTime' ? <div className="grid grid-cols-2 gap-2 mt-3">
                     <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center h-[100px] '>
                         <p className='m-1 font-light text-sm'>

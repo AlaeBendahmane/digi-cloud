@@ -79,5 +79,10 @@
     "Plan": "Plan",
     "SAVE ROOM": "ENREGISTRER LA PIÈCE",
     "Draw a room": "Dessiner une pièce",
-    "Add devices": "Ajouter des appareils"
+    "Add devices": "Ajouter des appareils",
+    "All devices in :": "Tous les appareils dans :",
+    "OFFLINE": "HORS LIGNE",
+    "ONLINE": "EN LIGNE",
+    "INACTIVE": "INACTIF",
+    "Device Name:": "Nom de l'appareil:"
 }

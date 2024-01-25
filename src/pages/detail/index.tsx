@@ -31,7 +31,7 @@ export default function index() {
     return (
         <div className="flex h-full w-full flex-col">
             <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px] min-h-14">
-                {t('All devices in : ') + id}
+                {t('All devices in :') + id}
             </h6>
             {/*Devices.map((e) => <div>{e.serial}</div>)*/}
             {isLoading ? (

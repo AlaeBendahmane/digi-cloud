@@ -9,7 +9,9 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { AppContextType } from '../../App';
 import { useProvider } from '../../components/provider';
+import { useTranslation } from 'react-i18next';
 export default function leftcard(id: any) {
+    const { t } = useTranslation();
     const v = id.id;
     const [Device, setDevice] = useState<any>();
     const { backendApi } = useProvider<AppContextType>();
@@ -81,7 +83,7 @@ export default function leftcard(id: any) {
         <div className='grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2'>
             <Card className="bg-white p-2 md:col-span-full" placeholder={undefined}>
                 <div className="px-3">
-                    Overview
+                    {t('overview')}
                 </div>
                 <div className=" flex-1 text-xs p-2 flex flex-col gap-5">
                     <div className="flex gap-2 p-3 border-b-2 flex-wrap items-center">
@@ -91,21 +93,21 @@ export default function leftcard(id: any) {
                         <div className="flex-1 flex flex-col gap-2">
                             <div className="flex gap-2">
                                 <span className="text-gray-500">
-                                    <span>Device Name:</span>
+                                    <span>{t('Device Name:')}</span>
                                 </span>
                                 <span className="font-semibold">{Device?.name || "---"}</span>
                             </div>
                             <div className="flex gap-2 items-center">
-                                <span className="text-gray-500">Serial:</span>
+                                <span className="text-gray-500">{t('Serial')}:</span>
                                 <span className="font-semibold">{Device?.serial || "---"}</span>
                             </div>
                         </div>
-                        <div className="flex-1 flex flex-col gap-2">
+                        {/*<div className="flex-1 flex flex-col gap-2">
                             <div className="flex gap-2">
                                 <span className="text-gray-500">CreatedAt:</span>
                                 <span className="font-semibold">{Device ? new Date(Device.createdAt.toString()).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }).replace(",", " ") : ''}</span>
                             </div>
-                        </div>
+    </div>*/}
                     </div>
                     <div className="grid grid-cols-2 [&amp;>*]:min-h-[5rem] [&amp;>*]:flex [&amp;>*]:gap-2 [&amp;>*]:items-center [&amp;>*]:px-4">
                         <div className="flex gap-2 p-3  flex-wrap items-center">

@@ -78,5 +78,10 @@
   "Plan": "Plan",
   "SAVE ROOM": "SAVE ROOM",
   "Draw a room": "Draw a Room",
-  "Add devices": "Add Devices"
+  "Add devices": "Add Devices",
+  "All devices in :": "All devices in :",
+  "OFFLINE": "OFFLINE",
+  "ONLINE": "ONLINE",
+  "INACTIVE": "INACTIVE",
+  "Device Name:":"Device Name"
 }
