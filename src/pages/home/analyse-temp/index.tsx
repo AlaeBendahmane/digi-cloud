@@ -1,6 +1,5 @@
 import { Card } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts';
-import Resetzoom from '../../../assets/icons/resetzoom.svg'
 import { useTranslation } from "react-i18next";
 import { useProvider } from "../../../components/provider";
 import { AppContextType } from "../../../App";
@@ -80,10 +79,24 @@ function AnalyseTemp() {
         format: 'HH:mm'
       }
     },
+    yaxis: {
+      min: 0,
+      max: Math.max(...alldata.Humidity) + 5,
+      labels: {
+        formatter: function (val) {
+          return val.toFixed(0);
+        }
+      }
+    },
     tooltip: {
       x: {
         format: 'HH:mm:ss',
       },
+      y: {
+        formatter: function (val) {
+          return val.toFixed(2);
+        }
+      }
     },
     legend: {
       position: 'top',

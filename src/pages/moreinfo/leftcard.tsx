@@ -78,6 +78,11 @@ export default function leftcard(id: any) {
             x: {
                 format: 'HH:mm:ss',
             },
+            y: {
+                formatter: function (val) {
+                    return val.toFixed(2);
+                }
+            }
         },
         legend: {
             position: 'top',
@@ -104,7 +109,7 @@ export default function leftcard(id: any) {
                             <div className="flex h-[2rem] gap-2 p-0 px-3 absolute">
                                 <span className="font-Nunito font-bold text-xl">{t('humidity')}</span>
                             </div>
-                            <ReactApexChart options={options} series={serieshumidity} type="area" height={250} />
+                            <ReactApexChart options={{ ...options, yaxis: { min: 0, max: Math.max(...alldata.Humidity) + 5, labels: { formatter: function (val) { return val.toFixed(0); } } } }} series={serieshumidity} type="area" height={250} />
                         </div>)}
                 </Card>
             </div>
@@ -124,7 +129,7 @@ export default function leftcard(id: any) {
                             <div className="flex h-[2rem] gap-2 p-0 px-3 absolute">
                                 <span className="font-Nunito font-bold text-xl">{t('temperature')}</span>
                             </div>
-                            <ReactApexChart options={options} series={seriestemperature} type="area" height={250} />
+                            <ReactApexChart options={{ ...options, yaxis: { min: 0, max: Math.max(...alldata.Temperature) + 5, labels: { formatter: function (val) { return val.toFixed(0); } } } }} series={seriestemperature} type="area" height={250} />
                         </div>)}
                 </Card>
             </div>
