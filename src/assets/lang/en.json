@@ -83,5 +83,10 @@
   "OFFLINE": "OFFLINE",
   "ONLINE": "ONLINE",
   "INACTIVE": "INACTIVE",
-  "Device Name:":"Device Name"
+  "Device Name:": "Device Name:",
+  "Stats": "Stats",
+  "Attributes": "Attributes",
+  "Created At": "Created At: ",
+  "Profile:": "Profile:",
+  "Tenant": "Tenant:"
 }

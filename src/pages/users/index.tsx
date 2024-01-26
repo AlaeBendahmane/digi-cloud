@@ -19,7 +19,7 @@ function UserPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [progressPending, setprogressPending] = useState(true);
   const data: { Name: string; Role: string; EmailAdrdress: string; Creationdate: string; }[] = [];
-  useQuery(['getRoomsDevices', searchQuery, currentPage], async () => {
+  useQuery(['getUsers', searchQuery, currentPage], async () => {
     const result = await backendApi.findMany<any>("user", {
       where: {
         OR: [
@@ -59,12 +59,12 @@ function UserPage() {
     },
     {
       name: t('Role'),
-      selector: (row: { Role: string }) => row.Role,
+      selector: (row: { Role: string }) => row.Role.toUpperCase(),
       sortable: true,
     },
     {
       name: t('Email Adrdress'),
-      selector: (row: { EmailAdrdress: string }) => row.EmailAdrdress,
+      selector: (row: { EmailAdrdress: string }) => row.EmailAdrdress.toLowerCase(),
       sortable: true,
     },
     {
@@ -75,7 +75,7 @@ function UserPage() {
   ];
   ContactsArray.forEach(element => {
     data.push({
-      Name: element.firstName + " " + element.lastName,
+      Name: element.firstName.toUpperCase()[0] + element.firstName.slice(1).toLowerCase() + " " + element.lastName.toUpperCase()[0] + element.lastName.slice(1).toLowerCase(),
       Role: element.role,
       EmailAdrdress: element.email,
       Creationdate: new Date(element.createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")

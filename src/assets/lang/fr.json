@@ -84,5 +84,10 @@
     "OFFLINE": "HORS LIGNE",
     "ONLINE": "EN LIGNE",
     "INACTIVE": "INACTIF",
-    "Device Name:": "Nom de l'appareil:"
+    "Device Name:": "Nom de l'appareil:",
+    "Stats": "Statistiques",
+    "Attributes": "Attributs",
+    "Created At:": "Créé le: ",
+    "Profile:": "Profil:",
+    "Tenant:": "Locataire:"
 }
