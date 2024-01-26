@@ -2,7 +2,7 @@ import { Navbar } from "@material-tailwind/react";
 import Notifications from "./notifications";
 import ProfileMenu from "./profile-menu";
 import ToggleFullScreen from "./toggle-full-screen";
-import Logo from '../../assets/unused/dup/logo.svg'
+import Logo from '../../assets/icons/logo.svg'
 import Lang from "./lang";
 function Upbar() {
   return (
