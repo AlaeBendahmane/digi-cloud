@@ -41,15 +41,15 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose }) => {
                 <img src={Device} alt="" className='mr-1.5' />
                 {t('Add device')}
             </DialogHeader>
-            <DialogBody placeholder={undefined} className='grid grid-rows-4 gap-5 p-3'>
-                <div className="w-full ">
+            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-4 gap-5 p-3'>
+                <div className="w-full">
                     <Input label={t('Name')} placeholder="NXT-3" crossOrigin={undefined} />
                 </div>
-                <div className="w-full grid grid-cols-2 gap-5">
+                <div className="w-full grid sm:grid-cols-1 md:grid-cols-2 gap-5">
                     <Input label={t('Serial')} placeholder="SIS02-2MS3DJ3JJDJDJD" crossOrigin={undefined} />
                     <Input label={t('Type')} placeholder="Humidity" crossOrigin={undefined} />
                 </div>
-                <div className=" grid grid-cols-3 gap-9">
+                <div className=" grid sm:grid-cols-1 sm:gap-5 md:grid-cols-3 gap-5">
                     <Select label={t('Room')} placeholder={undefined}>
                         {RoomsArray.map((element) =>
                             <Option key={element.id}>{element.name}</Option>
@@ -60,7 +60,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose }) => {
                             <Option key={element.id}>{element.name + " v:" + element.version}</Option>
                         )}
                     </Select>
-                    <div className='p-2 flex gap-2 ml-auto'>
+                    <div className='p-2 flex gap-2 md:ml-auto'>
                         <p>{t('Device Status')}</p>
                         <Switch ripple={true} crossOrigin={undefined} color="purple" checked={isChecked} onChange={handleSwitchChange} />
                     </div>
