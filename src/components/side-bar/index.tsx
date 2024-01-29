@@ -33,7 +33,7 @@ function SideBar(props: Props) {
               variant="text"
               className={`mb-auto flex 
                aspect-square w-10  items-center justify-center  !p-0 ${""}`} placeholder={undefined}            >
-              <img src="src/assets/icons/more-aps.svg" className="h-6 w-6 stroke-white" />
+              <img src="../src/assets/icons/more-aps.svg" className="h-6 w-6 stroke-white" />
             </Button>
           </PopoverHandler>
           <PopoverContent className="z-[500]" placeholder={undefined}>

@@ -61,24 +61,28 @@ export default function Roomespage() {
       selector: (row: { Name: string }) => row.Name,
       sortable: true,
       cell: customCellRendererDevice,
+      width: '260px'
     },
     {
       name: t('Nb of devices'),
       selector: (row: { Nbofdevices: number }) => row.Nbofdevices,
       sortable: true,
       cell: customCellRendererNumber,
+      // width:'150px'
     },
     {
       name: t('Alert'),
       selector: (row: { Alert: number }) => row.Alert,
       sortable: true,
       cell: customCellRendererAlert,
+      //width:'100px'
     },
     {
       name: t('Devices stats'),
       selector: (row: { OnlineDevices: number; OfflineDevices: number }) => row.OnlineDevices + row.OfflineDevices,
       sortable: true,
       cell: customCellRendererStats,
+      width: '180px'
     },
     {
       name: t('Creation date'),
@@ -130,7 +134,7 @@ export default function Roomespage() {
         paddingLeft: 'auto',
         paddingRight: 'auto',
         fontFamily: 'Nunito',
-        //textWrap: 'nowrap',
+        textWrap: 'nowrap',
         backgroundColor: '#F7F7F8',
         borderBottom: 'none !important',
         width: 'auto',

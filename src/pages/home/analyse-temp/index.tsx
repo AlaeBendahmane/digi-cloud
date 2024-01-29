@@ -107,7 +107,7 @@ function AnalyseTemp() {
   };
   return (
     <Card className="bg-white p-2 md:col-span-full" placeholder={undefined} >
-      <div className="flex h-[2rem] gap-2 p-0 px-3 absolute">
+      <div className="hidden md:absolute md:flex md:h-[2rem] md:gap-2 md:p-0 md:px-3">{/*flex h-[2rem] gap-2 p-0 px-3 absolute*/}
         <span className="font-Nunito font-bold text-xl">{t('overview')}</span>
       </div>
       <div className="h-[18rem]">

@@ -58,7 +58,7 @@ function Avrg() {
           </div>
           <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center  h-[100px] '>
             <p className='m-1 font-light font-Roboto text-sm'>  {t('last reading...')} </p>
-            <p className='m-1 font-medium  font-Roboto text-xl text-nowrap'> {Lreading} </p>
+            <p className='m-1 font-medium  font-Roboto text-xl text-center'> {Lreading} </p>{/**text-nowrap */}
             {/*<div className="flex">
               <p className='m-1 font-medium font-Roboto text-xl'>01/19/2018 </p>
               <p className='m-1 font-medium font-Roboto text-xl'>21:30</p>
@@ -82,7 +82,7 @@ function Avrg() {
           </div>
           <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center  h-[100px]'>
             <p className='m-1 font-light font-Roboto text-sm'>  {t('last reading...')} </p>
-            <p className='m-1 font-medium  font-Roboto text-xl text-nowrap'> {Lreading} </p>
+            <p className='m-1 font-medium  font-Roboto text-xl text-center'> {Lreading} </p>
             {/*<div className="flex">
               <p className='m-1 font-medium font-Roboto text-xl'>01/19/2018 </p>
               <p className='m-1 font-medium font-Roboto text-xl'>21:30</p>
@@ -106,7 +106,7 @@ function Avrg() {
           </div>
           <div className='bg-red-100 rounded-sm flex flex-col justify-center items-center  h-[100px]'>
             <p className='m-1 font-light font-Roboto text-sm'> {t('last reading...')} </p>
-            < p className='m-1 font-medium  font-Roboto text-xl text-nowrap'>{Lreading} </p>
+            < p className='m-1 font-medium  font-Roboto text-xl text-center'>{Lreading} </p>
             {/*<div className="flex">
               <p className='m-1 font-medium font-Roboto text-xl'>01/19/2018 </p>{/*font-light font-Roboto text-sm 
             <p className='m-1 font-medium font-Roboto text-xl'>21:30</p>{/*font-light font-Roboto text-sm 

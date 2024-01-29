@@ -84,7 +84,7 @@ export default function leftcard(id: any) {
     });
     return (
         <div className='grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2'>
-            <Card className="bg-white p-2 md:col-span-full" placeholder={undefined}>
+            <Card className="bg-white p-2 md:col-span-full " placeholder={undefined}>
                 <div className="pt-1 px-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                     {t('overview')}
                 </div>
@@ -113,7 +113,7 @@ export default function leftcard(id: any) {
                     <div className={Attr.length === 0 ? 'grid grid-cols-2 [&amp;>*]:min-h-[5rem] [&amp;>*]:flex [&amp;>*]:gap-2 [&amp;>*]:items-center [&amp;>*]:px-4' : ''}>{/* */}
                         {Attr.length === 0 ? (
                             <>
-                                <div className="flex gap-2 p-3  flex-wrap items-center">
+                                <div className="flex gap-2 p-1  flex-wrap items-center">
                                     <div className="">
                                         <img src={Profiledev} alt="" width={'50px'} height={'50px'} />
                                     </div>
@@ -128,7 +128,7 @@ export default function leftcard(id: any) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 p-3  flex-wrap items-center">
+                                <div className="flex gap-2 p-1  flex-wrap items-center">
                                     <div className="">
                                         <img src={Prof} alt="" width={'50px'} height={'50px'} />
                                     </div>
@@ -143,7 +143,7 @@ export default function leftcard(id: any) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 p-3  flex-wrap items-center">
+                                <div className="flex gap-2 p-1  flex-wrap items-center">
                                     <div className="">
                                         <img src={Tenant} alt="" width={'50px'} height={'50px'} />
                                     </div>
@@ -158,7 +158,7 @@ export default function leftcard(id: any) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex gap-2 p-3  flex-wrap items-center">
+                                <div className="flex gap-2 p-1  flex-wrap items-center">
                                     <div className="">
                                         <img src={Status} alt="" width={'50px'} height={'50px'} />
                                     </div>
@@ -172,7 +172,10 @@ export default function leftcard(id: any) {
                                             <span className={Device?.status === 'ONLINE' ? "font-semibold text-green-600" : Device?.status === 'OFFLINE' ? "font-semibold text-red-600" : "font-semibold text-orange-600"}>{Device?.status || "---"}</span>
                                         </div>
                                     </div>
-                                </div></>
+                                </div>
+
+
+                            </>
                         ) : (
                             <div className="space-y-2">
                                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" htmlFor=":r32:-form-item">
