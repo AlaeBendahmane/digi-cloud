@@ -9,11 +9,15 @@ import { Button, Spinner } from '@material-tailwind/react';
 import Plan from '../../assets/icons/plan.svg'
 import DrawerTop from '../../components/drawer/index'
 import { ChangeEvent, DragEvent, useState } from 'react';
+import { ImageOverlay, MapContainer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
 export default function Index() {
     const { t } = useTranslation();
     const [dragging, setDragging] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
+    const [ImageURL, setImageURL] = useState<string>('');
     const [isDrawerOpen, setDrawerOpen] = useState(false);
+    const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const handleBrowseClick = () => {
         document.getElementById('fileInput')?.click();
     };
@@ -60,15 +64,19 @@ export default function Index() {
         });
     };
     const show = (index: number) => {
-        const drawComponent = document.getElementById('drawcomponent');
-        if (drawComponent && droppedFiles[index]) {
+        if (droppedFiles[index]) {
             const imageUrl = URL.createObjectURL(droppedFiles[index].file);
-            drawComponent.style.backgroundImage = `url(${imageUrl})`;
-            drawComponent.style.backgroundSize = '100% 100%';
-            drawComponent.style.backgroundPosition = 'center';
+            const img = new Image();
+            img.src = imageUrl;
+            img.onload = () => {
+                const width = img.width;
+                const height = img.height;
+                setDimensions({ width: width, height: height });
+                setImageURL(imageUrl);
+            };
         }
     };
-    console.log(droppedFiles)
+    //console.log(droppedFiles)
     return (
         <div className="flex flex-col h-full w-full">
             <h6 className="mx-5 flex items-center font-bold border-b-4 min-h-14">
@@ -102,7 +110,7 @@ export default function Index() {
                                 </p>
                             </div>
                         </div>
-                        <div className="p-3 overflow-y-scroll overflow-x-hidden h-[calc(635px-20rem)] border-b-2 border-gray-500 md:border-0">
+                        <div className="p-3 overflow-y-auto overflow-x-hidden h-[calc(635px-20rem)] border-b-2 border-gray-500 md:border-0">
                             {droppedFiles.length === 0 ?
                                 (
                                     <div className="flex justify-center items-center h-full">
@@ -146,7 +154,23 @@ export default function Index() {
                                 {t('SAVE ROOM')}
                             </Button>
                         </div>
-                        <div className="bg-white w-auto m-2  h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md" id='drawcomponent'></div>
+                        <div className="bg-white w-auto m-2 h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md overflow-hidden" id='drawcomponent' >
+                            <MapContainer center={[65, 300]} zoom={1} zoomControl={true} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover', }}>
+                                {ImageURL ? (
+                                    <ImageOverlay
+                                        url={ImageURL}
+                                        bounds={[[0, 0], [dimensions.width, dimensions.height]]}
+                                    />
+                                ) : (
+                                    <div className="flex justify-center items-center h-full">
+                                        <Spinner color="purple" />
+                                    </div>
+                                )}
+                                {/*<Marker position={[51.505, -0.09]}>
+                                    <Popup>A pretty CSS3 popup. <br /> Easily customizable.</Popup>
+                                </Marker>*/}
+                            </MapContainer>
+                        </div>
                     </div>
                 </div>
             </div>
