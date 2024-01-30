@@ -99,7 +99,7 @@ export default function leftcard(id: any) {
                                     <span>{t('Device Name:')}</span>
                                 </span>
                                 <span className="font-semibold flex">{Device?.name || "---"}
-                                    <Tooltip placeholder={undefined} content={t('Created At:') + (Device ? new Date(Device.createdAt.toString()).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ") : '')} color="white" >
+                                    <Tooltip placeholder={undefined} content={t('Created At:') + " " + (Device ? new Date(Device.createdAt.toString()).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ") : '')} color="white" >
                                         <img src={Info} className='ml-1' />
                                     </Tooltip>
                                 </span>
