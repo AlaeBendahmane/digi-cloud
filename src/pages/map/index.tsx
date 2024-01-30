@@ -64,7 +64,7 @@ export default function Index() {
                 {t('Map')}
             </h6>
             <div className="mx-auto mb-2 flex max-h-80rem w-full max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
-                <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 rounded-lg bg-white border-2 border-gray-500">
+                <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4  rounded-lg bg-white border-2 border-gray-500">
                     <div className="md:border-r-2 md:border-gray-500">
                         <div className="flex h-12 p-3 bg-red-50 rounded-tl-lg w-auto">
                             <img src={Upload} width={20} height={20} />
@@ -118,19 +118,19 @@ export default function Index() {
                             <img src={Plan} width={20} height={20} />
                             <p className="text-red-900 ml-2">{t('Plan')}</p>
                         </div>
-                        <div className="flex m-3 flex-col sm:flex-row">
-                            <div className="flex md:space-x-1 flex-col  sm:flex-row">
+                        <div className="flex m-3 flex-col sm:flex-row gap-2">
+                            <div className="flex md:space-x-1 flex-col  sm:flex-row gap-1">
                                 <Button
                                     className="flex items-center gap-3 text-sm font-medium h-[41px]" color="gray" placeholder={undefined} >
                                     <img src={Adddev} alt="" />
                                     {t('Add devices')}
                                 </Button>
-                                <Button className="flex items-center gap-3 text-sm font-medium h-[41px]  mt-0.5 md:mt-0" color="gray" placeholder={undefined} >
+                                <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0" color="gray" placeholder={undefined} >
                                     <img src={Draw} alt="" />
                                     {t('Draw a room')}
                                 </Button>
                             </div>
-                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] mt-2 md:mt-0 md:ml-auto" placeholder={undefined} >
+                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} >
                                 <img src={Sav} alt="" />
                                 {t('SAVE ROOM')}
                             </Button>
