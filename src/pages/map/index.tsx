@@ -7,11 +7,13 @@ import Draw from '../../assets/icons/draw.svg';
 import Sav from '../../assets/icons/sav.svg';
 import { Button, Spinner } from '@material-tailwind/react';
 import Plan from '../../assets/icons/plan.svg'
+import DrawerTop from '../../components/drawer/index'
 import { ChangeEvent, DragEvent, useState } from 'react';
 export default function Index() {
     const { t } = useTranslation();
     const [dragging, setDragging] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
+    const [isDrawerOpen, setDrawerOpen] = useState(false);
     const handleBrowseClick = () => {
         document.getElementById('fileInput')?.click();
     };
@@ -57,6 +59,15 @@ export default function Index() {
             return newFiles;
         });
     };
+    const show = (index: number) => {
+        const drawComponent = document.getElementById('drawcomponent');
+        if (drawComponent && droppedFiles[index]) {
+            const imageUrl = URL.createObjectURL(droppedFiles[index].file);
+            drawComponent.style.backgroundImage = `url(${imageUrl})`;
+            drawComponent.style.backgroundSize = '100% 100%';
+            drawComponent.style.backgroundPosition = 'center';
+        }
+    };
     console.log(droppedFiles)
     return (
         <div className="flex flex-col h-full w-full">
@@ -101,7 +112,7 @@ export default function Index() {
                                 : (
                                     <>
                                         {droppedFiles.map(({ file, name }, index) => (
-                                            <div key={index} className="h-[50px] rounded-lg border-2 border-gray-500 mb-1 flex p-3 ">
+                                            <div key={index} className="h-[50px] rounded-lg border-2 border-gray-500 mb-1 flex p-3 cursor-pointer" onClick={() => show(index)}>
                                                 <img src={URL.createObjectURL(file)} alt="" />
                                                 <p className="text-sm text-gray-500 ml-2 text-nowrap overflow-hidden text-ellipsis">{name}</p>
                                                 <button className="ml-auto" onClick={() => delfromarray(index)}>
@@ -120,7 +131,7 @@ export default function Index() {
                         </div>
                         <div className="flex m-3 flex-col sm:flex-row gap-2">
                             <div className="flex md:space-x-1 flex-col  sm:flex-row gap-1">
-                                <Button
+                                <Button onClick={() => setDrawerOpen(true)}
                                     className="flex items-center gap-3 text-sm font-medium h-[41px]" color="gray" placeholder={undefined} >
                                     <img src={Adddev} alt="" />
                                     {t('Add devices')}
@@ -135,10 +146,11 @@ export default function Index() {
                                 {t('SAVE ROOM')}
                             </Button>
                         </div>
-                        <div className="bg-yellow-500 w-auto m-2  h-[calc(635px-10rem)]">draw</div>
+                        <div className="bg-white w-auto m-2  h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md" id='drawcomponent'></div>
                     </div>
                 </div>
             </div>
+            <DrawerTop isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
         </div >
     );
 }
