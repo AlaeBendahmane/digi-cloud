@@ -93,7 +93,7 @@ export default function leftcard(id: any) {
     };
     return (
         <div className='grid sm:grid-rows-1 md:col-span-2 md:grid-rows-2'>
-            <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2"> 
+            <div className="grid w-full gap-3 md:grid-cols-6 2xl:grid-cols-12 mt-2">
                 <Card className="bg-white p-2 md:col-span-full w-full" placeholder={undefined}>
 
                     <div className="flex h-[2rem] gap-2 p-0 px-3 absolute">

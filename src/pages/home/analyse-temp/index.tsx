@@ -81,7 +81,7 @@ function AnalyseTemp() {
     },
     yaxis: {
       min: 0,
-      max: Math.max(...alldata.Humidity) + 5,
+      max: Math.max(...alldata.Humidity) > Math.max(...alldata.Temperature) ? Math.max(...alldata.Humidity) + 5 : Math.max(...alldata.Temperature) + 5,
       labels: {
         formatter: function (val) {
           return val.toFixed(0);

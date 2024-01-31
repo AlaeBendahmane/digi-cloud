@@ -1,23 +1,53 @@
-import { useTranslation } from 'react-i18next';
 import Upload from '../../assets/icons/upload.svg';
 import UploadIcon from '../../assets/icons/uploadico.svg';
 import Recycle from '../../assets/icons/recycle.svg';
-import Adddev from '../../assets/icons/adddev.svg';
+import Adddevblack from '../../assets/icons/adddevblack.svg';
 import Draw from '../../assets/icons/draw.svg';
 import Sav from '../../assets/icons/sav.svg';
-import { Button, Spinner } from '@material-tailwind/react';
 import Plan from '../../assets/icons/plan.svg'
-import DrawerTop from '../../components/drawer/index'
+import Menuindex from './menuindex'
+import { Button } from '@material-tailwind/react';
+import { useTranslation } from 'react-i18next';
 import { ChangeEvent, DragEvent, useState } from 'react';
-import { ImageOverlay, MapContainer, Marker, Popup } from 'react-leaflet'
+import { ImageOverlay, MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css'
 export default function Index() {
     const { t } = useTranslation();
     const [dragging, setDragging] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
     const [ImageURL, setImageURL] = useState<string>('');
-    const [isDrawerOpen, setDrawerOpen] = useState(false);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+    const [markers, setMarkers] = useState<{ lat: number; lng: number }[]>([]);
+    const markerIcon = new Icon({
+        iconUrl: Adddevblack,
+        iconSize: [42, 42],
+        //iconAnchor: [50,0],
+        // popupAnchor: [42, 42],
+        tooltipAnchor: [42, 42],
+        shadowSize: [20, 20],
+    });
+    const deleteMarker = (index: number) => {
+        setMarkers((prevMarkers) => {
+            const newMarkers = [...prevMarkers];
+            newMarkers.splice(index, 1);
+            return newMarkers;
+        });
+    };
+    const addMarker = (lat: number, lng: number) => {
+        const newMarker = { lat, lng };
+        setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+    };
+    const handleSingleClick = (e: { latlng: { lat: number; lng: number } }) => {
+        const { lat, lng } = e.latlng;
+        addMarker(lat, lng);
+    };
+    const AddMarkerToClick = () => {
+        useMapEvents({
+            dblclick: handleSingleClick,
+        });
+        return null;
+    };
     const handleBrowseClick = () => {
         document.getElementById('fileInput')?.click();
     };
@@ -111,25 +141,15 @@ export default function Index() {
                             </div>
                         </div>
                         <div className="p-3 overflow-y-auto overflow-x-hidden h-[calc(635px-20rem)] border-b-2 border-gray-500 md:border-0">
-                            {droppedFiles.length === 0 ?
-                                (
-                                    <div className="flex justify-center items-center h-full">
-                                        <Spinner color="purple" />
-                                    </div>
-                                )
-                                : (
-                                    <>
-                                        {droppedFiles.map(({ file, name }, index) => (
-                                            <div key={index} className="h-[50px] rounded-lg border-2 border-gray-500 mb-1 flex p-3 cursor-pointer" onClick={() => show(index)}>
-                                                <img src={URL.createObjectURL(file)} alt="" />
-                                                <p className="text-sm text-gray-500 ml-2 text-nowrap overflow-hidden text-ellipsis">{name}</p>
-                                                <button className="ml-auto" onClick={() => delfromarray(index)}>
-                                                    <img src={Recycle} className="w-5 h-5" alt="" />
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </>
-                                )}
+                            {droppedFiles.map(({ file, name }, index) => (
+                                <div key={index} className="h-[50px] rounded-lg border-2 border-gray-500 mb-1 flex p-3 cursor-pointer" onClick={() => show(index)}>
+                                    <img src={URL.createObjectURL(file)} className='max-w-12' alt="" />
+                                    <p className="text-sm text-gray-500 ml-2 text-nowrap overflow-hidden text-ellipsis">{name}</p>
+                                    <button className="ml-auto" onClick={() => delfromarray(index)}>
+                                        <img src={Recycle} className="w-5 h-5" alt="" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="col-span-3">
@@ -139,11 +159,6 @@ export default function Index() {
                         </div>
                         <div className="flex m-3 flex-col sm:flex-row gap-2">
                             <div className="flex md:space-x-1 flex-col  sm:flex-row gap-1">
-                                <Button onClick={() => setDrawerOpen(true)}
-                                    className="flex items-center gap-3 text-sm font-medium h-[41px]" color="gray" placeholder={undefined} >
-                                    <img src={Adddev} alt="" />
-                                    {t('Add devices')}
-                                </Button>
                                 <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0" color="gray" placeholder={undefined} >
                                     <img src={Draw} alt="" />
                                     {t('Draw a room')}
@@ -155,26 +170,32 @@ export default function Index() {
                             </Button>
                         </div>
                         <div className="bg-white w-auto m-2 h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md overflow-hidden" id='drawcomponent' >
-                            <MapContainer center={[65, 300]} zoom={1} zoomControl={true} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover', }}>
-                                {ImageURL ? (
+                            {ImageURL ? (
+                                <MapContainer center={[65, 300]} zoom={1} zoomControl={true} doubleClickZoom={false} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover', }}>
                                     <ImageOverlay
                                         url={ImageURL}
                                         bounds={[[0, 0], [dimensions.width, dimensions.height]]}
                                     />
-                                ) : (
-                                    <div className="flex justify-center items-center h-full">
-                                        <Spinner color="purple" />
-                                    </div>
-                                )}
-                                {/*<Marker position={[51.505, -0.09]}>
-                                    <Popup>A pretty CSS3 popup. <br /> Easily customizable.</Popup>
-                                </Marker>*/}
-                            </MapContainer>
+                                    {markers.map((marker, index) => (
+                                        <Marker key={index} position={[marker.lat, marker.lng]} icon={markerIcon}>
+                                            <Popup closeButton={false} closeOnEscapeKey={true} className='w-96' >
+                                                <div className='flex space-x-2'>
+                                                    <Menuindex />
+                                                    <button className="select-none rounded-lg bg-gradient-to-tr from-purple-600 to-purple-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none text-nowrap"
+                                                        type="button" onClick={() => deleteMarker(index)} >
+                                                        Delete marker
+                                                    </button>
+                                                </div>
+                                            </Popup>
+                                        </Marker>
+                                    ))}
+                                    <AddMarkerToClick />
+                                </MapContainer>
+                            ) : ('')}
                         </div>
                     </div>
                 </div>
             </div>
-            <DrawerTop isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
         </div >
     );
 }
