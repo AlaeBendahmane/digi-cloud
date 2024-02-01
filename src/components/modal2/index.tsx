@@ -6,16 +6,21 @@ import { useProvider } from "../provider";
 import { TypeDevice } from "../../utils/types";
 import { useQuery } from "@tanstack/react-query";
 import { AppContextType } from "../../App";
-
+import { toast } from "react-toastify";
 interface DeviceDialogProps {
     open: boolean;
     handleClose: () => void;
-    data: boolean;
+    data: Object;
 }
 const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) => {
     const { t } = useTranslation();
     const [types, setTypes] = useState<TypeDevice[]>([]);
     const { backendApi } = useProvider<AppContextType>();
+    const [selectedType, setSelectedType] = useState<string | undefined>(undefined);
+    const handleTypeChange = (value: string | undefined) => {
+        setSelectedType(value);
+    };
+    const [roomName, setRoomName] = useState('');
     useQuery(['getTypes'], async () => {
         const result = await backendApi.findMany<any>("deviceType", {
         });
@@ -27,22 +32,32 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
         escapeKey: false
     };
     const handleSave = () => {
-        console.log(data)
+        if (roomName == '' || selectedType == '') {
+            toast.error("Provide a name and type, as both fields must be filled in.")
+        } else {
+            const roomupdated = {
+                name: roomName,
+                type: selectedType,
+                data: data,
+            };
+            console.log(roomupdated)
+        }
+
     }
     return (
-        <Dialog size='sm' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
+        <Dialog size='md' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
             <DialogHeader className='flex bg-red-50 h-16 p-3 font-medium' placeholder={undefined}>
                 <img src={Device} alt="" className='mr-1.5' />
                 {t('Add room')}
             </DialogHeader>
-            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-4 gap-5 p-3'>
-                <div className="w-full">
-                    <Input label={t('Name')} placeholder="Room0001" crossOrigin={undefined} size="md" />
-                </div>
-                <div className=" grid sm:grid-cols-1 sm:gap-5 md:grid-cols-3 gap-5">
-                    <Select label={t('Type')} placeholder={undefined}>
+            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-2 gap-2 p-3'>
+                <div className="grid sm:grid-cols-1 sm:gap-2 md:grid-cols-2 gap-2">
+                    <div className="w-full">
+                        <Input label={t('Name')} placeholder="Room0001" crossOrigin={undefined} size="md" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+                    </div>
+                    <Select label={t('Type')} placeholder={undefined} onChange={(value) => handleTypeChange(value)} value={selectedType}>
                         {types.map((element) =>
-                            <Option key={element.id}>{element.name.toUpperCase()}</Option>
+                            <Option key={element.id} value={element.id.toString()}>{element.name.toUpperCase()}</Option>
                         )}
                     </Select>
                 </div>

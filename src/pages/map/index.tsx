@@ -175,8 +175,6 @@ export default function Index() {
                     }
                 }
                 const room = {
-                    name: '',
-                    type: '',
                     file: droppedFiles,
                     devices: markers
                 };
