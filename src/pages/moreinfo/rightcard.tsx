@@ -183,7 +183,7 @@ export default function leftcard(id: any) {
                                 </label>
                                 <div className="flex flex-col gap-2 overflow-y-auto  max-h-[calc(100vh-290px)]" id=":r32:-form-item" aria-describedby=":r32:-form-item-description" aria-invalid="false">
                                     {Attr.map((e) =>
-                                        <div className="flex gap-2 items-center border border-gray-400/50 rounded-md p-2">
+                                        <div key={e.id} className="flex gap-2 items-center border border-gray-400/50 rounded-md p-2">
                                             <input
                                                 className="flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
                                                 placeholder="name"
