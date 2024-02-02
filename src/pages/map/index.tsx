@@ -241,7 +241,7 @@ export default function Index() {
                         <div className="p-3 overflow-y-auto overflow-x-hidden h-[calc(635px-20rem)] border-b-2 border-gray-500 md:border-0">
                             {droppedFiles.map(({ file, name }, index) => (
                                 <div key={index} className="flex   rounded-lg border-2 border-gray-500 mb-1 h-[50px]" >
-                                    <div className='flex w-[calc(100%-25px)] p-3 pr-0' onClick={() => show(index)}>
+                                    <div className='flex w-[calc(100%-25px)] p-3 pr-0 cursor-pointer' onClick={() => show(index)}>
                                         <img src={URL.createObjectURL(file)} className='max-w-10 max-h-7' alt="" />
                                         <p className="text-sm  text-gray-500 ml-2 text-nowrap overflow-hidden text-ellipsis">{name}</p>
                                     </div>
