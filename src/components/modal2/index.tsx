@@ -22,8 +22,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
     };
     const [roomName, setRoomName] = useState('');
     useQuery(['getTypes'], async () => {
-        const result = await backendApi.findMany<any>("deviceType", {
-        });
+        const result = await backendApi.findMany<any>("deviceType");
         setTypes(result.results);
         return result
     });
@@ -40,9 +39,10 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
                 type: selectedType,
                 data: data,
             };
+            setRoomName('')
+            setSelectedType(undefined)
             console.log(roomupdated)
         }
-
     }
     return (
         <Dialog size='md' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
@@ -50,7 +50,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
                 <img src={Device} alt="" className='mr-1.5' />
                 {t('Add room')}
             </DialogHeader>
-            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-2 gap-2 p-3'>
+            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-2 gap-2 p-1.5'>
                 <div className="grid sm:grid-cols-1 sm:gap-2 md:grid-cols-2 gap-2">
                     <div className="w-full">
                         <Input label={t('Name')} placeholder="Room0001" crossOrigin={undefined} size="md" value={roomName} onChange={(e) => setRoomName(e.target.value)} />

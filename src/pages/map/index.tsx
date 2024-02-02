@@ -132,6 +132,7 @@ export default function Index() {
     };
     const delfromarray = () => {
         setDroppedFiles([])
+        setMarkers([])
         setCanadd(true)
         setImageURL("");
         const el = document.getElementById('fileInput');
@@ -219,8 +220,7 @@ export default function Index() {
                                 onDragOver={handleDragOver}
                                 onDragEnter={handleDragEnter}
                                 onDragLeave={handleDragLeave}
-                                onDrop={handleDrop}
-                            >
+                                onDrop={handleDrop}>
                                 <img src={UploadIcon} alt="" />
                                 <span className="mt-2 font-bold text-sm sm:text-center ">
                                     <span className=''> {t('Drag & drop files or ')}</span>
