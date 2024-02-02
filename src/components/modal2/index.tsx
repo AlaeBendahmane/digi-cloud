@@ -36,7 +36,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
         } else {
             const roomupdated = {
                 name: roomName,
-                type: selectedType,
+                type: parseInt(selectedType || '0'),
                 data: data,
             };
             setRoomName('')
