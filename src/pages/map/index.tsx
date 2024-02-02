@@ -269,7 +269,7 @@ export default function Index() {
                                     )}
                                 </Button>
                                 {isVisible ? (
-                                    <Input type="color" label='Color' crossOrigin={undefined} value={selectedColor} onChange={handleColorChange} />
+                                    <Input type="color" label={t('Color')} className='cursor-pointer' crossOrigin={undefined} value={selectedColor} onChange={handleColorChange} />
                                 ) : ('')}
                             </div>
                             <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} onClick={isVisible ? (saveCanvas) : (saveData)} >

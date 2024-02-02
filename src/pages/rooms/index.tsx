@@ -42,12 +42,12 @@ export default function Roomespage() {
   const customCellRendererStats = (row: { OnlineDevices: number | number; OfflineDevices: number | number }) => (
     <div className='grid grid-flow-row auto-rows-max gap-2 '>
       <div className="grid grid-cols-2 gap-1" >
-        <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '10px 0px 0px 10px' }}>
+        <div className="px-0.5 w-fit" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '10px 0px 0px 10px' }}>
           <p style={{ color: '#3FBC58' }} className="px-1  font-semibold text-sm text-nowrap">{t('Online :')}
             <span className="text-black	"> {row.OnlineDevices}</span>
           </p>
         </div>
-        <div className="px-0.5" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '0px 10px 10px 0px' }}>
+        <div className="px-0.5 w-fit" style={{ backgroundColor: '#ebecee', display: 'flex', borderRadius: '0px 10px 10px 0px' }}>
           <p className="px-1  font-semibold text-sm text-nowrap" style={{ color: '#999ca9' }}>{t('Offline :')}
             <span className="text-black	"> {row.OfflineDevices}</span>
           </p>
@@ -82,7 +82,7 @@ export default function Roomespage() {
       selector: (row: { OnlineDevices: number; OfflineDevices: number }) => row.OnlineDevices + row.OfflineDevices,
       sortable: true,
       cell: customCellRendererStats,
-      width: '180px'
+      width: '200px'
     },
     {
       name: t('Creation date'),
