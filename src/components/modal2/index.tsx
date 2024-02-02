@@ -42,6 +42,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
             setRoomName('')
             setSelectedType(undefined)
             console.log(roomupdated)
+            handleClose()
         }
     }
     return (
