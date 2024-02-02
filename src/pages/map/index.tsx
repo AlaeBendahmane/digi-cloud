@@ -4,11 +4,11 @@ import Recycle from '../../assets/icons/recycle.svg';
 import Adddevblack from '../../assets/icons/adddevblack.svg';
 import Draw from '../../assets/icons/draw.svg';
 import Sav from '../../assets/icons/sav.svg';
-import Modal from '../../components/modal2/index';
 import Plan from '../../assets/icons/plan.svg'
+import Modal from '../../components/modal2/index';
 import { Button, Input } from '@material-tailwind/react';
 import { useTranslation } from 'react-i18next';
-import { ChangeEvent, DragEvent, useRef, useEffect, useState, SetStateAction } from 'react';
+import { ChangeEvent, DragEvent, useRef, useState, SetStateAction } from 'react';
 import { ImageOverlay, MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css'
@@ -17,6 +17,7 @@ import { AppContextType } from '../../App';
 import { useProvider } from '../../components/provider';
 import SearchSelect from '../../components/searchselect/searchselect';
 import { toast } from 'react-toastify';
+import CanvasComponent from '../../components/canvas/canvas';
 export default function Index() {
     const [openDialog, setOpenDialog] = useState(false);
     const handleOpenDialog = () => setOpenDialog(true);
@@ -25,8 +26,6 @@ export default function Index() {
     const [dragging, setDragging] = useState(false);
     const [room, setRoom] = useState(Object);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [context, setContext] = useState<CanvasRenderingContext2D | null>(null);
-    const [isPainting, setIsPainting] = useState(false);
     const [selectedColor, setSelectedColor] = useState("#000000");
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
     const [ImageURL, setImageURL] = useState<string>("");
@@ -47,8 +46,6 @@ export default function Index() {
     const markerIcon = new Icon({
         iconUrl: Adddevblack,
         iconSize: [42, 42],
-        //iconAnchor: [50,0],
-        // popupAnchor: [42, 42],
         tooltipAnchor: [42, 42],
         shadowSize: [20, 20],
     });
@@ -133,22 +130,12 @@ export default function Index() {
             toast.error('You can use only one image');
         }
     };
-    const delfromarray = (/*index: number*/) => {
-        /* setDroppedFiles(prevFiles => {
-             const newFiles = [...prevFiles];
-             newFiles.splice(index, 1);
-             return newFiles;
-         });*/
+    const delfromarray = () => {
         setDroppedFiles([])
         setCanadd(true)
         setImageURL("");
         const el = document.getElementById('fileInput');
         (el as HTMLInputElement).value = ""
-        /*setMarkers(prevMarkers => {
-            const newMarkers = [...prevMarkers];
-            newMarkers.splice(index, 1);
-            return newMarkers;
-        });*/
     };
     const show = (index: number) => {
         if (droppedFiles[index]) {
@@ -187,41 +174,11 @@ export default function Index() {
             toast.error('Pick image');
         }
     };
-    ///paint
     const showDrawing = () => {
         setIsVisible(true);
     }
     const hideDrawing = () => {
         setIsVisible(false);
-    };
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            setContext(ctx);
-        }
-    }, []);
-    const startPainting = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
-        const { offsetX, offsetY } = nativeEvent;
-        if (context) {
-            context.beginPath();
-            context.moveTo(offsetX, offsetY);
-            setIsPainting(true);
-        }
-    };
-    const stopPainting = () => {
-        if (context) {
-            context.closePath();
-            setIsPainting(false);
-        }
-    };
-    const paint = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
-        if (!isPainting || !context) return;
-        const { offsetX, offsetY } = nativeEvent;
-        context.lineTo(offsetX, offsetY);
-        context.strokeStyle = selectedColor;
-        context.lineWidth = 5
-        context.stroke();
     };
     const handleColorChange = (event: { target: { value: SetStateAction<string>; }; }) => {
         setSelectedColor(event.target.value);
@@ -265,14 +222,14 @@ export default function Index() {
                                 onDrop={handleDrop}
                             >
                                 <img src={UploadIcon} alt="" />
-                                <span className="mt-2 font-bold text-sm ">
+                                <span className="mt-2 font-bold text-sm sm:text-center ">
                                     <span className=''> {t('Drag & drop files or ')}</span>
                                     <span className="text-purple-400 underline cursor-pointer" onClick={handleBrowseClick}>
                                         {t('Browse')}
                                         <input type="file" name="" id="fileInput" style={{ display: 'none' }} onChange={handleFileInputChange} accept="image/png, image/jpeg" />
                                     </span>
                                 </span>
-                                <p className="text-sm font-light text-gray-400">
+                                <p className="text-sm font-light text-gray-400 sm:text-center">
                                     {t('Supported formats')}: JPEG, PNG
                                 </p>
                             </div>
@@ -297,7 +254,7 @@ export default function Index() {
                             <p className="text-red-900 ml-2">{t('Plan')}</p>
                         </div>
                         <div className="flex m-3 flex-col sm:flex-row gap-2">
-                            <div className="flex md:space-x-1 flex-col  sm:flex-row gap-3">
+                            <div className="grid md:grid-cols-2 gap-3 ">
                                 <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0" color="gray" placeholder={undefined} onClick={isVisible ? (hideDrawing) : (showDrawing)}>
                                     {isVisible ? (
                                         <>
@@ -312,7 +269,7 @@ export default function Index() {
                                     )}
                                 </Button>
                                 {isVisible ? (
-                                    <Input type="color" label='Color' size='md' crossOrigin={undefined} value={selectedColor} onChange={handleColorChange} />
+                                    <Input type="color" label='Color' crossOrigin={undefined} value={selectedColor} onChange={handleColorChange} />
                                 ) : ('')}
                             </div>
                             <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} onClick={isVisible ? (saveCanvas) : (saveData)} >
@@ -322,15 +279,7 @@ export default function Index() {
                         </div>
                         <div className="bg-white w-auto m-2 h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md overflow-hidden" id='drawcomponent' >
                             <div className='w-full h-full' style={{ display: isVisible ? 'block' : 'none' }}>
-                                <canvas
-                                    ref={canvasRef}
-                                    width={1410}
-                                    height={480}
-                                    //style={{ border: '1px solid #000' }}
-                                    onMouseDown={startPainting}
-                                    onMouseUp={stopPainting}
-                                    onMouseMove={paint}
-                                />
+                                <CanvasComponent selectedColor={selectedColor} canvasRef={canvasRef} />
                             </div>
                             <div className='w-full h-full' style={{ display: !isVisible ? 'block' : 'none' }}>
                                 {ImageURL != '' ? (
@@ -341,7 +290,7 @@ export default function Index() {
                                         />
                                         {markers.map((marker, index) => (
                                             <Marker key={index} position={[marker.lat, marker.lng]} icon={markerIcon}>
-                                                <Popup closeButton={false} autoClose={false} closeOnClick={false} closeOnEscapeKey={true} className='w-96'>
+                                                <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true} className='w-96'>
                                                     <div className='flex space-x-2'>
                                                         <SearchSelect
                                                             value={marker.device}
@@ -371,7 +320,6 @@ export default function Index() {
                 </div>
             </div>
             <Modal open={openDialog} handleClose={handleCloseDialog} data={room} />
-
         </div >
     );
 }
