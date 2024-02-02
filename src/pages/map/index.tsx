@@ -199,6 +199,10 @@ export default function Index() {
                 link.href = dataUrl;
                 link.download = 'Room_' + Date.now() + "_" + Math.floor(Math.random() * 100000) + '.png';
                 link.click();
+                const originalContext = canvasRef.current.getContext('2d');
+                if (originalContext) {
+                    originalContext.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                }
             }
         }
     }
