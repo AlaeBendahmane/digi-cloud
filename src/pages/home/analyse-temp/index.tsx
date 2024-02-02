@@ -115,7 +115,7 @@ function AnalyseTemp() {
           <div className="flex justify-center items-center h-full">
             <Spinner color="purple" />
           </div>
-          : data?.results.length === 0 || error ? (
+          : data?.results?.length === 0 || error ? (
             <div className="flex justify-center items-center h-full">
               <span className=" font-extrabold text-purple-600 " >
                 {t('No Data found')}

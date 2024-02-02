@@ -52,7 +52,7 @@ function DevicesPage() {
       </h6>
       {isLoading ? (
         <Loading />
-      ) : historyArray.length === 0 ? (
+      ) : historyArray?.length === 0 ? (
         <Nodata />
       ) : (
         <div className="mx-auto flex h-full max-h-[80rem] w-full max-w-[calc(2000px-20rem)] flex-col px-5 overflow-auto" id="Content">
