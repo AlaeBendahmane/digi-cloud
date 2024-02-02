@@ -25,7 +25,10 @@ function AnalyseTemp() {
         },
         createdAt: {
           $gte: new Date().toISOString().slice(0, 10),
-        }
+        },
+        deviceId: {//to remove to see prblm
+          $ne: 40950
+      }
       },
       pagination: {
         perPage: 1000,

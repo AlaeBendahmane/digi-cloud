@@ -97,5 +97,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   </React.StrictMode>,
 );
 console.warn = () => { };
-//console.log = () => { };
+console.log = () => { };
 console.error = () => { };

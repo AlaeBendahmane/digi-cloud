@@ -203,18 +203,3 @@ export default class BackendApi {
     return res.data;
   }
 }
-
-export const makeReq = async (url: string) => {
-  let token = localStorage.getItem('accessToken')?.replace(/"/g, '');
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    return response.data;
-  } catch (error) {
-    return 0;
-    //throw error;
-  }
-};
