@@ -26,9 +26,12 @@ function AnalyseTemp() {
         createdAt: {
           $gte: new Date().toISOString().slice(0, 10),
         },
-        deviceId: {//to remove to see prblm
-          $ne: 40950
-      }
+        //   deviceId: {//to remove to see prblm
+        //     $ne: {40950,40951},
+        // }
+        deviceId: {
+          $nin: [40950, 40951]
+        },
       },
       pagination: {
         perPage: 1000,
@@ -41,12 +44,12 @@ function AnalyseTemp() {
       Humidity: result.results.map((e) => parseFloat(parseFloat(e.humidity).toFixed(2))),
       Time: result.results.map((e) => e.date)
     }));
+    console.log(result)
     return result
   });
   const options: ApexCharts.ApexOptions = {
     chart: {
       height: 350,
-      type: 'area',
       toolbar: {
         show: true,
         tools: {
