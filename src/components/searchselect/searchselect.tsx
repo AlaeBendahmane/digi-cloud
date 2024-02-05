@@ -1,6 +1,7 @@
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { Input } from "@material-tailwind/react";
 import { twMerge } from "tailwind-merge";
+import { useTranslation } from "react-i18next";
 export type Option<T> = {
     label: string;
     value: T;
@@ -28,6 +29,7 @@ export default function SearchSelect<T>({
     );
     const [showOptions, setShowOptions] = useState(false);
     const containerRef = useRef<ElementRef<"div">>(null);
+    const { t } = useTranslation();
     const filteredOptions = options?.filter((option) =>
         option.label.toLowerCase().includes(search.toLowerCase())
     );
@@ -52,7 +54,7 @@ export default function SearchSelect<T>({
     return (
         <div className="relative w-full" ref={containerRef}>
             <Input
-                label="Select device"
+                label={t('Select device')}
                 type="text"
                 className={twMerge(
                     "peer rounded-md border bg-white  w-full p-2 shadow-sm",

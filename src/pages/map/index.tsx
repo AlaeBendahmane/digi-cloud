@@ -226,14 +226,14 @@ export default function Index() {
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}>
                                 <img src={UploadIcon} alt="" />
-                                <span className="mt-2 font-bold text-sm sm:text-center ">
+                                <span className="mt-2 font-bold text-sm text-center ">
                                     <span className=''> {t('Drag & drop files or ')}</span>
                                     <span className="text-purple-400 underline cursor-pointer" onClick={handleBrowseClick}>
                                         {t('Browse')}
                                         <input type="file" name="" id="fileInput" style={{ display: 'none' }} onChange={handleFileInputChange} accept="image/png, image/jpeg" />
                                     </span>
                                 </span>
-                                <p className="text-sm font-light text-gray-400 sm:text-center">
+                                <p className="text-sm font-light text-gray-400 text-center">
                                     {t('Supported formats')}: JPEG, PNG
                                 </p>
                             </div>
@@ -296,8 +296,8 @@ export default function Index() {
                                         />
                                         {markers.map((marker, index) => (
                                             <Marker key={index} position={[marker.lat, marker.lng]} icon={markerIcon}>
-                                                <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true} className='w-96'>
-                                                    <div className='flex space-x-2'>
+                                                <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true} minWidth={400}>
+                                                    <div className='grid md:grid-cols-2 gap-2'>
                                                         <SearchSelect
                                                             value={marker.device}
                                                             onValueChange={(val) => handleDeviceSelection(index, val)}
@@ -311,7 +311,7 @@ export default function Index() {
                                                         <button
                                                             className="select-none rounded-lg bg-gradient-to-tr from-purple-600 to-purple-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none text-nowrap"
                                                             type="button" onClick={() => deleteMarker(index)} >
-                                                            Delete device
+                                                            {t('Delete device')}
                                                         </button>
                                                     </div>
                                                 </Popup>

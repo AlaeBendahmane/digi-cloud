@@ -91,5 +91,7 @@
     "Profile:": "Profil:",
     "Tenant:": "Locataire:",
     "Edit a room": "Modifier une pièce",
-    "Color": "Couleur"
+    "Color": "Couleur",
+    "Delete device": "Supprimer l'appareil",
+    "Select device": "Choisir un appareil"
 }
