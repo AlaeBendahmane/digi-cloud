@@ -76,7 +76,9 @@ function AnalyseTemp() {
     },
     xaxis: {
       type: 'datetime',
-      categories: alldata.Time,
+      categories: alldata.Time/*.map(function (time) {
+        return new Date(time).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ");
+      })*/,
       tickAmount: 12,
       labels: {
         format: 'HH:mm'

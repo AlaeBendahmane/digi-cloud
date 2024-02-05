@@ -41,7 +41,7 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose }) => {
                 <img src={Device} alt="" className='mr-1.5' />
                 {t('Add device')}
             </DialogHeader>
-            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-4 gap-5 p-3'>
+            <DialogBody placeholder={undefined} className='grid sm:grid-cols-1 md:grid-rows-4 gap-5 p-2'>
                 <div className="w-full">
                     <Input label={t('Name')} placeholder="NXT-3" crossOrigin={undefined} />
                 </div>
