@@ -3,14 +3,17 @@ import React, { useState } from "react";
 import Device from '../../assets/icons/device.svg'
 import { useTranslation } from "react-i18next";
 import { useProvider } from "../provider";
-import { TypeDevice } from "../../utils/types";
+import { Group, TypeDevice } from "../../utils/types";
 import { useQuery } from "@tanstack/react-query";
 import { AppContextType } from "../../App";
 import { toast } from "react-toastify";
 interface DeviceDialogProps {
     open: boolean;
     handleClose: () => void;
-    data: Object;
+    data: {
+        file: any;
+        devices: any[];
+    };
 }
 const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) => {
     const { t } = useTranslation();
@@ -30,21 +33,30 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
         outsidePress: false,
         escapeKey: false
     };
-    const handleSave = () => {
+    const { refetch } = useQuery(['insertgroups', roomName, selectedType, data], async () => {
         if (roomName == '' || selectedType == '') {
             toast.error("Provide a name and type, as both fields must be filled in.")
         } else {
-            const roomupdated = {
+            const result = await backendApi.create<Group>("group", {
                 name: roomName,
-                type: parseInt(selectedType || '0'),
-                data: data,
-            };
+                type: selectedType,
+                attributes: {
+                    "File": data.file[0].name,
+                    "Devices": data.devices,
+                },
+                //devices: data.devices,
+            });
+            console.log(result)
             setRoomName('')
             setSelectedType(undefined)
-            console.log(roomupdated)
             handleClose()
+            return result
         }
-    }
+    }, { enabled: false });
+    const handleSave = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        await refetch();
+    };
     return (
         <Dialog size='md' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
             <DialogHeader className='flex bg-red-50 h-16 p-3 font-medium' placeholder={undefined}>
