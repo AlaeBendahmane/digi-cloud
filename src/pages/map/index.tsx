@@ -2,14 +2,14 @@ import Upload from '../../assets/icons/upload.svg';
 import UploadIcon from '../../assets/icons/uploadico.svg';
 import Recycle from '../../assets/icons/recycle.svg';
 import Adddevblack from '../../assets/icons/adddevblack.svg';
-import Draw from '../../assets/icons/draw.svg';
 import Sav from '../../assets/icons/sav.svg';
 import Plan from '../../assets/icons/plan.svg'
 import Modal from '../../components/modal2/index';
-import { Button, Input } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { useTranslation } from 'react-i18next';
-import { ChangeEvent, DragEvent, useRef, useState, SetStateAction } from 'react';
-import { ImageOverlay, MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { ChangeEvent, DragEvent, useState } from 'react';
+import { FeatureGroup, ImageOverlay, MapContainer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import { EditControl } from "react-leaflet-draw";
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css'
 import { useQuery } from '@tanstack/react-query';
@@ -17,20 +17,22 @@ import { AppContextType } from '../../App';
 import { useProvider } from '../../components/provider';
 import SearchSelect from '../../components/searchselect/searchselect';
 import { toast } from 'react-toastify';
-import CanvasComponent from '../../components/canvas/canvas';
+import "leaflet-draw/dist/leaflet.draw.css";
 export default function Index() {
     const [openDialog, setOpenDialog] = useState(false);
     const handleOpenDialog = () => setOpenDialog(true);
     const handleCloseDialog = () => setOpenDialog(false);
+    const [data2, setData2] = useState({
+        polygons: {} as { [id: string]: any[] },
+        polylines: {} as { [id: string]: any[] },
+        circlemarkers: {} as { [id: string]: any[] }
+      });
     const { t } = useTranslation();
     const [dragging, setDragging] = useState(false);
     const [room, setRoom] = useState(Object);
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    const [selectedColor, setSelectedColor] = useState("#000000");
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
     const [ImageURL, setImageURL] = useState<string>("");
     const [canadd, setCanadd] = useState<boolean>(true);
-    const [isVisible, setIsVisible] = useState(false);
     const { backendApi } = useProvider<AppContextType>();
     const { data } = useQuery(['getHistory'], async () => {
         const devices = await backendApi.findMany<any>("device", {
@@ -162,12 +164,23 @@ export default function Index() {
                         return;
                     }
                 }
-                const room = {
-                    file: droppedFiles,
-                    devices: markers
-                };
-                setRoom(room)
-                handleOpenDialog()
+                const file = droppedFiles[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        if (e && e.target) {
+                            const base64String = (e.target.result as string)?.split(',')[1];
+                            const room = {
+                                file: base64String,
+                                devices: markers,
+                                draw: data2
+                            };
+                            setRoom(room)
+                            handleOpenDialog()
+                        }
+                    };
+                    reader.readAsDataURL(file.file);
+                }
             } else {
                 toast.error("Room need devices");
             }
@@ -175,37 +188,47 @@ export default function Index() {
             toast.error('Pick image');
         }
     };
-    const showDrawing = () => {
-        setIsVisible(true);
+    const _onCreate = (e: any) => {
+        if (e.layerType === "polygon") {
+            data2.polygons[e.layer._leaflet_id] = e.layer._latlngs
+        } else if (e.layerType === "polyline") {
+            data2.polylines[e.layer._leaflet_id] = e.layer._latlngs
+        } else if (e.layerType === "circlemarker") {
+            data2.circlemarkers[e.layer._leaflet_id] = e.layer._latlng
+        }
+        setData2(data2)
     }
-    const hideDrawing = () => {
-        setIsVisible(false);
-    };
-    const handleColorChange = (event: { target: { value: SetStateAction<string>; }; }) => {
-        setSelectedColor(event.target.value);
-    };
-    const saveCanvas = () => {
-        if (canvasRef.current) {
-            const newCanvas = document.createElement('canvas');
-            newCanvas.width = canvasRef.current.width;
-            newCanvas.height = canvasRef.current.height;
-            const newContext = newCanvas.getContext('2d');
-            if (newContext) {
-                newContext.fillStyle = 'white';
-                newContext.fillRect(0, 0, newCanvas.width, newCanvas.height);
-                newContext.drawImage(canvasRef.current, 0, 0);
-                const dataUrl = newCanvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = 'Room_' + Date.now() + "_" + Math.floor(Math.random() * 100000) + '.png';
-                link.click();
-                const originalContext = canvasRef.current.getContext('2d');
-                if (originalContext) {
-                    originalContext.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    const _onEdite = (e: any) => {
+        const editedLayers = e.layers._layers;
+        for (const leafletId in editedLayers) {
+            if (editedLayers.hasOwnProperty(leafletId)) {
+                const editedItem = editedLayers[leafletId];
+                if (data2.polygons[leafletId]) {
+                    data2.polygons[leafletId] = editedItem._latlngs;
+                } else if (data2.polylines[leafletId]) {
+                    data2.polylines[leafletId] = editedItem._latlngs;
+                } else if (data2.circlemarkers[leafletId]) {
+                    data2.circlemarkers[leafletId] = editedItem._latlng;
                 }
             }
         }
-    }
+        setData2(data2)
+    };
+    const _onDelete = (e: any) => {
+        const deletedLayers = e.layers._layers;
+        for (const leafletId in deletedLayers) {
+            if (deletedLayers.hasOwnProperty(leafletId)) {
+                if (data2.polygons[leafletId]) {
+                    delete data2.polygons[leafletId];
+                } else if (data2.polylines[leafletId]) {
+                    delete data2.polylines[leafletId];
+                } else if (data2.circlemarkers[leafletId]) {
+                    delete data2.circlemarkers[leafletId];
+                }
+            }
+        }
+        setData2(data2)
+    };
     return (
         <div className="flex flex-col h-full w-full">
             <h6 className="mx-5 flex items-center font-bold border-b-4 min-h-14">
@@ -213,7 +236,7 @@ export default function Index() {
             </h6>
             <div className="mx-auto mb-2 flex max-h-80rem w-full max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
                 <div className="overflow-hidden grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4  rounded-lg bg-white border-2 border-gray-500">
-                    <div className={isVisible ? ("md:border-r-2 md:border-gray-500 hidden") : ("md:border-r-2 md:border-gray-500")}>
+                    <div className="md:border-r-2 md:border-gray-500">
                         <div className="flex h-12 p-3 bg-red-50 rounded-tl-lg w-auto">
                             <img src={Upload} width={20} height={20} />
                             <p className="text-red-900 ml-2">{t('Upload')}</p>
@@ -254,42 +277,39 @@ export default function Index() {
                             ))}
                         </div>
                     </div>
-                    <div className={isVisible ? ("col-span-4") : ("col-span-3")}>
+                    <div className="col-span-3">
                         <div className="flex h-12 p-3 bg-red-50 rounded-tr-lg w-auto">
                             <img src={Plan} width={20} height={20} />
                             <p className="text-red-900 ml-2">{t('Plan')}</p>
                         </div>
                         <div className="flex m-3 flex-col sm:flex-row gap-2">
-                            <div className="grid md:grid-cols-2 gap-3 ">
-                                <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0" color="gray" placeholder={undefined} onClick={isVisible ? (hideDrawing) : (showDrawing)}>
-                                    {isVisible ? (
-                                        <>
-                                            <img src={Draw} alt="" />
-                                            {t('Edit a room')}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <img src={Draw} alt="" />
-                                            {t('Draw a room')}
-                                        </>
-                                    )}
-                                </Button>
-                                {isVisible ? (
-                                    <Input type="color" label={t('Color')} className='cursor-pointer' crossOrigin={undefined} value={selectedColor} onChange={handleColorChange} />
-                                ) : ('')}
-                            </div>
-                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} onClick={isVisible ? (saveCanvas) : (saveData)} >
+                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} /*onClick={() => { ImageURL != "" ? console.log(data2) : toast.error('No file selected') }} */ onClick={saveData}>
                                 <img src={Sav} alt="" />
                                 {t('SAVE ROOM')}
                             </Button>
                         </div>
                         <div className="bg-white w-auto m-2 h-[calc(635px-10rem)] border-2 border-gray-500 rounded-md overflow-hidden" id='drawcomponent' >
-                            <div className='w-full h-full' style={{ display: isVisible ? 'block' : 'none' }}>
-                                <CanvasComponent selectedColor={selectedColor} canvasRef={canvasRef} />
-                            </div>
-                            <div className='w-full h-full' style={{ display: !isVisible ? 'block' : 'none' }}>
+                            <div className='w-full h-full' >
                                 {ImageURL != '' ? (
-                                    <MapContainer center={[65, 300]} zoom={1} zoomControl={true} doubleClickZoom={false} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover' }}>
+                                    <MapContainer id='mappp' center={[65, 300]} zoom={1} zoomControl={true} doubleClickZoom={false} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover' }}>
+                                        <FeatureGroup  >
+                                            <EditControl
+                                                position="topright"
+                                                onCreated={_onCreate}
+                                                onEdited={_onEdite}
+                                                onDeleted={_onDelete}
+                                                draw={
+                                                    {
+                                                        rectangle: false,
+                                                        circle: false,
+                                                        circlemarker: true,
+                                                        marker: false,
+                                                        polyline: true,
+                                                        polygon: true,
+                                                    }
+                                                }
+                                            />
+                                        </FeatureGroup>
                                         <ImageOverlay
                                             url={ImageURL}
                                             bounds={[[0, 0], [dimensions.width, dimensions.height]]}

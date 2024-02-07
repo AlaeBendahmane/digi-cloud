@@ -13,9 +13,11 @@ interface DeviceDialogProps {
     data: {
         file: any;
         devices: any[];
+        draw: any
     };
 }
 const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) => {
+    //console.log(data)
     const { t } = useTranslation();
     const [types, setTypes] = useState<TypeDevice[]>([]);
     const { backendApi } = useProvider<AppContextType>();
@@ -41,8 +43,9 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
                 name: roomName,
                 type: selectedType,
                 attributes: {
-                    "File": data.file[0].name,
+                    "File": data.file,
                     "Devices": data.devices,
+                    "Draw": data.draw
                 },
                 //devices: data.devices,
             });
@@ -54,8 +57,9 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
         }
     }, { enabled: false });
     const handleSave = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-        await refetch();
+        // event.preventDefault();
+        // await refetch();
+        console.log(roomName, selectedType, data)
     };
     return (
         <Dialog size='md' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
