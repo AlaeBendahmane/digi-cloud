@@ -21,6 +21,13 @@ function UserPage() {
   const data: { Name: string; Role: string; EmailAdrdress: string; Creationdate: string; }[] = [];
   useQuery(['getUsers', searchQuery, currentPage], async () => {
     const result = await backendApi.findMany<any>("user", {
+      select: {
+        lastName: true,
+        firstName: true,
+        role: true,
+        email: true,
+        createdAt: true,
+      },
       where: {
         OR: [
           { "email": { contains: searchQuery } },

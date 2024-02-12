@@ -15,6 +15,12 @@ export default function leftcard(id: any) {
     });
     const { isLoading } = useQuery(['getHistory', id], async () => {
         const result = await backendApi.findMany<any>("dpc-history/api/history", {
+            select: {
+                date: true,
+                humidity: true,
+                temperature: true,
+                t_dht: true,
+            },
             where: {
                 deviceId: parseInt(id.id ?? '0'),
                 createdAt: {

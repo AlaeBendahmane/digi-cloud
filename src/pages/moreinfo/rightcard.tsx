@@ -19,58 +19,16 @@ export default function leftcard(id: any) {
     const { backendApi } = useProvider<AppContextType>();
     useQuery(['getAllHistory', v], async () => {
         const devices = await backendApi.findMany<any>("device", {
-            include: {
-                "credential": {
-                    "select": {
-                        "type": true,
-                        "username": true,
-                        "ProtocolCredential": {
-                            "select": {
-                                "attributes": true,
-                                "protocol": {
-                                    "select": {
-                                        "name": true,
-                                        "inPrefix": true,
-                                        "outPrefix": true
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "tags": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "tenant": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "element": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "deviceProfile": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "firmware": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "group": {
-                    "select": {
-                        "name": true
-                    }
-                },
-                "attributes": {
-                    "select": { "id": true, "name": true, "value": true }
-                }
+            select: {
+                "id": true,
+                "name": true,
+                "serial": true,
+                "status": true,
+                "createdAt": true,
+                "credential": { select: { "username": true, } },
+                "tenant": { select: { "name": true, } },
+                "deviceProfile": { select: { "name": true, } },
+                "attributes": { "select": { "id": true, "name": true, "value": true } }
             },
             where: {
                 "id": parseInt(v),
@@ -173,8 +131,6 @@ export default function leftcard(id: any) {
                                         </div>
                                     </div>
                                 </div>
-
-
                             </>
                         ) : (
                             <div className="space-y-2">

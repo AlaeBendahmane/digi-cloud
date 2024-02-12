@@ -88,10 +88,12 @@
     "Stats": "Statistiques",
     "Attributes": "Attributs",
     "Created At:": "Créé le: ",
+    "Created At": "Créé le",
     "Profile:": "Profil:",
     "Tenant:": "Locataire:",
     "Edit a room": "Modifier une pièce",
     "Color": "Couleur",
     "Delete device": "Supprimer l'appareil",
-    "Select device": "Choisir un appareil"
+    "Select device": "Choisir un appareil",
+    "No Map found": "Aucune carte trouvée"
 }

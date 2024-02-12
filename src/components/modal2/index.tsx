@@ -1,4 +1,4 @@
-import { Button, Dialog, Option, Input, DialogHeader, DialogBody, Select } from "@material-tailwind/react";
+import { Button, Dialog, Option, Input, DialogHeader, DialogBody, Select, Spinner } from "@material-tailwind/react";
 import React, { useState } from "react";
 import Device from '../../assets/icons/device.svg'
 import { useTranslation } from "react-i18next";
@@ -13,13 +13,15 @@ interface DeviceDialogProps {
     data: {
         file: any;
         devices: any[];
-        draw: any
+        draw: any;
+        bounds: any;
+        arrdevices: any[]
     };
 }
 const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) => {
-    //console.log(data)
     const { t } = useTranslation();
     const [types, setTypes] = useState<TypeDevice[]>([]);
+    const [Loading, setLoading] = useState<boolean>(false);
     const { backendApi } = useProvider<AppContextType>();
     const [selectedType, setSelectedType] = useState<string | undefined>(undefined);
     const handleTypeChange = (value: string | undefined) => {
@@ -35,31 +37,36 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
         outsidePress: false,
         escapeKey: false
     };
-    const { refetch } = useQuery(['insertgroups', roomName, selectedType, data], async () => {
+    const { refetch, isError } = useQuery(['insertgroups', roomName, selectedType, data], async () => {
         if (roomName == '' || selectedType == '') {
             toast.error("Provide a name and type, as both fields must be filled in.")
         } else {
+            setLoading(!Loading)
             const result = await backendApi.create<Group>("group", {
                 name: roomName,
                 type: selectedType,
                 attributes: {
                     "File": data.file,
+                    "Bounds": data.bounds,
                     "Devices": data.devices,
                     "Draw": data.draw
                 },
-                //devices: data.devices,
+                devices: data.arrdevices,
             });
-            console.log(result)
-            setRoomName('')
-            setSelectedType(undefined)
-            handleClose()
+            if (!isError) {
+                setRoomName('')
+                setSelectedType(undefined)
+                handleClose()
+                window.location.href = 'rooms/' + roomName;
+            } else {
+                setLoading(!Loading)
+            }
             return result
         }
     }, { enabled: false });
     const handleSave = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        // event.preventDefault();
-        // await refetch();
-        console.log(roomName, selectedType, data)
+        event.preventDefault();
+        await refetch();
     };
     return (
         <Dialog size='md' open={open} handler={handleClose} dismiss={dismissType} className="bg-white shadow-none" placeholder={undefined} animate={{ mount: { scale: 1, y: 0 }, unmount: { scale: 0.9, y: -100 }, }} >
@@ -74,13 +81,21 @@ const DeviceDialog: React.FC<DeviceDialogProps> = ({ open, handleClose, data }) 
                     </div>
                     <Select label={t('Type')} placeholder={undefined} onChange={(value) => handleTypeChange(value)} value={selectedType}>
                         {types.map((element) =>
-                            <Option key={element.id} value={element.id.toString()}>{element.name.toUpperCase()}</Option>
+                            <Option key={element.id} value={element.name.toUpperCase()}>{element.name.toUpperCase()}</Option>
                         )}
                     </Select>
                 </div>
                 <div className="w-full flex">
                     <Button placeholder={undefined} color='gray' className='w-[169px]' onClick={handleClose}>{t('Cancel')}</Button>
-                    <Button placeholder={undefined} className=' w-[169px] ml-auto' onClick={handleSave}>{t('Save')}</Button>
+                    <Button placeholder={undefined} className=' w-[169px] ml-auto' onClick={handleSave}>
+                        {Loading ? (
+                            <div className="flex justify-center items-center">
+                                <Spinner />
+                            </div>
+                        ) : (
+                            t('Save')
+                        )}
+                    </Button>
                 </div>
             </DialogBody>
         </Dialog>

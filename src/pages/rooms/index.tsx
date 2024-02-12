@@ -94,14 +94,21 @@ export default function Roomespage() {
   const data: { Name: string; Nbofdevices: number; Alert: number; OnlineDevices: number; OfflineDevices: number; Creationdate: string }[] = [];
   useQuery(['getRoomsDevices', searchQuery], async () => {
     const result = await backendApi.findMany<any>("group", {
+      select: {
+        "name": true,
+        "createdAt": true,
+        "devices": {
+          select: {
+            "id": true,
+            "name": true,
+            "status": true
+          }
+        }
+      },
       where: {
         name: {
           contains: searchQuery
         }
-      },
-      include: {
-        _count: true,
-        devices: true,
       },
     });
     setRoomsArray(result.results);
@@ -113,7 +120,7 @@ export default function Roomespage() {
     const offlineDevices = element.devices.filter(device => device.status === "OFFLINE").length;
     data.push({
       Name: element.name,
-      Nbofdevices: element._count.devices,
+      Nbofdevices: element.devices.length,
       Alert: 0,
       OnlineDevices: onlineDevices,
       OfflineDevices: offlineDevices,

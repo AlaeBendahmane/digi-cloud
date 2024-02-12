@@ -86,11 +86,12 @@
   "Device Name:": "Device Name:",
   "Stats": "Stats",
   "Attributes": "Attributes",
-  "Created At": "Created At: ",
+  "Created At": "Created At",
   "Profile:": "Profile:",
   "Tenant": "Tenant:",
   "Edit a room": "Edit a room",
   "Color": "Color",
   "Delete device": "Delete device",
-  "Select device": "Select device"
+  "Select device": "Select device",
+  "No Map found": "No Map found"
 }

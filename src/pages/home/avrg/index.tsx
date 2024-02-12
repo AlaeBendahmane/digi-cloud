@@ -15,6 +15,11 @@ function Avrg() {
   const { backendApi } = useProvider<AppContextType>();
   useQuery(['getAVG'], async () => {
     const result = await backendApi.findMany<any>("dpc-history/api/history", {
+      select: {
+        temperature: true,
+        humidity: true,
+        date: true
+      },
       where: {
         temperature: {
           $exists: true
@@ -37,7 +42,7 @@ function Avrg() {
     const humidities = result.results.map(entry => entry.humidity);
     const averageHumidity = humidities.reduce((sum, humidity) => sum + humidity, 0) / humidities.length;
     setHumidity(averageHumidity.toFixed(2) + "%");
-    setLreading(new Date(result.results[0].date).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " "),)
+    setLreading(new Date(result.results[0]?.date).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " "),)
     return result
   });
   return (

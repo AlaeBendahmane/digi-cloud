@@ -4,6 +4,7 @@ import Recycle from '../../assets/icons/recycle.svg';
 import Adddevblack from '../../assets/icons/adddevblack.svg';
 import Sav from '../../assets/icons/sav.svg';
 import Plan from '../../assets/icons/plan.svg'
+import Draw from '../../assets/icons/draw.svg'
 import Modal from '../../components/modal2/index';
 import { Button } from '@material-tailwind/react';
 import { useTranslation } from 'react-i18next';
@@ -26,10 +27,12 @@ export default function Index() {
         polygons: {} as { [id: string]: any[] },
         polylines: {} as { [id: string]: any[] },
         circlemarkers: {} as { [id: string]: any[] }
-      });
+    });
     const { t } = useTranslation();
     const [dragging, setDragging] = useState(false);
+    const [arrdevices, setarrdevices] = useState<number[]>([]);
     const [room, setRoom] = useState(Object);
+    const [isVisible, setisVisible] = useState(false);
     const [droppedFiles, setDroppedFiles] = useState<{ file: File; name: string }[]>([]);
     const [ImageURL, setImageURL] = useState<string>("");
     const [canadd, setCanadd] = useState<boolean>(true);
@@ -71,6 +74,11 @@ export default function Index() {
             const updatedMarkers = [...prevMarkers];
             updatedMarkers[index] = { ...updatedMarkers[index], device: newDevice };
             return updatedMarkers;
+        });
+        setarrdevices((prevArrDevices) => {
+            const newArrDevices = [...prevArrDevices];
+            newArrDevices[index] = newDevice;
+            return newArrDevices;
         });
     };
     const handleDeviceSelection = (index: number, selectedDevice: any) => {
@@ -173,7 +181,9 @@ export default function Index() {
                             const room = {
                                 file: base64String,
                                 devices: markers,
-                                draw: data2
+                                draw: data2,
+                                bounds: dimensions,
+                                arrdevices: arrdevices
                             };
                             setRoom(room)
                             handleOpenDialog()
@@ -283,7 +293,22 @@ export default function Index() {
                             <p className="text-red-900 ml-2">{t('Plan')}</p>
                         </div>
                         <div className="flex m-3 flex-col sm:flex-row gap-2">
-                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} /*onClick={() => { ImageURL != "" ? console.log(data2) : toast.error('No file selected') }} */ onClick={saveData}>
+                            <div className="grid md:grid-cols-2 gap-3 ">
+                                <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0" color="gray" placeholder={undefined} onClick={() => { ImageURL != '' ? setisVisible(!isVisible) : toast.error('Pick image') }}>
+                                    {isVisible ? (
+                                        <>
+                                            <img src={Draw} alt="" />
+                                            {t('Edit a room')}
+                                        </>
+                                    ) : (
+                                        <>
+                                            <img src={Draw} alt="" />
+                                            {t('Draw a room')}
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                            <Button className="flex items-center gap-3 text-sm font-medium h-[41px] md:mt-0 md:ml-auto" placeholder={undefined} disabled={isVisible} onClick={saveData}>
                                 <img src={Sav} alt="" />
                                 {t('SAVE ROOM')}
                             </Button>
@@ -292,20 +317,24 @@ export default function Index() {
                             <div className='w-full h-full' >
                                 {ImageURL != '' ? (
                                     <MapContainer id='mappp' center={[65, 300]} zoom={1} zoomControl={true} doubleClickZoom={false} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover' }}>
-                                        <FeatureGroup  >
+                                        <FeatureGroup>
                                             <EditControl
                                                 position="topright"
                                                 onCreated={_onCreate}
                                                 onEdited={_onEdite}
                                                 onDeleted={_onDelete}
+                                                edit={{
+                                                    remove: isVisible,
+                                                    edit: isVisible ? {} : (false),
+                                                }}
                                                 draw={
                                                     {
                                                         rectangle: false,
                                                         circle: false,
-                                                        circlemarker: true,
+                                                        circlemarker: isVisible,
                                                         marker: false,
-                                                        polyline: true,
-                                                        polygon: true,
+                                                        polyline: isVisible,
+                                                        polygon: isVisible,
                                                     }
                                                 }
                                             />

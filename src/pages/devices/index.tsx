@@ -20,7 +20,9 @@ function DevicesPage() {
   const [historyArray, setHistoryArray] = useState<Device[]>([]);
   const { isLoading } = useQuery(['getHistory'], async () => {
     const devices = await backendApi.findMany<any>("device", {
-      include: {
+      select: {
+        id: true,
+        name: true,
         lastTelemetries: true,
       },
       where: {
@@ -37,10 +39,6 @@ function DevicesPage() {
           },
         },
       },
-      pagination: {
-        page: 1,
-        perPage: 50
-      }
     });
     setHistoryArray(devices.results);
     return devices;
