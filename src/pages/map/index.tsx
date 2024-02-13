@@ -298,7 +298,7 @@ export default function Index() {
                                     {isVisible ? (
                                         <>
                                             <img src={Draw} alt="" />
-                                            {t('Edit a room')}
+                                            {t('End drawing')}
                                         </>
                                     ) : (
                                         <>

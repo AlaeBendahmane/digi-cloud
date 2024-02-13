@@ -17,14 +17,19 @@ function index({ id, nom, temperature, humidity, calledfrom, status }: AnalysePr
     const { setIdSelected } = useProvider<AppContextType>();
     const { t } = useTranslation();
     return (
-        <Link to={'/stats/' + id.toString()} className="md:col-span-3 2xl:col-span-4 mb-2" onClick={() => { setIdSelected(id) }}>
-            <Card className={calledfrom === 'RealTime' ? "min-h-[10rem] h-fit bg-white p-[1rem]" : "h-fit bg-white p-[1rem]"} placeholder={undefined} style={{ fontFamily: 'Roboto' }} >
-                <div className="flex">
-                    <span style={{ fontFamily: 'Nunito !important' }} className={calledfrom === "RealTime" ? "font-medium text-2xl text-red-300" : "font-medium text-2xl text-gray-800"}>{nom}</span>
-                    {calledfrom == 'Rooms' ?
-                        <span className={status === "OFFLINE" ? "ml-auto font-medium text-2xl text-red-600 font-Nunito" :
-                            status === "ONLINE" ? "ml-auto font-medium text-2xl text-green-600 font-Nunito" :
-                                status === "INACTIVE" ? "ml-auto font-medium text-2xl text-orange-600 font-Nunito" : ""}>{t(status)}</span> : ''}</div>
+        <Link to={'/stats/' + id.toString()} className={calledfrom == 'Rooms' ? "md:col-span-1 2xl:col-span-4 mb-2" : "md:col-span-3 2xl:col-span-4 mb-2"} onClick={() => { setIdSelected(id) }}>
+            <Card className={calledfrom === 'RealTime' ? "min-h-[10rem] h-fit bg-white p-[1rem]"
+                : status === "ONLINE" ? "h-fit bg-green-600 p-[1rem]"
+                    : status === "OFFLINE" ? "h-fit bg-red-600 p-[1rem]"
+                        : status === "INACTIVE" ? "h-fit bg-orange-600 p-[1rem]"
+                            : ""} placeholder={undefined} style={{ fontFamily: 'Roboto' }} >
+                <div className={calledfrom === 'Rooms' ? "flex items-center justify-center" : "flex"}>
+                    <span style={{ fontFamily: 'Nunito !important' }} className={calledfrom === "RealTime" ? "font-medium text-2xl text-red-300" : "font-light text-lg text-white"}>{nom}</span>
+                    {/* {calledfrom == 'Rooms' ?
+                        <span className={status === "OFFLINE" ? "ml-auto font-light text-lg text-red-600 font-Nunito" :
+                            status === "ONLINE" ? "ml-auto font-light text-lg text-green-600 font-Nunito" :
+                                status === "INACTIVE" ? "ml-auto font-light text-lg text-orange-600 font-Nunito" : ""}>{t(status)}</span> : ''} */}
+                </div>
                 {calledfrom == 'RealTime' ? <div className="grid grid-cols-2 gap-2 mt-3">
                     <div className='bg-gray-200 rounded-sm flex flex-col justify-center items-center h-[100px] '>
                         <p className='m-1 font-light text-sm'>
