@@ -20,7 +20,7 @@ const RightInfos: React.FC<RightInfosProps> = ({ name, type, devices, createdAt 
                             disabled
                         />
                         <input
-                            className="flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
+                            className="truncate flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
                             value={name}
                             disabled
                         />
@@ -32,7 +32,7 @@ const RightInfos: React.FC<RightInfosProps> = ({ name, type, devices, createdAt 
                             disabled
                         />
                         <input
-                            className="flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
+                            className="truncate flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
                             value={type}
                             disabled
                         />
@@ -44,7 +44,7 @@ const RightInfos: React.FC<RightInfosProps> = ({ name, type, devices, createdAt 
                             disabled
                         />
                         <input
-                            className="flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
+                            className="truncate flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
                             value={devices}
                             disabled
                         />
@@ -56,7 +56,7 @@ const RightInfos: React.FC<RightInfosProps> = ({ name, type, devices, createdAt 
                             disabled
                         />
                         <input
-                            className="flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
+                            className="truncate flex h-10 bg-white dark:bg-slate-800 w-full border border-input px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-default"
                             value={new Date(createdAt).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).replace(",", " ")}
                             disabled
                         />

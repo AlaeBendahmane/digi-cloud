@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 export type Option<T> = {
     label: string;
     value: T;
+    status: string;
 };
 export interface SearchSelectProps<T>
     extends React.HTMLAttributes<HTMLDivElement> {
@@ -14,6 +15,7 @@ export interface SearchSelectProps<T>
     options: {
         label: string;
         value: T;
+        status: string
     }[];
 }
 export default function SearchSelect<T>({
@@ -91,7 +93,9 @@ export default function SearchSelect<T>({
                             {valueGetter ? (
                                 valueGetter(option)
                             ) : (
-                                <span className="inline-block w-full cursor-pointer px-2 py-1">
+                                <span className={option.status === "ONLINE" ? "inline-block w-full cursor-pointer px-2 py-1 bg-green-600"
+                                    : option.status === "OFFLINE" ? "inline-block w-full cursor-pointer px-2 py-1 bg-red-600"
+                                        : option.status === "INACTIVE" ? "inline-block w-full cursor-pointer px-2 py-1 bg-orange-600" : ""}>
                                     {option.label}
                                 </span>
                             )}

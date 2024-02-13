@@ -42,6 +42,10 @@ export default function Index() {
             select: {
                 id: true,
                 name: true,
+                status: true
+            },
+            orderBy: {
+                "status": "asc"
             }
         });
         return devices.results;
@@ -353,7 +357,8 @@ export default function Index() {
                                                             options={(data || []).map((e) => {
                                                                 return {
                                                                     label: e.name + '',
-                                                                    value: e.id
+                                                                    value: e.id,
+                                                                    status: e.status
                                                                 };
                                                             })}
                                                         />
