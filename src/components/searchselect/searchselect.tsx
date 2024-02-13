@@ -82,6 +82,7 @@ export default function SearchSelect<T>({
                 {filteredOptions?.length ? (
                     filteredOptions.map((option, index) => (
                         <li
+                            className="border border-b-1"
                             role="option"
                             key={index}
                             onClick={() => {
