@@ -17,7 +17,7 @@ function index({ id, nom, temperature, humidity, calledfrom, status }: AnalysePr
     const { setIdSelected } = useProvider<AppContextType>();
     const { t } = useTranslation();
     return (
-        <Link to={'/stats/' + id.toString()} className={calledfrom == 'Rooms' ? "md:col-span-1 2xl:col-span-4 mb-2" : "md:col-span-3 2xl:col-span-4 mb-2"} onClick={() => { setIdSelected(id) }}>
+        <Link to={'/stats/' + id.toString()} className={calledfrom == 'Rooms' ? "col-span-1 mb-2" : "md:col-span-3 2xl:col-span-4 mb-2"} onClick={() => { setIdSelected(id) }}>
             <Card className={calledfrom === 'RealTime' ? "min-h-[10rem] h-fit bg-white p-[1rem]"
                 : status === "ONLINE" ? "h-fit bg-green-600 p-[1rem]"
                     : status === "OFFLINE" ? "h-fit bg-red-600 p-[1rem]"
