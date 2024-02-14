@@ -186,6 +186,15 @@ export default function index() {
             ))}
         </>
     }
+    const renderdevname = (val: any) => {
+        let name = '';
+        data?.results[0].devices.forEach((element: Device) => {
+            if (val == element.id) {
+                name = element.name
+            }
+        });
+        return name
+    }
     return (
         <div className="flex h-full w-full flex-col">
             <h6 className="mx-5 flex  h-[4rem] items-center  font-bold border-b-[4px] min-h-14">
@@ -219,7 +228,7 @@ export default function index() {
                                                 <Marker key={device} position={[lat, lng]} icon={markerIcon} >
                                                     <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true}>
                                                         <div className=''>
-                                                            <p>{device}</p>
+                                                            <p className='flex flex-center cursor-default'>{renderdevname(device)}</p>
                                                         </div>
                                                     </Popup>
                                                 </Marker>
