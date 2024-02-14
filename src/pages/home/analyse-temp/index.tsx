@@ -16,6 +16,11 @@ function AnalyseTemp() {
   });
   const { data, isLoading, error } = useQuery(['getHistory'], async () => {
     const result = await backendApi.findMany<any>("dpc-history/api/history", {
+      select: {
+        humidity: true,
+        date: true,
+        temperature: true,
+      },
       where: {
         temperature: {
           $exists: true

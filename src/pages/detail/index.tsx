@@ -14,9 +14,14 @@ import Draw from '../../assets/icons/drawblack.svg'
 import Checkmark from '../../assets/icons/checkmark.svg'
 import { CircleMarker, FeatureGroup, ImageOverlay, MapContainer, Marker, Polygon, Polyline, Popup, useMap, useMapEvents } from 'react-leaflet'
 import { EditControl } from "react-leaflet-draw";
-import { Icon } from 'leaflet';
+import L, { Icon, Map, polyline } from 'leaflet';
 import { toast } from 'react-toastify';
 import Rightinfos from './rightinfos';
+declare module 'leaflet' {
+    interface Layer {
+        _leaflet_id: number;
+    }
+}
 export default function index() {
     const { id } = useParams();
     const { t } = useTranslation();
@@ -42,19 +47,15 @@ export default function index() {
                         "id": true,
                         "name": true,
                         "status": true
+                    },
+                    orderBy: {
+                        "status": 'asc'
                     }
                 },
-
             },
         });
+        console.log(result.results[0])
         result.results.map((e) => setDevicesArray(e.devices))
-        setNewDrawings((prevDrawings) => ({
-            ...prevDrawings,
-            polygons: result.results[0]?.attributes?.Draw?.polygons || {},
-            polylines: result.results[0]?.attributes?.Draw?.polylines || {},
-            circlemarkers: result.results[0]?.attributes?.Draw?.circlemarkers || {},
-        }));
-        console.log(result.results)
         return result
     });
     const devices = data?.results[0]?.attributes?.Devices || [];
@@ -66,78 +67,118 @@ export default function index() {
         shadowSize: [20, 20],
     });
     const _onCreate = (e: any) => {
-        if (e.layerType === "polygon") {
-            newDrawings.polygons[e.layer._leaflet_id] = e.layer._latlngs
-        } else if (e.layerType === "polyline") {
-            newDrawings.polylines[e.layer._leaflet_id] = e.layer._latlngs
-        } else if (e.layerType === "circlemarker") {
-            newDrawings.circlemarkers[e.layer._leaflet_id] = e.layer._latlng
+        const layer = e.layer;
+        if (layer instanceof L.Polygon) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                polygons: {
+                    ...prevState.polygons,
+                    [layer._leaflet_id]: layer.getLatLngs()
+                },
+            }));
+        } else if (layer instanceof L.Polyline) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                polylines: {
+                    ...prevState.polylines,
+                    [layer._leaflet_id]: layer.getLatLngs()
+                },
+            }));
+        } else if (layer instanceof L.CircleMarker) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                circlemarkers: {
+                    ...prevState.circlemarkers,
+                    [layer._leaflet_id]: layer.getLatLng()
+                },
+            }));
         }
-        setNewDrawings(newDrawings)
-        // handleSave
-        console.log(newDrawings)
     };
-    ////
     const _onEdit = (e: any) => {
-        console.log(e.layers)
-        //  const layers = e.layers;
-        // layers.eachLayer((layer) => {
-        //     // You need to check if it's a polygon, polyline, or circlemarker
-        //     // and then update the state similarly to the _onCreate method
-        //     console.log("aa", layer)
-        // });
-    };
-    ////
-    const _onDelete = (e: any) => {
-        const layers = e.layers;
-        console.log(layers);
-    };
-    ////////
-    const { refetch, isError } = useQuery(['updategroup', data], async () => {
-        const result = await backendApi.update<Group>("group", data?.results[0].id, {
-            attributes: {
-                // "Devices": data.devices,
-                "Draw": newDrawings
-            },
-            //devices: data.devices,
-        });
-        if (isError) {
-            toast.error('Something went wrong');
+        const layer = e.layer;
+        if (layer instanceof L.Polygon) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                polygons: {
+                    ...prevState.polygons,
+                    [layer._leaflet_id]: layer.getLatLngs()
+                },
+            }));
+        } else if (layer instanceof L.Polyline) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                polylines: {
+                    ...prevState.polylines,
+                    [layer._leaflet_id]: layer.getLatLngs()
+                },
+            }));
+        } else if (layer instanceof L.CircleMarker) {
+            setNewDrawings(prevState => ({
+                ...prevState,
+                circlemarkers: {
+                    ...prevState.circlemarkers,
+                    [layer._leaflet_id]: layer.getLatLng()
+                },
+            }));
         }
-        return result;
-    }, { enabled: false });
-    const handleSave = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
-        await refetch();
-        toast.success('Features saved successfully!');
     };
-    /////
+    const _onDelete = (e: any) => {
+        const layer = e.layers._layers
+        Object.entries(layer || {}).forEach(([key]: [string, unknown]) => {
+            setNewDrawings(prevState => {
+                const polygons = { ...prevState.polygons };
+                const polylines = { ...prevState.polylines };
+                const circlemarkers = { ...prevState.circlemarkers };
+                delete polygons[parseInt(key)];
+                delete polylines[parseInt(key)];
+                delete circlemarkers[parseInt(key)];
+                return { polygons, polylines, circlemarkers };
+            });
+        })
+    };
+    const _onEditStart = (e: any) => {
+        const map: Map = e.sourceTarget._layers;
+        Object.entries(map || {}).forEach(([key, layer]) => {
+            if (layer instanceof L.Polygon) {
+                newDrawings.polygons[key] = layer.getLatLngs()
+            } else if (layer instanceof L.CircleMarker) {
+                newDrawings.circlemarkers[key] = layer.getLatLng()
+            } else if (layer instanceof L.Polyline) {
+                newDrawings.polylines[key] = layer.getLatLngs()
+            }
+        });
+    };
+    const _ondrawStart = _onEditStart;
+    const _onDeleteStart = _onEditStart;
+    const savechanges = () => {
+        setisVisible(!isVisible)
+        if (isVisible) {
+            console.log("Updated :", newDrawings)
+        }
+    }
     const renderdrawing = (color: string | undefined) => {
         return <>
-            {Object.keys(newDrawings.polylines || {}).map((key) => (
+            {Object.keys(data?.results[0]?.attributes?.Draw?.polylines || {}).map((key) => (
                 <Polyline
                     key={key}
-                    positions={newDrawings.polylines[key].map(({ lat, lng }: { lat: number, lng: number }) => [lat, lng])}
+                    positions={data?.results[0]?.attributes?.Draw?.polylines[key].map(({ lat, lng }: { lat: number, lng: number }) => [lat, lng])}
                     color={color}
                     weight={4}
-                    eventHandlers={{
-                        mouseover: () => { console.log(key) }
-                    }}
                 />
             ))}
-            {Object.keys(newDrawings.circlemarkers || {}).map((key) => (
+            {Object.keys(data?.results[0]?.attributes?.Draw?.circlemarkers || {}).map((key) => (
                 <CircleMarker
                     key={key}
-                    center={[newDrawings.circlemarkers[key].lat, newDrawings.circlemarkers[key].lng]}
+                    center={[data?.results[0]?.attributes?.Draw?.circlemarkers[key].lat, data?.results[0]?.attributes?.Draw?.circlemarkers[key].lng]}
                     fillOpacity={0.5}
                     color={color}
                     weight={4}
                 />
             ))}
-            {Object.keys(newDrawings.polygons || {}).map((key) => (
+            {Object.keys(data?.results[0]?.attributes?.Draw?.polygons || {}).map((key) => (
                 <Polygon
                     key={key}
-                    positions={newDrawings.polygons[key]}
+                    positions={data?.results[0]?.attributes?.Draw?.polygons[key]}
                     fillOpacity={0.5}
                     color={color}
                     weight={4}
@@ -165,16 +206,16 @@ export default function index() {
                                     <>
                                         <div className='flex'>
                                             <p>{t('Map')}</p>
-                                            {/* <Button variant="text" size='sm' className="ml-auto" color='gray' placeholder={undefined} /*onClick={savechanges} onClick={() => setisVisible(!isVisible)} >
+                                            <Button variant="text" size='sm' className="ml-auto" color='gray' placeholder={undefined} onClick={savechanges} /*onClick={() => setisVisible(!isVisible)}*/ >
                                                 <img src={isVisible ? (Checkmark) : (Draw)} alt="" />
-                                            </Button> */}
+                                            </Button>
                                         </div>
                                         <MapContainer id='mappp' center={[65, 300]} zoom={1} zoomControl={true} doubleClickZoom={false} attributionControl={false} scrollWheelZoom={true} className="h-full w-full " style={{ backgroundColor: 'white', objectFit: 'cover' }}>
                                             <ImageOverlay
                                                 url={imageUrl}
                                                 bounds={[[0, 0], [data.results[0].attributes?.Bounds?.width, data.results[0].attributes?.Bounds?.height]]}
                                             />
-                                            {/* {devices.map(({ lat, lng, device }: { lat: number, lng: number, device: number }) => (
+                                            {devices.map(({ lat, lng, device }: { lat: number, lng: number, device: number }) => (
                                                 <Marker key={device} position={[lat, lng]} icon={markerIcon} >
                                                     <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true}>
                                                         <div className=''>
@@ -182,30 +223,31 @@ export default function index() {
                                                         </div>
                                                     </Popup>
                                                 </Marker>
-                                            ))} */}
+                                            ))}
                                             <FeatureGroup>
                                                 <EditControl
                                                     position="topright"
                                                     onCreated={_onCreate}
+                                                    onDrawStart={_ondrawStart}
                                                     onEdited={_onEdit}
+                                                    onEditStart={_onEditStart}
                                                     onDeleted={_onDelete}
-                                                    // edit={{
-                                                    //     remove: true,
-                                                    //     //edit: {},
-                                                    // }}
+                                                    onDeleteStart={_onDeleteStart}
+                                                    edit={{
+                                                        remove: isVisible,
+                                                        edit: isVisible ? {} : (false),
+                                                    }}
                                                     draw={{
                                                         rectangle: false,
                                                         circle: false,
-                                                        circlemarker: true,
+                                                        circlemarker: isVisible,
                                                         marker: false,
-                                                        polyline: true,
-                                                        polygon: true,
+                                                        polyline: isVisible,
+                                                        polygon: isVisible,
                                                     }}
                                                 />
                                                 {renderdrawing('#99c4ff')}
-
                                             </FeatureGroup>
-
                                         </MapContainer>
                                     </>
                                 ) : (
