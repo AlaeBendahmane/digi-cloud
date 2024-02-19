@@ -13,6 +13,7 @@ import { FeatureGroup, ImageOverlay, MapContainer, Marker, Popup, useMapEvents }
 import { EditControl } from "react-leaflet-draw";
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css'
+import RemoveX from '../../assets/icons/x.svg'
 import { useQuery } from '@tanstack/react-query';
 import { AppContextType } from '../../App';
 import { useProvider } from '../../components/provider';
@@ -349,8 +350,8 @@ export default function Index() {
                                         />
                                         {markers.map((marker, index) => (
                                             <Marker key={index} position={[marker.lat, marker.lng]} icon={markerIcon}>
-                                                <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true} minWidth={400}>
-                                                    <div className='grid md:grid-cols-2 gap-2'>
+                                                <Popup closeButton={false} autoClose={false} closeOnClick={true} closeOnEscapeKey={true}>
+                                                    <div className='flex justify-center space-x-1'>
                                                         <SearchSelect
                                                             value={marker.device}
                                                             onValueChange={(val) => handleDeviceSelection(index, val)}
@@ -362,11 +363,7 @@ export default function Index() {
                                                                 };
                                                             })}
                                                         />
-                                                        <button
-                                                            className="select-none rounded-lg bg-gradient-to-tr from-purple-600 to-purple-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none text-nowrap"
-                                                            type="button" onClick={() => deleteMarker(index)} >
-                                                            {t('Delete device')}
-                                                        </button>
+                                                        <img src={RemoveX} alt={t('Delete device')} className='border border-purple-500 border-solid bg-purple-500 rounded-md cursor-pointer' onClick={() => deleteMarker(index)} />
                                                     </div>
                                                 </Popup>
                                             </Marker>

@@ -10,6 +10,7 @@ export type Option<T> = {
 export interface SearchSelectProps<T>
     extends React.HTMLAttributes<HTMLDivElement> {
     value: T | undefined;
+    disabled?: boolean;
     onValueChange?: (value: T | undefined) => void;
     valueGetter?: (option: Option<T>) => React.ReactNode;
     options: {
@@ -20,6 +21,7 @@ export interface SearchSelectProps<T>
 }
 export default function SearchSelect<T>({
     value,
+    disabled,
     onValueChange,
     valueGetter,
     options,
@@ -55,11 +57,12 @@ export default function SearchSelect<T>({
     }, [showOptions]);
     return (
         <div className="relative w-full" ref={containerRef}>
-            <Input
-                label={t('Select device')}
+            <input
+                disabled={disabled}
+                placeholder={t('Select device')}
                 type="text"
                 className={twMerge(
-                    "peer rounded-md border bg-white  w-full p-2 shadow-sm",
+                    "peer rounded-md border w-32 bg-white  p-2 enabled:shadow-sm disabled:text-center disabled:bg-white disabled:cursor-default disabled:border-none",
                     className,
                     selected && "font-semibold"
                 )}
@@ -72,7 +75,7 @@ export default function SearchSelect<T>({
                 }}
                 onFocus={() => {
                     setShowOptions(true);
-                }} crossOrigin={undefined} />
+                }} />
             <ul
                 className={twMerge(
                     "z-50 absolute top-full flex max-h-[8rem]   w-full translate-y-1 flex-col overflow-y-auto border  bg-white  shadow-lg",

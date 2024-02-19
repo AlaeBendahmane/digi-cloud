@@ -14,6 +14,9 @@ const MoreInfo = () => {
     const { backendApi } = useProvider<AppContextType>();
     const { data, isLoading, error } = useQuery(['getAllHistory', id], async () => {
         const device = await backendApi.findMany<any>("device", {
+            select: {
+                id: true
+            },
             where: {
                 "id": parseInt(id ?? '0'),
             }
