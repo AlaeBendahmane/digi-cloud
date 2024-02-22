@@ -9,13 +9,40 @@ import Nodata from '../../components/nodata'
 import Modal from '../../components/modal'
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { AppContextType } from '../../App';
+import { useProvider } from '../../components/provider';
 export default function Alerts() {
   const { t } = useTranslation();
   const [openDialog, setOpenDialog] = React.useState(false);
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
+  const [progressPending, setprogressPending] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const { backendApi } = useProvider<AppContextType>();
+  const { data } = useQuery(['getAlerts', searchQuery], async () => {
+    const result = await backendApi.findMany<any>("dpc-history/api/alerts", {
+      select: {
+        date: true,
+        serial: true,
+        type: true,
+        message: true,
+      },
+      where: {
+        acknowledged: false,
+        type: {
+          $exists: true
+        },
+        // serial: JSON.stringify({
+        //   $regex: new RegExp('TUGHVXX5F673LQMM', 'i')
+        // })
+      },
+    });
+    setprogressPending(false)
+    console.log(result.results)
+    return result.results
+  });
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -32,7 +59,7 @@ export default function Alerts() {
   );
   const customCellRendererStats = (row: { Devicestats: String | String[] }) => (
     <span className="uppercase bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">
-      {t(`DEVICE_${row.Devicestats}`)}
+      {row.Devicestats}
     </span>
   );
   const columns = [
@@ -41,22 +68,17 @@ export default function Alerts() {
       selector: (row: { datetime: string }) => row.datetime,
       sortable: true,
       cell: customCellRendererDate,
-      width: '250px'
+      //  width:'220px'
     },
     {
       name: t('Device stats'),
       selector: (row: { Devicestats: string }) => row.Devicestats,
       sortable: true,
-      cell: customCellRendererStats
+      cell: customCellRendererStats,
     },
     {
       name: t('Cause'),
       selector: (row: { Cause: string }) => row.Cause,
-      sortable: true,
-    },
-    {
-      name: t('Room'),
-      selector: (row: { Room: string }) => row.Room,
       sortable: true,
     },
     {
@@ -65,27 +87,19 @@ export default function Alerts() {
       sortable: true,
     },
   ];
-  const data = [
-    {
-      datetime: '2024-01-01 12:00 PM', Devicestats: 'Online', Cause: 'Power outage', Room: 'Living Room', Serial: 'ABC123',
-    },
-    {
-      datetime: '2024-01-02 03:30 PM', Devicestats: 'Offline', Cause: 'Network issue', Room: 'Bedroom', Serial: 'XYZ789',
-    },
-    {
-      datetime: '2024-01-03 08:45 AM', Devicestats: 'Online', Cause: 'Software update', Room: 'Kitchen', Serial: 'DEF456',
-    },
-    {
-      datetime: '2024-01-04 02:15 PM', Devicestats: 'Offline', Cause: 'Hardware failure', Room: 'Home Office', Serial: 'GHI789',
-    }
-  ];
-  const filteredData = data.filter((room) =>
-    room.Serial.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const datain: { datetime: string; Devicestats: string; Cause: any; Serial: string; }[] = [];
+  data?.forEach(element => {
+    datain.push({
+      datetime: new Date(element.date).toLocaleString("en-US", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: true }).replace(",", " "),
+      Devicestats: element.type,
+      Cause: element.message,
+      Serial: element.serial,
+    });
+  })
   const rowsPerPage = 9;
   const startIndex = currentPage * rowsPerPage;
   const endIndex = startIndex + rowsPerPage;
-  const slicedData = filteredData.slice(startIndex, endIndex);
+  const slicedData = datain?.slice(startIndex, endIndex);
   const customStyles = {
     headRow: {
       style: {
@@ -124,9 +138,9 @@ export default function Alerts() {
         </div>
       </h6>
       <div className="mx-auto mb-[2rem] flex h-full max-h-[80rem] w-full  max-w-[calc(2000px-20rem)] flex-col px-5 mt-2 rounded">
-        <DataTable columns={columns} data={slicedData} customStyles={customStyles} progressComponent={<Loanding />} noDataComponent={<Nodata />}
-          {...(filteredData.length === 0 ? {} : { fixedHeader: true, fixedHeaderScrollHeight: "calc(100vh - 175px)" })} />
-        <Pagination totalRows={filteredData.length} currentPage={currentPage} onPageChange={handlePageChange} />
+        <DataTable progressPending={progressPending} columns={columns} data={slicedData} customStyles={customStyles} progressComponent={<Loanding />} noDataComponent={<Nodata />}
+          {...(datain.length === 0 ? {} : { fixedHeader: true, fixedHeaderScrollHeight: "calc(100vh - 175px)" })} />
+        <Pagination totalRows={datain.length} currentPage={currentPage} onPageChange={handlePageChange} />
       </div>
       <Modal open={openDialog} handleClose={handleCloseDialog} />
     </div>
